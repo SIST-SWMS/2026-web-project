@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <properties resource="db.properties"/>
+  <settings>
+    <setting name="cacheEnabled" value="true"/>
+    <setting name="callSettersOnNulls" value="true"/>
+    <setting name="logImpl" value="STDOUT_LOGGING"/>
+    <!-- SQL실행 로그 출력 -->
+  </settings>
+  <typeAliases>
+<!--     
+	<typeAlias type="com.sist.vo.MemberVO" alias="MemberVO"/>
+    <typeAlias type="com.sist.vo.FoodVO" alias="FoodVO"/>
+    <typeAlias type="com.sist.vo.TourVO" alias="TourVO"/>
+ -->  
+  </typeAliases>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+       <property name="driver" value="${driver}"/>
+       <property name="url" value="${url}"/>
+       <property name="username" value="${username}"/>
+       <property name="password" value="${password}"/>
+       <property name="poolMaximumActiveConnections" value="${maxActive}"/>
+       <property name="poolMaximumIdleConnections" value="${maxIdle}"/>
+       <property name="poolTimeToWait" value="${maxWait}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+  <!-- 
+    <mapper resource="com/sist/mapper/member-mapper.xml"/>
+    <mapper resource="com/sist/mapper/food-mapper.xml"/>
+    <mapper resource="com/sist/mapper/tour-mapper.xml"/>
+   -->
+  </mappers>
+</configuration>
