@@ -12,6 +12,6 @@ public class CartModel {
 	public String mypage(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("main_jsp", "../cart/cart.jsp");
 		return "../main/main.jsp";
-		//커밋테스트
+		//커밋테스트트
 	}
 }
