@@ -11,11 +11,8 @@
     <!-- SQL실행 로그 출력 -->
   </settings>
   <typeAliases>
-<!--     
 	<typeAlias type="com.sist.vo.MemberVO" alias="MemberVO"/>
-    <typeAlias type="com.sist.vo.FoodVO" alias="FoodVO"/>
-    <typeAlias type="com.sist.vo.TourVO" alias="TourVO"/>
- -->  
+	<typeAlias type="com.sist.vo.GoodsVO" alias="GoodsVO"/>
   </typeAliases>
   <environments default="development">
     <environment id="development">
@@ -32,10 +29,7 @@
     </environment>
   </environments>
   <mappers>
-  <!-- 
     <mapper resource="com/sist/mapper/member-mapper.xml"/>
-    <mapper resource="com/sist/mapper/food-mapper.xml"/>
-    <mapper resource="com/sist/mapper/tour-mapper.xml"/>
-   -->
+    <mapper resource="com/sist/mapper/goods-mapper.xml"/>
   </mappers>
 </configuration>
