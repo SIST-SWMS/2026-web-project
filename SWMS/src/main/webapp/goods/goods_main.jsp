@@ -106,8 +106,9 @@
 	border-color: #000;
 }
 </style>
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 <script>
-/* $(function() {
+ $(function() {
     // 사용자의 카테고리, 페이지 상태를 기억할 전역 변수
     let currentCno = 1;
     let currentPage = 1;
@@ -146,20 +147,16 @@
         getProductList(currentCno, sortVal, 1);
     });
 
-    // 3. 하단 페이지네이션 번호 클릭
+    /* // 3. 하단 페이지네이션 번호 클릭
     $('#product-list-box').on('click', '.page-link-btn', function(e) {
         e.preventDefault();
         let targetPage = $(this).attr('data-page');
         let sortVal = $('#sort-select').val();
         
         getProductList(currentCno, sortVal, targetPage);
-    });
-}); */
+    }); */
+}); 
     
-    // $(function(){
-    	
-   // }) 으로 단축형으로 교체
-
 </script>
 </head>
 <body>

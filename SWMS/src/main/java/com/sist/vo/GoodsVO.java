@@ -23,7 +23,7 @@ import java.sql.*;
 @Data
 public class GoodsVO {
 	private int goods_no, goods_discount, brand_no, category_no, hit, like_count; 
-	private String goods_code, goods_name, goods_price, poster_url, subposter_url, regdate, brand_name;
+	private String goods_code, goods_name, goods_price, poster_url, subposter_url, dbday, brand_name, category_name;
 	private Date created_at;
 	
 }
