@@ -146,7 +146,6 @@
 								<small>LIKE</small>
 							</a>
 						</li>
-					
 						<li>
 							<a href="../cart/cart.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 								<svg width="18" height="18" viewBox="0 0 24 24">
@@ -163,7 +162,7 @@
 								<small>MY</small>
 							</a>
 						</li>
-						
+						<c:if test="${sessionScope.auth == 'adm' }">
 						<li>
 							<a href="../admin/admin.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 								<svg width="18" height="18" viewBox="0 0 24 24">
@@ -172,7 +171,7 @@
 								<small>ADM</small>
 							</a>
 						</li>
-						
+						</c:if>
 						<c:if test="${sessionScope.id == null }">
 							<li>
 								<a href="../member/login.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">

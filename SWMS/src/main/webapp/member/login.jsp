@@ -19,9 +19,10 @@ $(function() {
 		$.ajax({
 			method:'POST',
 			url:'../member/login_ok.do',
-			data:{id, pwd}
+			data:{id, pwd},
 			success:function(result){
 				result = result.trim()
+				console.log(result)
 				if(result === 'NOID'){
 					$('#loginMsg').text('존재하지 않는 아이디 입니다.').show()
 					$('#id').val("").focus()
@@ -47,21 +48,16 @@ $(function() {
 				<div class="col-md-6 col-lg-4">
 					<div class="border rounded-4 p-4 p-md-5 shadow-sm">
 						<h3 class="fw-bold text-center mb-4">로그인</h3>
-
-						<div id="loginMsg" class="alert alert-danger" style="display: none;"></div>
-
 						<div class="mb-3">
 							<label for="id" class="form-label fw-bold">아이디</label>
 							<input type="text" class="form-control form-control-lg bg-light" id="id" name="id" placeholder="아이디 입력">
 						</div>
-
 						<div class="mb-4">
 							<label for="pwd" class="form-label fw-bold">비밀번호</label>
 							<input type="password" class="form-control form-control-lg bg-light" id="pwd" name="pwd" placeholder="비밀번호 입력">
 						</div>
-
+						<div id="loginMsg" class="alert alert-danger" style="display: none;"></div>
 						<button class="btn btn-primary btn-lg w-100 mb-3" type="button" id="loginBtn">로그인</button>
-
 						<a href="../member/join.do" class="btn btn-outline-dark btn-lg w-100">회원가입</a>
 					</div>
 				</div>
