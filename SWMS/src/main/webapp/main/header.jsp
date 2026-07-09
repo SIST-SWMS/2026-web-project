@@ -143,7 +143,7 @@
 								<svg width="18" height="18" viewBox="0 0 24 24">
 									<use xlink:href="#heart"></use>
 								</svg>
-								<small>MY LIKE</small>
+								<small>LIKE</small>
 							</a>
 						</li>
 					
@@ -152,7 +152,7 @@
 								<svg width="18" height="18" viewBox="0 0 24 24">
 									<use xlink:href="#cart"></use>
 								</svg>
-								<small>SHOPPING BAG</small>
+								<small>BAG</small>
 							</a>
 						</li>
 						<li>
@@ -160,19 +160,19 @@
 								<svg width="18" height="18" viewBox="0 0 24 24">
 									<use xlink:href="#user"></use>
 								</svg>
-								<small>MY PAGE</small>
+								<small>MY</small>
 							</a>
 						</li>
-						<!-- 
+						
 						<li>
 							<a href="../admin/admin.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 								<svg width="18" height="18" viewBox="0 0 24 24">
 									<use xlink:href="#user"></use>
 								</svg>
-								<small>ADMIN</small>
+								<small>ADM</small>
 							</a>
 						</li>
-						 -->
+						
 						<c:if test="${sessionScope.id == null }">
 							<li>
 								<a href="../member/login.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
@@ -242,7 +242,7 @@
 										<a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Example</a>
 										<ul class="dropdown-menu bg-black text-white" aria-labelledby="pages">
 											<li>
-												<a href="#" class="dropdown-item text-white">About Us 1
+												<a href="../temp/guide.jsp" class="dropdown-item text-white">Guide
 													<span class="badge bg-warning text-dark ms-2">PRO</span>
 												</a>
 											</li>

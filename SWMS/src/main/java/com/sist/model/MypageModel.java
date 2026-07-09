@@ -55,4 +55,11 @@ public class MypageModel {
 		return "../main/main.jsp";
 	}
 	
+	@RequestMapping("mypage/member_detail.do")
+	public String mypage_member_detail(HttpServletRequest request, HttpServletResponse response) {
+		request.setAttribute("mypage_content", "../mypage/member_detail.jsp");
+		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
+		return "../main/main.jsp";
+	}
+	
 }

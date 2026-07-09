@@ -52,7 +52,7 @@
 							href="../mypage/qnaList.do">1:1 문의</a>
 
 						<div class="mypage-menu-title">나의 계정정보</div>
-						<a href="../member/detail.do">회원정보수정</a>
+						<a href="../mypage/member_detail.do">회원정보수정</a>
 					</nav>
 				</div>
 
