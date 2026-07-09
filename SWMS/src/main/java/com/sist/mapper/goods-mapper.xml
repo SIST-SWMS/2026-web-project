@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.goods-mapper">
+	<!--    GOODS_NO       NOT NULL NUMBER        
+			GOODS_CODE     NOT NULL VARCHAR2(50)  
+			GOODS_NAME     NOT NULL VARCHAR2(100) 
+			GOODS_PRICE    NOT NULL VARCHAR2(50)  
+			GOODS_DISCOUNT          NUMBER        
+			POSTER_URL     NOT NULL VARCHAR2(260) 
+			SUBPOSTER_URL           VARCHAR2(260) 
+			BRAND_NO       NOT NULL NUMBER        
+			CATEGORY_NO    NOT NULL NUMBER        
+			HIT            NOT NULL NUMBER        
+			CREATED_AT     NOT NULL DATE        -->
+	<select id="goodsListData" resultType="com.sist.vo.GoodsVO" parameterType="map">
+		SELECT goods_no, goods_code, goods_name, goods_price, goods_discount, poster_url, subposter_url, b.brand_name, hit,
+				(SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count
+		FROM goods g JOIN brand b
+		ON g.brand_no=b.brand_no
+		WHERE g.category_no=#{category_no}
+		<!-- 기준 상품 정렬 -->
+		<choose>
+			<when test="sort == 'price_asc'">      
+			ORDER BY g.goods_price ASC    
+			</when>    
+			<when test="sort == 'price_desc'">      
+			ORDER BY g.goods_price DESC    
+			</when>    
+			<when test="sort == 'hit_desc'">      
+			ORDER BY g.hit DESC   
+			</when>    
+			<otherwise>    
+ 			 ORDER BY g.goods_no ASC  
+			</otherwise>
+		</choose>
+		OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
+	</select>
+	<select id="goodsTotalPage" resultType="int">
+		SELECT CEIL(COUNT(*)/12.0) 
+		FROM goods
+	</select>
+</mapper>
