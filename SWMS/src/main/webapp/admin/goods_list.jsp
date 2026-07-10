@@ -109,7 +109,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr class="prod-row" v-for="(vo,index) in list" :key="index">
+				<tr class="prod-row" v-for="(vo,index) in list" :key="index" @click="goView(vo.goods_no)">
 					<td>{{vo.goods_code}}</td>
 					<td>
 						<img :src="vo.poster_url" class="thumb-sm" alt="이미지">
@@ -192,6 +192,9 @@
 	    		 pageChange(page){
 	    			 this.curpage = page
 	    			 this.dataRecv()
+	    		 },
+	    		 goView(no){
+	    			 location.href = "../admin/goods_view.do?no="+no;
 	    		 }
 			}
 		}).mount("#app")

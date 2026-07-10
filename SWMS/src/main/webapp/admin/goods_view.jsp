@@ -27,52 +27,55 @@
 	background: #fff0f0;
 }
 </style>
-<script>
-	// 삭제: 확인 팝업 → 확인 시 비활성화 처리(is_deleted) 후 목록 이동
-	function deleteProduct(code) {
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	$('#deleteBtn').on('click',function(){
+		let no = 1
 		if (confirm("삭제 시 해당 상품의 재고·이력 데이터도 영향을 받습니다. 삭제하시겠습니까?")) {
-			location.href = "product_delete.do?code=" + code;
+			location.href = "../admin/goods_delete.do?goods_no=" + no
+		} 
+		else {
+			return;
 		}
-	}
+	})
+})
 </script>
 </head>
 <body>
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">상품 상세</h4>
 
-	<%-- ===================== 상단 - 이미지 + 기본 정보 ===================== --%>
 	<div class="row g-4 mb-5">
 
-		<!-- 상품 이미지 + 상세이미지 -->
 		<div class="col-md-4">
 			<img src="../resources/images/product-thumb-1.png" class="w-100 rounded-3 mb-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
 		</div>
 
-		<!-- 기본 정보 -->
 		<div class="col-md-8">
 			<div class="info-row">
 				<div class="label">상품코드</div>
-				<div class="value">${product.productCode}</div>
+				<div class="value">${vo.productCode}</div>
 			</div>
 			<div class="info-row">
 				<div class="label">상품명</div>
-				<div class="value">${product.productName}</div>
+				<div class="value">${vo.productName}</div>
 			</div>
 			<div class="info-row">
 				<div class="label">브랜드</div>
-				<div class="value">${product.brand}</div>
+				<div class="value">${vo.brand_name}</div>
 			</div>
 			<div class="info-row">
 				<div class="label">카테고리</div>
-				<div class="value">${product.category}</div>
+				<div class="value">${vo.category_name}</div>
 			</div>
 			<div class="info-row">
 				<div class="label">가격</div>
-				<div class="value">${product.price}원</div>
+				<div class="value">${vo.goods_price}원</div>
 			</div>
 			<div class="info-row">
 				<div class="label">할인율</div>
 				<div class="value">
-					<span class="text-danger">${product.discount}%</span>
+					<span class="text-danger">${vo.goods_discount}%</span>
 				</div>
 			</div>
 			<div class="info-row">
@@ -87,7 +90,6 @@
 
 	</div>
 
-	<%-- ===================== 사이즈별 재고 현황 ===================== --%>
 	<h5 class="fw-bold border-bottom pb-2 mb-3">사이즈별 재고 현황</h5>
 
 	<table class="table align-middle text-center" style="max-width: 560px;">
@@ -99,44 +101,22 @@
 			</tr>
 		</thead>
 		<tbody>
-			<%-- 사이즈 1개 = tr 하나. <c:forEach var="s" items="${sizeStockList}"> 로 반복 --%>
-			<!-- <c:forEach var="s" items="${sizeStockList}"> -->
-			<tr>
-				<td>230</td>
-				<td>32</td>
-				<td>
-					<span class="badge bg-success">정상</span>
-				</td>
-			</tr>
-			<!-- </c:forEach> -->
-			<tr>
-				<td>240</td>
-				<td>7</td>
-				<td>
-					<span class="badge bg-warning text-dark">부족</span>
-				</td>
-			</tr>
-			<tr class="soldout-row">
-				<td>250</td>
-				<td class="text-danger fw-bold">0</td>
-				<td>
-					<span class="badge bg-danger">품절</span>
-				</td>
-			</tr>
-			<tr>
-				<td>260</td>
-				<td>25</td>
-				<td>
-					<span class="badge bg-success">정상</span>
-				</td>
-			</tr>
+			<c:forEach var="lvo" items="${list }">
+				<tr>
+					<td>${lvo.goods_size }</td>
+					<td>${lvo.quantity }</td>
+					<td>
+						<span class="badge bg-success">정상</span>
+					</td>
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
 
 	<div class="mt-4 d-flex gap-2">
-		<a href="../admin/goods_update.do?code=${product.productCode}" class="btn btn-dark px-4">수정</a>
-		<button type="button" class="btn btn-danger px-4" onclick="deleteProduct('${product.productCode}')">삭제</button>
-		<a href="../admin/goods_list.do" class="btn btn-outline-dark px-4">목록으로</a>
+		<a href="../admin/goods_update.do?code=${vo.goods_no }" class="btn btn-dark px-4">수정</a>
+		<button type="button" class="btn btn-danger px-4" id="deleteBtn">삭제</button>
+		<a href="../admin/goods_list.do" class="btn btn-outline-dark px-4">목록</a>
 	</div>
 
 </body>

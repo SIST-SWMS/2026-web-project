@@ -10,6 +10,7 @@ import com.sist.commons.CreateSqlSessionFactory;
 import com.sist.vo.BrandVO;
 import com.sist.vo.CategoryVO;
 import com.sist.vo.GoodsVO;
+import com.sist.vo.StockVO;
 
 public class AdminDAO {
 	private static SqlSessionFactory ssf;
@@ -44,6 +45,20 @@ public class AdminDAO {
 	public static List<BrandVO> SearchBrand() {
 		SqlSession session = ssf.openSession();
 		List<BrandVO> list = session.selectList("SearchBrand");
+		session.close();
+		return list;
+	}
+
+	public static GoodsVO adminGoodsData(int no) {
+		SqlSession session = ssf.openSession();
+		GoodsVO vo = session.selectOne("adminGoodsData", no);
+		session.close();
+		return vo;
+	}
+
+	public static List<StockVO> goodsStockList(int no) {
+		SqlSession session = ssf.openSession();
+		List<StockVO> list = session.selectList("goodsStockList", no);
 		session.close();
 		return list;
 	}

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.builder.xml.XMLMapperEntityResolver;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
@@ -14,6 +12,7 @@ import com.sist.dao.AdminDAO;
 import com.sist.vo.BrandVO;
 import com.sist.vo.CategoryVO;
 import com.sist.vo.GoodsVO;
+import com.sist.vo.StockVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,13 +69,6 @@ public class AdminModel {
 		map.put("brand", brand_no);
 		map.put("fd", fd);
 		
-		System.out.println("======================[parameter]=====================");
-		System.out.println("======>" + curpage);
-		System.out.println("======>" + category_no);
-		System.out.println("======>" + brand_no);
-		System.out.println("======>" + fd);
-		System.out.println("======================[parameter]=====================");
-		
 		int totalpage = AdminDAO.adminGoodsTotal(map);
 		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
 		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
@@ -112,6 +104,13 @@ public class AdminModel {
 	// 상품 상세보기
 	@RequestMapping("admin/goods_view.do")
 	public String goods_view(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		
+		GoodsVO vo = AdminDAO.adminGoodsData(Integer.parseInt(no));
+		List<StockVO> list = AdminDAO.goodsStockList(Integer.parseInt(no));
+		
+		request.setAttribute("vo", vo);	
+		request.setAttribute("list", list);
 		request.setAttribute("admin_content", "../admin/goods_view.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
