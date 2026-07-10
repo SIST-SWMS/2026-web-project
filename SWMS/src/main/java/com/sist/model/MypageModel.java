@@ -2,9 +2,12 @@ package com.sist.model;
 
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
+import com.sist.dao.MemberDAO;
+import com.sist.vo.MemberVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MypageModel {
@@ -57,6 +60,12 @@ public class MypageModel {
 	
 	@RequestMapping("mypage/member_detail.do")
 	public String mypage_member_detail(HttpServletRequest request, HttpServletResponse response) {
+		// 디비에 잇는 회원정보 가져온다
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("id");
+		
+	    MemberVO vo = MemberDAO.memberDetailData(id);
+		request.setAttribute("vo", vo);
 		request.setAttribute("mypage_content", "../mypage/member_detail.jsp");
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
