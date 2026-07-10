@@ -12,31 +12,42 @@
 			CATEGORY_NO    NOT NULL NUMBER        
 			HIT            NOT NULL NUMBER        
 			CREATED_AT     NOT NULL DATE        -->
-	<select id="goodsListData" resultType="com.sist.vo.GoodsVO" parameterType="map">
+	<select id="goodsListData" resultType="GoodsVO" parameterType="map">
 		SELECT goods_no, goods_code, goods_name, goods_price, goods_discount, poster_url, subposter_url, b.brand_name, hit,
 				(SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count
 		FROM goods g JOIN brand b
 		ON g.brand_no=b.brand_no
-		WHERE g.category_no=#{category_no}
-		<!-- 기준 상품 정렬 -->
+		
+		<where>
+			<if test="category_no!=0">
+				g.category_no = #{category_no}
+			</if>
+		</where>
+		
 		<choose>
-			<when test="sort == 'price_asc'">      
-			ORDER BY g.goods_price ASC    
-			</when>    
-			<when test="sort == 'price_desc'">      
-			ORDER BY g.goods_price DESC    
-			</when>    
-			<when test="sort == 'hit_desc'">      
-			ORDER BY g.hit DESC   
-			</when>    
-			<otherwise>    
- 			 ORDER BY g.goods_no ASC  
-			</otherwise>
-		</choose>
+		    <when test="sort=='price_asc'">      
+		        ORDER BY TO_NUMBER(REGEXP_REPLACE(g.goods_price, '[^0-9]', '')) ASC    
+		    </when>    
+		    <when test="sort=='price_desc'">      
+		        ORDER BY TO_NUMBER(REGEXP_REPLACE(g.goods_price, '[^0-9]', '')) DESC    
+		    </when>    
+		    <when test="sort=='hit_desc'">      
+		        ORDER BY g.hit DESC   
+		    </when>    
+		    <otherwise>    
+		        ORDER BY g.goods_no ASC  
+    		</otherwise>
+</choose>
 		OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
 	</select>
-	<select id="goodsTotalPage" resultType="int">
+	
+	<select id="goodsTotalPage" resultType="int" parameterType="int">
 		SELECT CEIL(COUNT(*)/12.0) 
 		FROM goods
+		<where>
+			<if test="_parameter!=0">
+				category_no=#{_parameter}
+			</if>
+		</where>
 	</select>
 </mapper>

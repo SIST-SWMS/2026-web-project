@@ -7,13 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-.mypage-menu-title {
-	font-weight: 700;
-	margin-top: 24px;
-	margin-bottom: 8px;
-}
-
-.mypage-menu a {
+.category-sidebar-menu a {
 	display: block;
 	padding: 6px 0;
 	color: #666;
@@ -21,19 +15,19 @@
 	font-size: 15px;
 }
 
-.mypage-menu a:hover {
+.category-sidebar-menu a:hover {
 	color: #000;
 }
 
-.mypage-nickname {
-	font-size: 28px;
+.category-sidebar-menu a.active {
+	color: #000;
 	font-weight: 700;
 }
 </style>
 </head>
 <body>
 	<%-- 우측 콘텐츠 기본값 지정: Controller에서 mypage_content 를 바꿔주면 우측 화면만 교체됨 --%>
-	<c:if test="${empty mypage_content}">
+	<c:if test="${empty goods_content}">
 		<c:set var="goods_content" value="../goods/goods_main.jsp" />
 	</c:if>
 
@@ -45,12 +39,12 @@
 				<div class="col-lg-2">
 					<h4 class="fw-bold border-bottom border-dark border-2 pb-3 mb-3">남성슈즈</h4>
 					<nav class="category-menu">
-						<a href="#" class="active">ALL</a> 
-						<a href="#">스포츠화</a> 
-						<a href="#">샌들/슬리퍼</a>
-						<a href="#">라이프스타일</a> 
-						<a href="#">구두</a> 
-						<a href="#">부츠</a> 
+						<a href="#" class="category-btn active" data-cno="0">ALL</a> 
+						<a href="#" class="category-btn" data-cno="1">스포츠화</a> 
+						<a href="#" class="category-btn" data-cno="2">샌들/슬리퍼</a>
+						<a href="#" class="category-btn" data-cno="3">라이프스타일</a> 
+						<a href="#" class="category-btn" data-cno="4">구두</a> 
+						<a href="#" class="category-btn" data-cno="5">부츠</a> 
 					</nav>
 					<h5 class="fw-bold border-top border-dark border-2 pt-3 mt-4">필터</h5>
 				</div>
