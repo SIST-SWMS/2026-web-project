@@ -1,14 +1,26 @@
 package com.sist.model;
 
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.builder.xml.XMLMapperEntityResolver;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
+import com.sist.dao.AdminDAO;
+import com.sist.vo.BrandVO;
+import com.sist.vo.CategoryVO;
+import com.sist.vo.GoodsVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AdminModel {
-	
+
 	// 관리자 메인화면 조회
 	@RequestMapping("admin/admin.do")
 	public String admin(HttpServletRequest request, HttpServletResponse response) {
@@ -16,13 +28,85 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
-	// 상품 관리 목록 조회
+
+	// 상품 관리 화면 전환
 	@RequestMapping("admin/goods_list.do")
 	public String goods_list(HttpServletRequest request, HttpServletResponse response) {
+
+		// 브랜드, 카테고리 가져다 뿌리기
+		List<BrandVO> bList = AdminDAO.SearchBrand();
+		List<CategoryVO> cList = AdminDAO.SearchCategory();
+
+		request.setAttribute("bList", bList);
+		request.setAttribute("cList", cList);
+		request.setAttribute("admin_menu", "goods");
 		request.setAttribute("admin_content", "../admin/goods_list.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
+	}
+
+	// 상품 관리 목록 조회
+	@RequestMapping("admin/goods_list_vue.do")
+	public void goods_list_vue(HttpServletRequest request, HttpServletResponse response) {
+		final int BLOCK = 10;
+		String page = request.getParameter("page");
+		String category = request.getParameter("category");
+		String brand = request.getParameter("brand");
+		String fd = request.getParameter("fd");
+
+
+		if (page == null) {
+			page = "1";
+		}
+		
+		int curpage = Integer.parseInt(page);
+		int start = (curpage - 1) * BLOCK;
+		int category_no = Integer.parseInt(category);
+		int brand_no = Integer.parseInt(brand);
+		
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("category", category_no);
+		map.put("brand", brand_no);
+		map.put("fd", fd);
+		
+		System.out.println("======================[parameter]=====================");
+		System.out.println("======>" + curpage);
+		System.out.println("======>" + category_no);
+		System.out.println("======>" + brand_no);
+		System.out.println("======>" + fd);
+		System.out.println("======================[parameter]=====================");
+		
+		int totalpage = AdminDAO.adminGoodsTotal(map);
+		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
+		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
+		if (endPage > totalpage) {
+			endPage = totalpage;
+		}
+		List<GoodsVO> list = AdminDAO.adminGoodsList(map);
+		
+		try {
+			
+			map = new HashMap();
+			map.put("fd", fd);
+			map.put("category", category);
+			map.put("brand", brand);
+			map.put("list", list);
+			map.put("curpage", curpage);
+			map.put("totalpage", totalpage);
+			map.put("startPage", startPage);
+			map.put("endPage", endPage);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(map);
+			
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(json);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 상품 상세보기
@@ -48,7 +132,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 재고 관리 목록 조회
 	@RequestMapping("admin/stock_list.do")
 	public String stock_list(HttpServletRequest request, HttpServletResponse response) {
@@ -56,7 +140,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 재고 관리 상세 조회
 	@RequestMapping("admin/stock_view.do")
 	public String stock_view(HttpServletRequest request, HttpServletResponse response) {
@@ -64,7 +148,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 재고 등록 화면 전환
 	@RequestMapping("admin/stock_insert.do")
 	public String stock_insert(HttpServletRequest request, HttpServletResponse response) {
@@ -72,7 +156,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 재고 수정 화면 전환
 	@RequestMapping("admin/stock_update.do")
 	public String stock_update(HttpServletRequest request, HttpServletResponse response) {
@@ -80,7 +164,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 출고 관리 목록 조회
 	@RequestMapping("admin/stockout.do")
 	public String stockout_list(HttpServletRequest request, HttpServletResponse response) {
@@ -88,7 +172,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 입출고 내역 조회
 	@RequestMapping("admin/io_list.do")
 	public String io_list(HttpServletRequest request, HttpServletResponse response) {
@@ -96,7 +180,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 입출고 내역 상세보기
 	@RequestMapping("admin/io_view.do")
 	public String io_view(HttpServletRequest request, HttpServletResponse response) {
@@ -112,7 +196,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// QNA 상세보기
 	@RequestMapping("admin/qna_view.do")
 	public String qna_view(HttpServletRequest request, HttpServletResponse response) {

@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<%-- 상품 목록 조회 --%>
 <style>
 .pagination {
 	display: inline-flex;
@@ -22,6 +21,7 @@
 	text-decoration: none;
 	border: 1px solid #ddd;
 	border-radius: 4px;
+	cursor: pointer;
 }
 
 .pagination li.active a {
@@ -46,121 +46,155 @@
 	background: #f8f8f8;
 }
 </style>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('#init').on('click', function() {
+			location.href = "../admin/goods_list.do"
+		})
+	})
+</script>
 </head>
 <body>
-	<%-- 상단: 제목 + 상품 등록 버튼 --%>
 	<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4">
 		<h4 class="fw-bold mb-0">상품 관리</h4>
 		<a href="../admin/goods_insert.do" class="btn btn-dark">상품 등록</a>
 	</div>
+	<div id="app">
+		<form action="../admin/goods_search.do" method="get" class="border rounded-4 p-4 mb-4 bg-light">
+			<div class="row g-3 align-items-end">
+				<div class="col-md-3">
+					<label class="form-label small text-body-secondary">카테고리</label>
+					<select name="category" class="form-select" v-model="category">
+						<c:forEach var="cvo" items="${cList }">
+							<option value="${cvo.category_no }">${cvo.category_name }</option>
+						</c:forEach>
+					</select>
+				</div>
 
-	<%-- ===================== 검색 영역 ===================== --%>
-	<form action="product_list.do" method="get" class="border rounded-4 p-4 mb-4 bg-light">
-		<div class="row g-3 align-items-end">
+				<div class="col-md-3">
+					<label class="form-label small text-body-secondary">브랜드</label>
+					<select name="brand" class="form-select" v-model="brand">
+						<c:forEach var="bvo" items="${bList }">
+							<option value="${bvo.brand_no }">${bvo.brand_name}</option>
+						</c:forEach>
+					</select>
+				</div>
 
-			<div class="col-md-3">
-				<label class="form-label small text-body-secondary">카테고리</label>
-				<select name="category" class="form-select">
-					<option value="">전체</option>
-					<option value="스니커즈">스니커즈</option>
-					<option value="스포츠">스포츠</option>
-					<option value="구두">구두</option>
-					<option value="샌들">샌들</option>
-					<option value="부츠">부츠</option>
-				</select>
+				<div class="col-md-3">
+					<label class="form-label small text-body-secondary">상품명</label>
+					<input type="text" name="goodsName" class="form-control" v-model="fd" placeholder="상품명 입력" value="" @keydown.enter="find()">
+				</div>
+
+				<div class="col-md-3 d-flex gap-2">
+					<button type="button" class="btn btn-dark flex-fill" @click="find()">검색</button>
+					<button type="button" class="btn btn-dark flex-fill" id="init">초기화</button>
+				</div>
+
 			</div>
+		</form>
 
-			<div class="col-md-3">
-				<label class="form-label small text-body-secondary">브랜드</label>
-				<select name="brand" class="form-select">
-					<option value="">전체</option>
-					<option value="나이키">나이키</option>
-					<option value="아디다스">아디다스</option>
-					<option value="뉴발란스">뉴발란스</option>
-					<option value="닥터마틴">닥터마틴</option>
-					<option value="킨">킨</option>
-				</select>
-			</div>
+		<table class="table align-middle text-center">
+			<thead>
+				<tr class="text-body-secondary">
+					<th style="width: 15%">상품코드</th>
+					<th style="width: 5%;">이미지</th>
+					<th style="width: 30%">상품명</th>
+					<th style="width: 20%;">브랜드</th>
+					<th style="width: 10%">카테고리</th>
+					<th style="width: 10%;">가격</th>
+					<th style="width: 10%;">할인율</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="prod-row" v-for="(vo,index) in list" :key="index">
+					<td>{{vo.goods_code}}</td>
+					<td>
+						<img :src="vo.poster_url" class="thumb-sm" alt="이미지">
+					</td>
+					<td class="text-start">{{vo.goods_name }}</td>
+					<td>{{vo.brand_name }}</td>
+					<td>{{vo.category_name }}</td>
+					<td class="text-end pe-4">{{vo.goods_price }}</td>
+					<td>{{vo.goods_discount }}%</td>
+				</tr>
+			</tbody>
+		</table>
 
-			<div class="col-md-3">
-				<label class="form-label small text-body-secondary">상품명</label>
-				<input type="text" name="productName" class="form-control" placeholder="상품명 입력" value="${param.productName}">
-			</div>
-
-			<div class="col-md-3 d-flex gap-2">
-				<button type="submit" class="btn btn-dark flex-fill">검색</button>
-				<a href="product_list.do" class="btn btn-outline-secondary flex-fill">초기화</a>
-			</div>
-
+		<%-- ===================== 페이지네이션 ===================== --%>
+		<div class="d-flex justify-content-center mt-4">
+			<ul class="pagination">
+				<li v-if="startPage > 1">
+					<a @click="pageChange(startPage-1)">&laquo;</a>
+				</li>
+				<li :class="{ active: i == curpage }" v-for="(i, index) in range(startPage, endPage)" :key="index">
+					<a @click="pageChange(i)">{{i}}</a>
+				</li>
+				<li v-if="endPage < totalpage">
+					<a @click="pageChange(endPage+1)">&raquo;</a>
+				</li>
+			</ul>
 		</div>
-	</form>
-
-	<%-- ===================== 목록 테이블 ===================== --%>
-	<table class="table align-middle text-center">
-		<thead>
-			<tr class="text-body-secondary">
-				<th style="width: 120px;">상품코드</th>
-				<th style="width: 80px;">이미지</th>
-				<th>상품명</th>
-				<th style="width: 100px;">브랜드</th>
-				<th style="width: 100px;">카테고리</th>
-				<th style="width: 110px;">가격</th>
-				<th style="width: 80px;">할인율</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%-- 1건 = tr 하나. <c:forEach var="p" items="${productList}"> 로 반복 --%>
-			<!-- <c:forEach var="p" items="${productList}"> -->
-			<tr class="prod-row" onclick="location.href='../admin/goods_view.do?code=SHOE-1001'">
-				<td>SHOE-1001</td>
-				<td>
-					<img src="../resources/images/product-thumb-1.png" class="thumb-sm" alt="이미지">
-				</td>
-				<td class="text-start">스트라이커 (Z1)_Black</td>
-				<td>데카트론</td>
-				<td>스니커즈</td>
-				<td class="text-end pe-4">49,900원</td>
-				<td>0%</td>
-			</tr>
-			<!-- </c:forEach> -->
-			<tr class="prod-row" onclick="location.href='../admin/goods_view.do?code=SHOE-1001'">
-				<td>SHOE-1001</td>
-				<td>
-					<img src="../resources/images/product-thumb-1.png" class="thumb-sm" alt="이미지">
-				</td>
-				<td class="text-start">스트라이커 (Z1)_Black</td>
-				<td>데카트론</td>
-				<td>스니커즈</td>
-				<td class="text-end pe-4">49,900원</td>
-				<td>0%</td>
-			</tr>
-			<tr class="prod-row" onclick="location.href='../admin/goods_view.do?code=SHOE-1001'">
-				<td>SHOE-1001</td>
-				<td>
-					<img src="../resources/images/product-thumb-1.png" class="thumb-sm" alt="이미지">
-				</td>
-				<td class="text-start">스트라이커 (Z1)_Black</td>
-				<td>데카트론</td>
-				<td>스니커즈</td>
-				<td class="text-end pe-4">49,900원</td>
-				<td>0%</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<%-- ===================== 페이지네이션 ===================== --%>
-	<div class="d-flex justify-content-center mt-4">
-		<ul class="pagination">
-			<c:if test="${startPage > 1}">
-				<li><a href="product_list.do?page=${startPage - 1}">&laquo;</a></li>
-			</c:if>
-			<c:forEach var="i" begin="${startPage}" end="${endPage}">
-				<li ${i == curPage ? "class='active'" : ""}><a href="product_list.do?page=${i}">${i}</a></li>
-			</c:forEach>
-			<c:if test="${endPage < totalPage}">
-				<li><a href="product_list.do?page=${endPage + 1}">&raquo;</a></li>
-			</c:if>
-		</ul>
 	</div>
+	<script>
+		let app = Vue.createApp({
+			data(){
+				return {
+					curpage:1,
+					category:0,
+					brand:0,
+					fd:'',
+					totalpage:0,
+					startPage:0,
+					endPage:0,
+					list:[]
+				}
+			},
+			mounted(){
+				this.dataRecv()
+			},
+			methods:{
+				async dataRecv(){
+					await axios.get('../admin/goods_list_vue.do',{
+						params:{
+							page:this.curpage,
+	    					category:this.category,
+	    					brand:this.brand,
+	    					fd:this.fd
+						}
+					}).then(response=>{
+	    				 console.log(response.data)
+	    				 this.list=response.data.list
+	    				 this.curpage=response.data.curpage
+	    				 this.totalpage=response.data.totalpage
+	    				 this.startPage=response.data.startPage
+	    				 this.endPage=response.data.endPage
+	    				 this.fd=response.data.fd
+	    				 this.category=response.data.category
+	    				 this.brand=response.data.brand
+	    			 })
+	    		 },
+	    		 find(){
+	    			 this.curpage=1
+	    			 this.dataRecv()
+	    		 },
+	    		 range(start, end){
+					let arr = []
+					let length = end-start
+					for(i=0; i<=length; i++){
+						arr[i] = start
+						start++
+					}
+					return arr
+	    		 },
+	    		 pageChange(page){
+	    			 this.curpage = page
+	    			 this.dataRecv()
+	    		 }
+			}
+		}).mount("#app")
+	</script>
 </body>
 </html>
