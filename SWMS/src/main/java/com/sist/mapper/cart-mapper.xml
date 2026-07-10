@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.cart-mapper">
+	<!-- 
+		SELECT c.cart_no,s.no,g.goods_no,c.sizes,c.quantity,
+		    g.poster_url,g.goods_name,g.goods_price,g.brand_no
+		FROM cart c JOIN stock s ON c.stock_no=s.no
+		JOIN goods g ON s.no=g.goods_no
+		WHERE c.id='user'
+		ORDER BY c.created_at DESC;
+	 -->
+	<!-- <select id="cartListData" resultType="CartVO" parameterType="string">
+		SELECT c.cart_no,s.no,g.goods_no,
+			c.sizes,c.quantity,
+		    g.poster_url,g.goods_name,g.goods_price,g.brand_no
+		FROM cart c JOIN stock s ON c.stock_no=s.no
+		JOIN goods g ON s.no=g.goods_no
+		WHERE c.id=#{id}
+		ORDER BY c.created_at DESC
+	</select> -->
+</mapper>
