@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.admin-mapper">
+	<select id="adminGoodsList" resultType="GoodsVO" parameterType="map">
+		SELECT goods_no, goods_discount, goods_code, goods_name, goods_price, poster_url, subposter_url, b.brand_name, c.category_name
+		 FROM goods g, brand b, category c
+		WHERE g.brand_no = b.brand_no 
+		 AND g.category_no = c.category_no
+	    <if test="category != null and category != 0">
+	        AND g.category_no = #{category}
+	    </if>
+	    <if test="brand != null and brand != 0">
+	        AND g.brand_no = #{brand}
+	    </if>
+	    <if test="fd != null and fd != ''">
+	        AND g.goods_name LIKE '%' || #{fd} || '%'
+	    </if>
+		ORDER BY g.goods_no
+		OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+	</select>
+	<select id="adminGoodsTotal" resultType="int">
+		SELECT CEIL(COUNT(*)/10.0)
+		 FROM goods g, brand b, category c
+		WHERE g.brand_no = b.brand_no 
+		 AND g.category_no = c.category_no
+		<if test="category != null and category != 0">
+	        AND g.category_no = #{category}
+	    </if>
+	    <if test="brand != null and brand != 0">
+	        AND g.brand_no = #{brand}
+	    </if>
+	    <if test="fd != null and fd != ''">
+	        AND g.goods_name LIKE '%' || #{fd} || '%'
+	    </if>
+	</select>
+	<select id="SearchCategory" resultType="CategoryVO">
+		SELECT 0 as category_no, 'ALL' as  category_name
+         FROM dual
+        UNION
+		SELECT category_no, category_name
+		 FROM category
+	</select>
+	<select id="SearchBrand" resultType="BrandVO">
+		SELECT 0 as brand_no, 'ALL' as  brand_name
+         FROM dual
+        UNION
+		SELECT brand_no, brand_name
+		 FROM brand
+	</select>
+</mapper>

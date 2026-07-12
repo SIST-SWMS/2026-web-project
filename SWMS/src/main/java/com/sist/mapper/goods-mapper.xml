@@ -67,10 +67,10 @@
 		WHERE g.goods_no = #{goods_no}
 	</select>
 	<select id="goodsFindListData" resultType="GoodsVO" parameterType="hashmap">
-		SELECT goods_no, goods_name, poster_url, goods_price, 
+		SELECT goods_no, goods_name
 		FROM goods
 		WHERE ${column} LIKE '%'||#{fd}||'%'
-		ORDER BY no ASC
+		ORDER BY goods_no ASC
 		OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY	
 	</select>
 	<select id="goodsFindTotalPage" resultType="int" parameterType="hashmap">

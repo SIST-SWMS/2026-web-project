@@ -223,19 +223,19 @@
 								<ul
 									class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-5 mb-0 text-black text-uppercase fw-bold">
 									<li class="nav-item active">
-										<a href="../goods/list.do?cno=1" class="nav-link">스포츠화</a>
+										<a href="../goods/list.do" class="nav-link">스포츠화</a>
 									</li>
 									<li class="nav-item active">
-										<a href="../goods/list.do?cno=2" class="nav-link">샌들/슬리퍼</a>
+										<a href="#women" class="nav-link">샌들/슬리퍼</a>
 									</li>
 									<li class="nav-item active">
-										<a href="../goods/list.do?cno=3" class="nav-link">라이프스타일</a>
+										<a href="#women" class="nav-link">라이프스타일</a>
 									</li>
 									<li class="nav-item active">
-										<a href="../goods/list.do?cno=4" class="nav-link">구두</a>
+										<a href="#women" class="nav-link">구두</a>
 									</li>
 									<li class="nav-item active">
-										<a href="../goods/list.do?cno=5" class="nav-link">부츠</a>
+										<a href="#women" class="nav-link">부츠</a>
 									</li>
 									<li class="nav-item dropdown">
 										<a class="nav-link dropdown-toggle" role="button" id="pages" data-bs-toggle="dropdown" aria-expanded="false">Example</a>
