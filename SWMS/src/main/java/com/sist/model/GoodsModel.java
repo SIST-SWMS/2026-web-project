@@ -1,9 +1,11 @@
 package com.sist.model;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
 import com.sist.dao.GoodsDAO;
@@ -93,10 +95,71 @@ public class GoodsModel {
         
         return "../goods/goods_main_ajax.jsp"; 
     }
+    
     @RequestMapping("goods/detail.do")
 	public String goods_detail(HttpServletRequest request, HttpServletResponse response) {
 		
+		
+		  String goods_no=request.getParameter("goods_no");
+		  
+		  GoodsVO vo=GoodsDAO.goodsDetailData(Integer.parseInt(goods_no));
+		  
+		  request.setAttribute("vo", vo);
+		 
+		 
 		request.setAttribute("main_jsp", "../goods/detail.jsp");
 		return "../main/main.jsp";
 	}
+    @RequestMapping("goods/find.do")
+    public String goods_find(HttpServletRequest request, HttpServletResponse response) {
+    	
+    	request.setAttribute("goods_content", "../goods/find.jsp");
+        request.setAttribute("main_jsp", "../goods/goods.jsp");
+    	return "../main/main.jsp";
+    }
+    
+    @RequestMapping("goods/find_vue.do")
+	public void goods_find_vue(HttpServletRequest request, HttpServletResponse response) {
+		
+		String page=request.getParameter("page");
+		String column=request.getParameter("column");
+		String fd=request.getParameter("fd"); // 검색어 
+		
+		int curpage=Integer.parseInt(page);
+		// vue  전송
+		Map map=new HashMap();
+		map.put("column", column);
+		map.put("fd", fd);
+		map.put("start", (curpage*12)-12);
+		List<GoodsVO> list=GoodsDAO.goodsFindListData(map);
+		
+		int totalpage=GoodsDAO.goodsFindTotalPage(map);
+		
+		final int BLOCK=10;
+		int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+		int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
+		if(endPage>totalpage)
+			endPage=totalpage;
+		
+		try {
+			map=new HashMap();
+			map.put("fd", fd);
+			map.put("column", column);
+			map.put("list", list);
+			map.put("curpage", curpage);
+			map.put("totalpage", totalpage);
+			map.put("startPage", startPage);
+			map.put("endPage", endPage);
+			
+			ObjectMapper mapper=new ObjectMapper();
+			String json=mapper.writeValueAsString(map);
+			
+			// 전송 
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out=response.getWriter();
+			out.write(json);
+			
+		} catch (Exception e) {}
+	}
+    
 }

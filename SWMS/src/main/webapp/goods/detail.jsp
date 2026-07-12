@@ -77,8 +77,8 @@
 				<li class="breadcrumb-item"><a href="main.do"
 					class="text-decoration-none text-dark">홈</a></li>
 				<li class="breadcrumb-item"><a href="index.html#men"
-					class="text-decoration-none text-dark">남성화</a></li>
-				<li class="breadcrumb-item active" aria-current="page">클래식 러너</li>
+					class="text-decoration-none text-dark">${vo.category_name}</a></li>
+				<li class="breadcrumb-item active" aria-current="page">${vo.goods_name}</li>
 			</ol>
 		</nav>
 	</div>
@@ -91,11 +91,11 @@
 				<!-- Gallery -->
 				<div class="col-lg-6">
 					<div class="border rounded-4 p-3 bg-light text-center mb-3">
-						<img id="mainImage" src="../resources/images/product-thumb-1.png"
+						<img id="mainImage" src="${vo.poster_url }"
 							alt="상품 이미지" class="img-fluid"
 							style="max-height: 460px; object-fit: contain;">
 					</div>
-					<div class="d-flex gap-2 flex-wrap">
+					<!-- <div class="d-flex gap-2 flex-wrap">
 						<img class="thumb border rounded-3 p-1 bg-light"
 							src="../resources/images/product-thumb-1.png" width="84"
 							height="84" style="cursor: pointer; object-fit: contain;">
@@ -108,16 +108,17 @@
 						<img class="thumb border rounded-3 p-1 bg-light"
 							src="../resources/images/product-thumb-4.png" width="84"
 							height="84" style="cursor: pointer; object-fit: contain;">
-					</div>
+					</div> -->
 				</div>
 
 				<!-- Info -->
 				<div class="col-lg-6">
-					<span class="badge bg-success mb-2">-30% 할인</span>
-					<h2 class="fw-bold">클래식 러너 스니커즈</h2>
+					<span class="badge bg-success mb-2">${vo.goods_discount }% 할인</span>
+					<h2 class="fw-bold">${vo.goods_name }</h2>
 					<div class="d-flex align-items-center gap-2 my-2">
 						<span class="d-flex"> <svg width="18" height="18"
 								class="text-warning">
+								<!-- 이부분은 나중에 리뷰 담당자와 논의 후 별점 유무 진행 -->
 								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
 								class="text-warning">
 								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
@@ -127,21 +128,21 @@
 								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
 								class="text-warning">
 								<use xlink:href="#star-solid"></use></svg>
-						</span> <small class="text-body-secondary">(리뷰 128개)</small>
+						</span> <small class="text-body-secondary">리뷰 ${review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
 					</div>
 
 					<div class="my-3">
-						<span class="fs-3 fw-bold text-dark">₩89,000</span>
-						<del class="text-body-secondary ms-2">₩128,000</del>
-						<span class="text-success ms-2 fw-bold">-30%</span>
+						<span class="fs-3 fw-bold text-dark">₩89,000</span><!-- 할인 후 가격 -->
+						<!-- var price= 금액 - (Math.floor((금액 * 할인율) / 100));-->
+						<del class="text-body-secondary ms-2">₩${goods_price }</del><!-- 할인 전 가격 -->
+						<span class="text-success ms-2 fw-bold">-${vo.goods_discount}%</span><!--  할인률 -->
 					</div>
 
-					<p class="text-body-secondary">가볍고 통기성이 뛰어난 데일리 러닝화. 쿠셔닝 미드솔과
-						논슬립 아웃솔로 일상과 운동 어디에나 어울립니다.</p>
+					<p class="text-body-secondary">배송비 무료</p>
 
 					<!-- 사이즈 -->
 					<div class="my-4">
-						<label class="fw-bold d-block mb-2">사이즈</label>
+						<label class="fw-bold d-block mb-2">사이즈</label><!-- 사이즈 버튼 클릭하면  -->
 						<div class="d-flex flex-wrap gap-2" id="sizeGroup">
 							<button type="button" class="btn btn-outline-dark size-btn">240</button>
 							<button type="button" class="btn btn-outline-dark size-btn">250</button>
@@ -182,7 +183,7 @@
 					</div>
 
 					<ul class="list-unstyled text-body-secondary small border-top pt-3">
-						<li class="mb-1">• 무료 배송 (5만원 이상 구매 시)</li>
+						<li class="mb-1">• 무료 배송 (3만원 이상 구매 시)</li>
 						<li class="mb-1">• 7일 이내 무료 반품</li>
 						<li class="mb-1">• 정품 인증 상품</li>
 					</ul>

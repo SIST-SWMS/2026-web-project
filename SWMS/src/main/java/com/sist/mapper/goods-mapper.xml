@@ -50,4 +50,32 @@
 			</if>
 		</where>
 	</select>
+	<!-- 상품 상세 임시 -->
+	
+	<update id="goodsHitIncrement" parameterType="int">
+		UPDATE goods SET
+		hit=hit+1
+		WHERE goods_no=#{goods_no}
+	</update>
+	<select id="goodsDetailData" resultType="GoodsVO" parameterType="int">
+		SELECT goods_no, goods_name, goods_code, goods_price, 
+		       goods_discount, poster_url, subposter_url, hit,
+		       b.brand_name, c.category_name 
+		FROM goods g 
+		JOIN brand b ON g.brand_no = b.brand_no
+		JOIN category c ON g.category_no = c.category_no
+		WHERE g.goods_no = #{goods_no}
+	</select>
+	<select id="goodsFindListData" resultType="GoodsVO" parameterType="hashmap">
+		SELECT goods_no, goods_name, poster_url, goods_price, 
+		FROM goods
+		WHERE ${column} LIKE '%'||#{fd}||'%'
+		ORDER BY no ASC
+		OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY	
+	</select>
+	<select id="goodsFindTotalPage" resultType="int" parameterType="hashmap">
+		SELECT CEIL(COUNT(*)/12.0)
+		FROM goods
+		WHERE ${column} LIKE '%'||#{fd}||'%'
+	</select>
 </mapper>
