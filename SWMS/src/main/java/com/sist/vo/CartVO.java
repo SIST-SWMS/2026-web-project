@@ -15,4 +15,8 @@ public class CartVO {
 	private int cart_no,stock_no,sizes,quantity;
 	private String id;
 	private Date created_at;
+	
+	private StockVO svo = new StockVO();
+	private GoodsVO gvo = new GoodsVO();
+	
 }

@@ -29,9 +29,12 @@
 	top: 20px;
 }
 </style>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
-	<section class="py-5">
+	<section class="py-5" id="cartApp">
 		<div class="container-fluid">
 
 			<h2 class="fw-bold mb-4">장바구니</h2>
@@ -42,51 +45,72 @@
 				<div class="col-lg-8">
 
 					<!-- 전체선택 / 선택삭제 -->
-					<div
-						class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+					<div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3" v-if="list.length>0">
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" id="checkAll"
 								checked> <label class="form-check-label fw-bold"
-								for="checkAll">전체선택 (3/3)</label>
+								for="checkAll">전체선택 (3/{{list.length}})</label>
 						</div>
 						<a href="#" class="text-body-secondary text-decoration-none">선택삭제</a>
 					</div>
 
+					
+					
 					<!-- 상품 1 -->
-					<div class="d-flex gap-3 py-4 border-bottom">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox" checked>
-						</div>
-						<img src="../resources/images/product-thumb-1.png" alt="상품"
-							class="cart-thumb">
-						<div class="flex-grow-1">
-							<div class="d-flex justify-content-between">
-								<div class="fw-bold">말로 스트랩 뮬 슬리퍼 [n5285]_3type</div>
-								<a href="#" class="text-body-secondary text-decoration-none">✕</a>
+					<div v-if="list.length>0 && id!=null">
+						<div class="d-flex gap-3 py-4 border-bottom" v-for="(vo,index) in list" :key="index">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" v-model="vo.checked">
 							</div>
-							<div class="text-body-secondary small mt-1">[color]Black
-								(키튼힐 3cm) [size]230mm (+2,000원)</div>
-							<div class="input-group qty-box mt-2" style="max-width: 130px;">
-								<button class="btn btn-outline-secondary" type="button">−</button>
-								<input type="text" class="form-control" value="1" readonly>
-								<button class="btn btn-outline-secondary" type="button">+</button>
-							</div>
-
-							<div class="mt-2">
-								<span class="text-danger fw-bold">38%</span> <span
-									class="fw-bold fs-5">45,900원</span>
-								<del class="text-body-secondary ms-1">74,000원</del>
-							</div>
-
-							<div class="mt-3" style="max-width: 300px;">
-								<a href="../order/order.do" class="btn btn-outline-dark w-100">바로
-									구매</a>
+							<img :src="vo.gvo.poster_url" alt="상품"
+								class="cart-thumb">
+							<div class="flex-grow-1">
+								<div class="d-flex justify-content-between">
+									<div class="fw-bold">{{vo.gvo.goods_name}}</div>
+									<a :href="'../cart/delete.do?no='+vo.cart_no" class="text-body-secondary text-decoration-none">✕</a>
+								</div>
+								<div class="text-body-secondary small mt-1">
+									{{vo.sizes}}</div>
+								<div class="input-group qty-box mt-2" style="max-width: 130px;">
+									<button class="btn btn-outline-secondary" type="button">−</button>
+									<input type="text" class="form-control" :value="vo.quantity" readonly>
+									<button class="btn btn-outline-secondary" type="button">+</button>
+								</div>
+	
+								<div class="mt-2">
+									<span class="text-danger fw-bold">xx%</span> <span
+										class="fw-bold fs-5">{{vo.gvo.goods_price}}</span> <%-- 할인 후 가격 --%>
+									<del class="text-body-secondary ms-1">xx,xxx원</del> <%-- 할인 전 가격 --%>
+								</div>
+	
+								<div class="mt-3" style="max-width: 300px;">
+									<a href="../order/order.do" class="btn btn-outline-dark w-100">바로
+										구매</a>
+								</div>
 							</div>
 						</div>
 					</div>
+					
+					<!-- 장바구니 담긴 상품이 없는 경우 -->
+					<div v-else-if="list.length==0 && id!=null">
+						<div class="py-5 border-bottom text-center">
+							<i class="fw-bold fs-1 fa-solid fa-box-open"></i>
+							<div class="fw-bold fs-3 ">장바구니에 담긴 상품이 없습니다.</div>
+						</div>
+					</div>
+					
+					<!-- 로그인하고 들어오라는 페이지 -->
+					<div v-else-if="id==null">
+						<div class="py-5 border-bottom text-center">
+							<i class="fw-bold fs-1 fa-solid fa-id-card"></i>
+							<div class="fw-bold fs-3 ">로그인을 하셔야 장바구니를 사용하실 수 있습니다.</div>
+						</div>
+					</div>
+					
+					
 
 					<!-- 상품 2 -->
-					<div class="d-flex gap-3 py-4 border-bottom">
+					<!-- <div class="d-flex gap-3 py-4 border-bottom">
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" checked>
 						</div>
@@ -116,10 +140,10 @@
 									구매</a>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 					<!-- 상품 3 -->
-					<div class="d-flex gap-3 py-4 border-bottom">
+<!-- 					<div class="d-flex gap-3 py-4 border-bottom">
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" checked>
 						</div>
@@ -149,12 +173,12 @@
 									구매</a>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
 				</div>
 
 				<!-- ================= 우측: 주문 요약 ================= -->
-				<div class="col-lg-4">
+				<div class="col-lg-4" v-if="list.length!=0">
 					<div class="border rounded-4 p-4 summary-box">
 
 						<div class="d-flex justify-content-between mb-2">
@@ -192,10 +216,51 @@
 						</div>
 
 						<a href="../order/order.do" class="btn btn-dark btn-lg w-100">315,170원
-							결제하기 (3개)</a>
+							결제하기 ({{list.length}}개)</a>
 
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+	<script>
+	let cartApp = Vue.createApp({
+		data() {
+			return {
+				list:[],
+				id:null,
+				checked:true
+			}
+		},
+		mounted(){
+			this.dataRecv()
+		},
+		methods:{
+			async dataRecv(){
+				await axios.get('../cart/cart_vue.do',{
+					params:{
+						
+					}
+				}).then(response=>{
+					this.list = response.data.list
+					this.id = response.data.id
+					
+					console.log(response)
+					console.log(this.id)
+					console.log(this.checked)
+				})
+			}
+		},
+		computed:{
+    		totalPrice() {
+    			
+    		}
+		},
+		watch:{
+			//
+		}
+		
+	}).mount('#cartApp')
+	</script>
+</body>
+</html>
