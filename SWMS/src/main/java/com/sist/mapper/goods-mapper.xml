@@ -61,21 +61,35 @@
 		SELECT goods_no, goods_name, goods_code, goods_price, 
 		       goods_discount, poster_url, subposter_url, hit,
 		       b.brand_name, c.category_name 
-		FROM goods g 
-		JOIN brand b ON g.brand_no = b.brand_no
-		JOIN category c ON g.category_no = c.category_no
-		WHERE g.goods_no = #{goods_no}
+		FROM goods g JOIN brand b 
+		ON g.brand_no = b.brand_no
+		JOIN category c 
+		ON g.category_no=c.category_no
+		WHERE g.goods_no=#{goods_no}
 	</select>
 	<select id="goodsFindListData" resultType="GoodsVO" parameterType="hashmap">
-		SELECT goods_no, goods_name
-		FROM goods
-		WHERE ${column} LIKE '%'||#{fd}||'%'
-		ORDER BY goods_no ASC
+		SELECT goods_no, goods_code, goods_name, goods_price, poster_url, b.brand_name, hit,
+		       (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count
+		FROM goods g JOIN brand b
+		ON g.brand_no=b.brand_no
+		<where>
+			<if test="cno != 0">
+				g.category_no=#{cno} AND
+			</if>
+			g.goods_name LIKE '%'||#{fd}||'%'
+		</where>
+		ORDER BY g.goods_no DESC
 		OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY	
 	</select>
+	
 	<select id="goodsFindTotalPage" resultType="int" parameterType="hashmap">
 		SELECT CEIL(COUNT(*)/12.0)
-		FROM goods
-		WHERE ${column} LIKE '%'||#{fd}||'%'
+		FROM goods g
+		<where>
+			<if test="cno!=0">
+				g.category_no=#{cno} AND
+			</if>
+			g.goods_name LIKE '%'||#{fd}||'%'
+		</where>
 	</select>
 </mapper>

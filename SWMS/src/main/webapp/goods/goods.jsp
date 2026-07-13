@@ -7,13 +7,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style>
-.mypage-menu-title {
-	font-weight: 700;
-	margin-top: 24px;
-	margin-bottom: 8px;
-}
-
-.mypage-menu a {
+.category-sidebar-menu a {
 	display: block;
 	padding: 6px 0;
 	color: #666;
@@ -21,14 +15,10 @@
 	font-size: 15px;
 }
 
-.mypage-menu a:hover {
+.category-sidebar-menu a:hover {
 	color: #000;
 }
 
-.mypage-nickname {
-	font-size: 28px;
-	font-weight: 700;
-}
 </style>
 </head>
 <body>

@@ -130,12 +130,16 @@
 								<use xlink:href="#star-solid"></use></svg>
 						</span> <small class="text-body-secondary">리뷰 ${review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
 					</div>
-
+					
+					<!-- <div id="goods-info" data-original-price="${goods_price}" data-discount-rate="${goods_discount}">
+  							정가: <span id="view-original">${goods_price}원</span> <br>
+  							할인율: <span id="view-discount">${goods_discount}%</span> <br> 
+  					-->
 					<div class="my-3">
-						<span class="fs-3 fw-bold text-dark">₩89,000</span><!-- 할인 후 가격 -->
+						<span class="fs-3 fw-bold text-dark">₩ ${vo.goods_price }</span><!-- 할인 후 가격 -->
 						<!-- var price= 금액 - (Math.floor((금액 * 할인율) / 100));-->
-						<del class="text-body-secondary ms-2">₩${goods_price }</del><!-- 할인 전 가격 -->
-						<span class="text-success ms-2 fw-bold">-${vo.goods_discount}%</span><!--  할인률 -->
+						<del class="text-body-secondary ms-2">₩ ${vo.goods_price }</del><!-- 할인 전 가격 -->
+						<span class="text-success ms-2 fw-bold">- ${vo.goods_discount} %</span><!--  할인률 -->
 					</div>
 
 					<p class="text-body-secondary">배송비 무료</p>
@@ -213,13 +217,13 @@
 							<!-- </c:forEach> -->
 							<div class="swiper-slide">
 								<a href="../main/product.do?no=2"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-2.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">레더 브라운 로퍼</div></a>
+									class="text-decoration-none text-dark">
+									<img src="${vo.subposter_url }" 
+									     style="width: 100%; height: auto; display: block; border-radius: 8px; background: #f5f5f5;" 
+									     alt="상품 상세설명">
+									<div class="small mt-2">${vo.goods_name }</div></a>
 							</div>
-							<div class="swiper-slide">
+							<!-- <div class="swiper-slide">
 								<a href="../main/product.do?no=3"
 									class="text-decoration-none text-dark"><img
 									src="../resources/images/product-thumb-3.png"
@@ -322,10 +326,10 @@
 									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
 									alt="상품">
 									<div class="small mt-2">스트라이커 Z1 블랙</div></a>
-							</div>
+							</div> -->
 						</div>
-						<div class="swiper-button-prev"></div>
-						<div class="swiper-button-next"></div>
+						<!-- <div class="swiper-button-prev"></div>
+						<div class="swiper-button-next"></div> -->
 					</div>
 				</div>
 			</div>
@@ -335,8 +339,8 @@
 					<ul class="nav nav-tabs" id="pTab" role="tablist">
 						<li class="nav-item"><button class="nav-link active"
 								data-bs-toggle="tab" data-bs-target="#desc" type="button">상세정보</button></li>
-						<li class="nav-item"><button class="nav-link"
-								data-bs-toggle="tab" data-bs-target="#spec" type="button">사양</button></li>
+						<!-- <li class="nav-item"><button class="nav-link"
+								data-bs-toggle="tab" data-bs-target="#spec" type="button">사양</button></li> -->
 						<li class="nav-item"><button class="nav-link"
 								data-bs-toggle="tab" data-bs-target="#qna" type="button">상품문의</button></li>
 					</ul>
@@ -462,7 +466,7 @@
 							<div>
 								<!-- 리뷰 제목: ${review.title} -->
 								<h6 class="fw-bold mb-1">가볍고 편해서 매일 신어요</h6>
-								<!-- 작성자: ${review.writer} -->
+								<!-- 작성자: ${review.writer} 작성자 이름 -->
 								<small class="text-body-secondary">작성자: 김민수</small>
 							</div>
 							<!-- 개별 평점: 별 개수를 ${review.rating} 값에 따라 표시 -->

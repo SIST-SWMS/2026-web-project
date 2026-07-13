@@ -44,7 +44,7 @@ public class GoodsDAO {
 	  * <update id="goodsHitIncrement" parameterType="int">
 			UPDATE goods SET
 			hit=hit+1
-			WHERE no=#{no}
+			WHERE goods_no=#{goods_no}
 		</update>
 		*/
 	 /*
@@ -66,13 +66,13 @@ public class GoodsDAO {
 			SELECT goods_no, goods_name
 			FROM goods
 			WHERE ${column} LIKE '%'||#{fd}||'%'
-			ORDER BY no ASC
+			ORDER BY goods_no ASC
 			OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY	
 		</select>
 		<select id="goodsFindTotalPage" resultType="int" parameterType="hashmap">
 			SELECT CEIL(COUNT(*)/12.0)
 			FROM goods
-			WHERE ${column} LIKE '%'||#{fd}||'%'
+			WHERE ${cno} LIKE '%'||#{fd}||'%'
 		</select>
 	  */
 	 public static List<GoodsVO> goodsFindListData(Map map) {

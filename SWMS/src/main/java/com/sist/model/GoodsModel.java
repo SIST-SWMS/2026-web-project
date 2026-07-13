@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class GoodsModel {
 
-    // 1. 상품 메인 리스트 (페이지 열기)
+    // 1. 상품 메인 리스트 
     @RequestMapping("goods/list.do")
     public String goods_list(HttpServletRequest request, HttpServletResponse response) {
         String cno = request.getParameter("cno");
@@ -38,10 +38,10 @@ public class GoodsModel {
         List<GoodsVO> list = GoodsDAO.goodsListData(map);    
         int totalpage = GoodsDAO.goodsTotalPage(Integer.parseInt(cno));        
 
-        final int BLOCK = 10;
-        int startPage = ((curpage-1)/BLOCK*BLOCK)+1;
-        int endPage = ((curpage-1)/BLOCK*BLOCK)+BLOCK;
-        if(endPage > totalpage) endPage = totalpage;
+        final int BLOCK=10;
+        int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+        int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
+        if(endPage>totalpage) endPage=totalpage;
 
         request.setAttribute("list", list);
         request.setAttribute("curPage", curpage); 
@@ -55,15 +55,15 @@ public class GoodsModel {
         return "../main/main.jsp";
     }
     
-    // 2. 상품 리스트 Ajax (정렬, 카테고리 클릭 시)
+    // 2. 상품 리스트 Ajax
     @RequestMapping("goods/goods_main_ajax.do")
     public String goods_list_ajax(HttpServletRequest request, HttpServletResponse response) {
-        String cno = request.getParameter("category_no");
-        String page = request.getParameter("page");
-        String sort = request.getParameter("sort");  
+        String cno=request.getParameter("category_no");
+        String page=request.getParameter("page");
+        String sort=request.getParameter("sort");  
         
-        if(page==null) page = "1";
-        if(sort==null) sort = "default";
+        if(page==null) page="1";
+        if(sort==null) sort="default";
         
         int curpage = Integer.parseInt(page);
         int start = (curpage-1) * 12;   
@@ -79,7 +79,7 @@ public class GoodsModel {
         final int BLOCK = 10;
         int startPage = ((curpage-1)/BLOCK*BLOCK)+1;
         int endPage = ((curpage-1)/BLOCK*BLOCK)+BLOCK;
-        if(endPage>totalpage) endPage = totalpage;
+        if(endPage>totalpage) endPage=totalpage;
 
         request.setAttribute("list", list);   
         request.setAttribute("curPage", curpage);
@@ -93,9 +93,9 @@ public class GoodsModel {
     // 3. 상품 상세 보기 
     @RequestMapping("goods/detail.do")
     public String goods_detail(HttpServletRequest request, HttpServletResponse response) {
-        String goods_no = request.getParameter("goods_no");
+        String goods_no=request.getParameter("goods_no");
         
-        if(goods_no != null) {
+        if(goods_no!=null) {
             GoodsVO vo = GoodsDAO.goodsDetailData(Integer.parseInt(goods_no));
             request.setAttribute("vo", vo);
         }
@@ -115,9 +115,9 @@ public class GoodsModel {
     // 5. 검색 데이터 전송 
     @RequestMapping("goods/find_vue.do")
     public void goods_find_vue(HttpServletRequest request, HttpServletResponse response) {
-        String page = request.getParameter("page");
-        String cno = request.getParameter("cno"); 
-        String fd = request.getParameter("fd"); // 검색어 
+        String page=request.getParameter("page");
+        String cno=request.getParameter("cno"); 
+        String fd=request.getParameter("fd"); // 검색어 
         
         if(page == null) page = "1";
         if(cno == null) cno = "0"; 
@@ -130,13 +130,13 @@ public class GoodsModel {
         map.put("fd", fd);
         map.put("start", (curpage*12)-12);
         
-        List<GoodsVO> list = GoodsDAO.goodsFindListData(map);
-        int totalpage = GoodsDAO.goodsFindTotalPage(map);
+        List<GoodsVO> list=GoodsDAO.goodsFindListData(map);
+        int totalpage=GoodsDAO.goodsFindTotalPage(map);
         
         final int BLOCK = 10;
         int startPage = ((curpage-1)/BLOCK*BLOCK)+1;
         int endPage = ((curpage-1)/BLOCK*BLOCK)+BLOCK;
-        if(endPage>totalpage) endPage = totalpage;
+        if(endPage>totalpage) endPage=totalpage;
         
         try {
             // Vue로 보낼 데이터

@@ -189,7 +189,7 @@ $(function() {
                     </svg>
                     ${vo.like_count}
                     <svg width="12" height="12" viewBox="0 0 12 12">
-                    <use xlink:href="#star-solid"></use>
+                    <use xlink:href="#eye"></use>
                     </svg>
                     ${vo.hit}
                 </div>
