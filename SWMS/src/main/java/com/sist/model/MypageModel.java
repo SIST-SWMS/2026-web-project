@@ -60,7 +60,7 @@ public class MypageModel {
 	
 	@RequestMapping("mypage/member_detail.do")
 	public String mypage_member_detail(HttpServletRequest request, HttpServletResponse response) {
-		// 디비에 잇는 회원정보 가져온다
+		// 디비에 있는 회원정보 가져온다
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("id");
 		
@@ -70,5 +70,7 @@ public class MypageModel {
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
 	}
+	
+	
 	
 }
