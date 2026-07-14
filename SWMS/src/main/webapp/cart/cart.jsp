@@ -84,7 +84,7 @@
 								</div>
 	
 								<div class="mt-3" style="max-width: 300px;">
-									<a :href="'../order/order.do?no='+vo.svo.no+'&quantity='+vo.quantity" class="btn btn-outline-dark w-100">바로
+									<a href="#" class="btn btn-outline-dark w-100" @click="buyNow(vo)">바로
 										구매</a>
 								</div>
 							</div>
@@ -279,6 +279,18 @@
 				}).then(response=>{
 					this.dataRecv()
 				})
+			},
+ 			buyNow(vo) {
+				console.log(vo)
+				axios.get('../order/order.do',{
+					params:{
+						stock_no:vo.svo.no,
+						quantity:vo.quantity
+					}
+				}).then(response=>{
+					location.href="../order/order.do?stock_no="+vo.svo.no+"&quantity="+vo.quantity
+				})
+				
 			},
 			selectedOrder() {
 				axios.get('../order/order.do',{

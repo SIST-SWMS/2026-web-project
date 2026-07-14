@@ -1,7 +1,6 @@
 package com.sist.vo;
 
 import lombok.Data;
-
 /*
  * 	ORDER_DETAIL_NO NOT NULL NUMBER       
 	ORDER_NO        NOT NULL NUMBER       
@@ -15,4 +14,6 @@ import lombok.Data;
 public class OrderDetailVO {
 	private int order_detail_no,order_no,goods_no,sizes,quantity,price;
 	private String status;
+	private String price_str;
+	private GoodsVO gvo = new GoodsVO();
 }
