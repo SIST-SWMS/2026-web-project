@@ -13,8 +13,9 @@
 		SELECT c.cart_no,s.no,g.goods_no,
 			c.sizes,c.quantity,
 		    g.poster_url,g.goods_name,g.goods_price
-		FROM cart c JOIN stock s ON c.stock_no=s.no
-		JOIN goods g ON s.no=g.goods_no
+		FROM cart c
+		JOIN stock s ON c.stock_no=s.no
+		JOIN goods g ON s.goods_no=g.goods_no
 		WHERE c.id=#{id}
 		ORDER BY c.created_at DESC
 	</select>

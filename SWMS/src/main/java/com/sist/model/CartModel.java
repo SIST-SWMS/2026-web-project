@@ -27,10 +27,18 @@ public class CartModel {
 	{
 		HttpSession session = request.getSession();
 		String id = session.getAttribute("id").toString();
-		System.out.println(id);
-		System.out.println(session.getAttribute("id"));
 		
 		List<CartVO> list = CartDAO.cartListData(id);
+		
+		for(int i = 0; i < list.size(); i++)
+		{
+			String priceStr = "";
+			int priceNum = 0;
+			priceStr = list.get(i).getGvo().getGoods_price().replaceAll("[^0-9]", "");
+			priceNum = Integer.parseInt(priceStr);					
+			list.get(i).getGvo().setPrice(priceNum);
+			//System.out.println(priceNum);
+		}
 		
 		try 
 		{
@@ -55,6 +63,25 @@ public class CartModel {
 	{
 		String goods_no = request.getParameter("no");
 		CartDAO.cartDeleteData(Integer.parseInt(goods_no));
+		return "redirect:../cart/cart.do";
+	}
+	
+	@RequestMapping("cart/selected_delete.do")
+	public String cart_selected_delete(HttpServletRequest request, HttpServletResponse response) 
+	{
+		String deletes = request.getParameter("deletes");	// 하나의 문자열로 받은 goods_no
+		String[] arr = deletes.split(",");
+		//List<String> nList = new ArrayList<String>();
+		for(int i = 0; i < arr.length; i++)
+		{
+			//nList.add(arr[i]);	// split 한 goods_no 들을 배열에 저장
+			CartDAO.cartDeleteData(Integer.parseInt(arr[i]));
+			System.out.println(arr[i]);
+		}
+		//System.out.println(nList);
+
+		
+		//CartDAO.cartDeleteData(Integer.parseInt(goods_no));
 		return "redirect:../cart/cart.do";
 	}
 }
