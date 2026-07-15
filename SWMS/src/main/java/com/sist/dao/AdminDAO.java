@@ -62,4 +62,10 @@ public class AdminDAO {
 		session.close();
 		return list;
 	}
+
+	public static void adminGoodsUpdate(GoodsVO vo) {
+		SqlSession session = ssf.openSession(true);
+		session.update("adminGoodsUpdate", vo);
+		session.close();
+	}
 }

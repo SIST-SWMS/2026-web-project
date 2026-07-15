@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,17 +30,17 @@
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
 <script type="text/javascript">
-$(function() {
-	$('#deleteBtn').on('click',function(){
-		let no = 1
-		if (confirm("삭제 시 해당 상품의 재고·이력 데이터도 영향을 받습니다. 삭제하시겠습니까?")) {
-			location.href = "../admin/goods_delete.do?goods_no=" + no
-		} 
-		else {
-			return;
-		}
+	$(function() {
+
+		$('#deleteBtn').on('click', function() {
+			let no = $(this).attr("data-no")
+			if (confirm("삭제 시 해당 상품의 재고·이력 데이터도 영향을 받습니다. 삭제하시겠습니까?")) {
+				location.href = "../admin/goods_delete.do?no=" + no
+			} else {
+				return;
+			}
+		})
 	})
-})
 </script>
 </head>
 <body>
@@ -48,17 +49,24 @@ $(function() {
 	<div class="row g-4 mb-5">
 
 		<div class="col-md-4">
-			<img src="../resources/images/product-thumb-1.png" class="w-100 rounded-3 mb-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
+			<c:choose>
+				<c:when test="${fn:startsWith(vo.poster_url, 'http')}">
+					<img src="${vo.poster_url}" class="w-100 rounded-3 mb-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
+				</c:when>
+				<c:otherwise>
+					<img src="/SWMS/uploads/${vo.poster_url}" class="w-100 rounded-3 mb-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
+				</c:otherwise>
+			</c:choose>
 		</div>
 
 		<div class="col-md-8">
 			<div class="info-row">
 				<div class="label">상품코드</div>
-				<div class="value">${vo.productCode}</div>
+				<div class="value">${vo.goods_code}</div>
 			</div>
 			<div class="info-row">
 				<div class="label">상품명</div>
-				<div class="value">${vo.productName}</div>
+				<div class="value">${vo.goods_name}</div>
 			</div>
 			<div class="info-row">
 				<div class="label">브랜드</div>
@@ -80,12 +88,19 @@ $(function() {
 			</div>
 			<div class="info-row">
 				<div class="label">등록일</div>
-				<div class="value">${product.regDate}</div>
+				<div class="value">${vo.dbday}</div>
 			</div>
 		</div>
 
 		<div>
-			<img src="../resources/images/product-thumb-1.png" class="w-100 rounded-3 mb-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 상세 이미지">
+			<c:choose>
+				<c:when test="${fn:startsWith(vo.subposter_url, 'http')}">
+					<img src="${vo.subposter_url}" class="w-100 rounded-3 mb-3" style="object-fit: cover; background: #f5f5f5;" alt="상품 상세 이미지">
+				</c:when>
+				<c:otherwise>
+					<img src="/SWMS/uploads/${vo.subposter_url}" class="w-100 rounded-3 mb-3" style="object-fit: cover; background: #f5f5f5;" alt="상품 상세 이미지">
+				</c:otherwise>
+			</c:choose>
 		</div>
 
 	</div>
@@ -96,7 +111,7 @@ $(function() {
 		<thead>
 			<tr class="text-body-secondary">
 				<th>사이즈</th>
-				<th>현재고</th>
+				<th>재고수량</th>
 				<th>상태</th>
 			</tr>
 		</thead>
@@ -106,7 +121,15 @@ $(function() {
 					<td>${lvo.goods_size }</td>
 					<td>${lvo.quantity }</td>
 					<td>
-						<span class="badge bg-success">정상</span>
+						<c:if test="${lvo.quantity >= 10}">
+							<span class="badge bg-success">정상</span>
+						</c:if>
+						<c:if test="${lvo.quantity < 10 && lvo.quantity > 0}">
+							<span class="badge bg-warning">부족</span>
+						</c:if>
+						<c:if test="${lvo.quantity == 0}">
+							<span class="badge bg-danger">품절</span>
+						</c:if>
 					</td>
 				</tr>
 			</c:forEach>
@@ -114,8 +137,8 @@ $(function() {
 	</table>
 
 	<div class="mt-4 d-flex gap-2">
-		<a href="../admin/goods_update.do?code=${vo.goods_no }" class="btn btn-dark px-4">수정</a>
-		<button type="button" class="btn btn-danger px-4" id="deleteBtn">삭제</button>
+		<a class="btn btn-dark px-4" href="../admin/goods_update.do?no=${vo.goods_no }">수정</a>
+		<button type="button" class="btn btn-danger px-4" id="deleteBtn" data-no="${vo.goods_no }">삭제</button>
 		<a href="../admin/goods_list.do" class="btn btn-outline-dark px-4">목록</a>
 	</div>
 
