@@ -50,8 +50,7 @@
 			</if>
 		</where>
 	</select>
-	<!-- 상품 상세 임시 -->
-	
+		
 	<update id="goodsHitIncrement" parameterType="int">
 		UPDATE goods SET
 		hit=hit+1
@@ -60,7 +59,8 @@
 	<select id="goodsDetailData" resultType="GoodsVO" parameterType="int">
 		SELECT goods_no, goods_name, goods_code, goods_price, 
 		       goods_discount, poster_url, subposter_url, hit,
-		       b.brand_name, c.category_name 
+		       b.brand_name, c.category_name,
+		       (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count 
 		FROM goods g JOIN brand b 
 		ON g.brand_no = b.brand_no
 		JOIN category c 
@@ -92,4 +92,42 @@
 			g.goods_name LIKE '%'||#{fd}||'%'
 		</where>
 	</select>
+	
+	<!-- 1. 재고 있는지 확인 -->
+	<select id="stockQuantityCheck" resultType="int" parameterType="map">    
+	SELECT quantity, sizes    
+	FROM stock     
+	WHERE goods_no = #{goods_no} 
+	AND sizes = #{sizes}
+	</select>
+
+	<!-- 2. 장바구니에 똑같은 상품+사이즈가 있는지 확인  -->
+	<select id="cartCount" resultType="int" parameterType="map">  
+	SELECT COUNT(*)   
+	FROM cart     
+	WHERE id = #{id} 
+	AND stock_no = #{stock_no} 
+	AND sizes = #{sizes}
+	</select>
+
+	<!-- 3. 장바구니에 이미 있으면 수량만 추가  -->
+	<update id="cartUpdate" parameterType="map">   
+	UPDATE cart 
+	SET quantity = quantity + #{quantity}   
+	WHERE id = #{id}       
+	AND stock_no = #{stock_no}       
+	AND sizes = #{sizes}
+	</update>
+
+	<!-- 4. 장바구니에 없으면 새로 담기 -->
+
+	<insert id="cartInsert" parameterType="map">   
+	INSERT INTO cart (cart_no, id, stock_no, sizes, quantity)    
+	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity})
+	</insert>
+
+		<!-- 
+			INSERT INTO cart (cart_no,id,stock_no,sizes,quantity)
+			VALUES (cart_no_seq.NEXTVAL,'user',1,230,1);
+ 		-->
 </mapper>

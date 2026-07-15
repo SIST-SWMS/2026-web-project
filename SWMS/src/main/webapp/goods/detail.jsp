@@ -16,10 +16,12 @@
 .thumb.active {
 	border-color: #000 !important;
 }
+
 </style>
 
 <%-- 상세 페이지 전용 스크립트 (썸네일 전환 / 사이즈 선택 / 수량 조절) --%>
 <script>
+$(function() {
 	document.querySelectorAll('.thumb').forEach(function(t) {
 		t.addEventListener('click', function() {
 			document.getElementById('mainImage').src = this.src;
@@ -37,7 +39,7 @@
 			this.classList.add('active');
 		});
 	});
-	var qty = document.getElementById('qtyInput');
+	let qty = document.getElementById('qtyInput');
 	document.getElementById('qtyPlus').addEventListener('click', function() {
 		qty.value = parseInt(qty.value) + 1;
 	});
@@ -48,23 +50,34 @@
 
 	// 연관상품 슬라이드 초기화 (한 화면에 6개씩, 옆으로 넘김)
 	new Swiper('.relatedSwiper', {
-		slidesPerView : 6,
-		spaceBetween : 16,
-		navigation : {
-			nextEl : '.relatedSwiper .swiper-button-next',
-			prevEl : '.relatedSwiper .swiper-button-prev'
+		slidesPerView:6,
+		spaceBetween:16,
+		navigation:{
+			nextEl:'.relatedSwiper .swiper-button-next',
+			prevEl:'.relatedSwiper .swiper-button-prev'
 		},
-		breakpoints : {
-			0 : {
-				slidesPerView : 2
+		breakpoints:{
+			0:{
+				slidesPerView:2
 			},
-			768 : {
-				slidesPerView : 4
+			768:{
+				slidesPerView:4
 			},
-			992 : {
-				slidesPerView : 6
+			992:{
+				slidesPerView:6
 			}
 		}
+	});
+	
+	    $('#likeOn').on('click', function() {
+	        let gno = $(this).attr('data-no');
+	        location.href = "../like/likeOn.do?goods_no=" + gno;
+	    });
+
+	    $('#likeOff').on('click', function() {
+	        let gno = $(this).attr('data-no');
+	        location.href = "../like/likeOff.do?goods_no=" + gno;
+	    });
 	});
 </script>
 </head>
@@ -131,10 +144,6 @@
 						</span> <small class="text-body-secondary">리뷰 ${review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
 					</div>
 					
-					<!-- <div id="goods-info" data-original-price="${goods_price}" data-discount-rate="${goods_discount}">
-  							정가: <span id="view-original">${goods_price}원</span> <br>
-  							할인율: <span id="view-discount">${goods_discount}%</span> <br> 
-  					-->
 					<div class="my-3">
 						<span class="fs-3 fw-bold text-dark">₩ ${vo.goods_price }</span><!-- 할인 후 가격 -->
 						<!-- var price= 금액 - (Math.floor((금액 * 할인율) / 100));-->
@@ -175,16 +184,35 @@
 					</div>
 
 					<!-- CTA -->
+					<c:if test="${sessionScope.id!=null }">
 					<div class="d-flex flex-wrap gap-2 my-4">
 						<button class="btn btn-primary btn-lg px-4"
 							data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart">
 							장바구니 담기</button>
 						<a href="checkout.do" class="btn btn-dark btn-lg px-4">바로 구매</a>
-						<button class="btn btn-outline-dark btn-lg">
+						<!-- <button class="btn btn-outline-dark btn-lg" id=>
 							<svg width="22" height="22">
 								<use xlink:href="#heart"></use></svg>
-						</button>
+						</button> -->
+                        
+						<c:if test="${check == 0}">
+						    <button class="btn btn-outline-dark btn-lg" id="likeOn" data-no="${vo.goods_no}">
+						        <svg width="22" height="22">
+						            <use xlink:href="#heart-empty"></use> 
+						        </svg>
+						        <span class="ms-2">${like_count}</span>
+						    </button>
+						</c:if>
+						<c:if test="${check == 1}">
+						    <button class="btn btn-danger btn-lg" id="likeOff" data-no="${vo.goods_no}">
+						        <svg width="22" height="22" fill="white">
+						            <use xlink:href="#heart-fill"></use> 
+						        </svg>
+						        <span class="ms-2">${like_count}</span>
+						    </button>
+						</c:if>
 					</div>
+					</c:if>
 
 					<ul class="list-unstyled text-body-secondary small border-top pt-3">
 						<li class="mb-1">• 무료 배송 (3만원 이상 구매 시)</li>
@@ -199,12 +227,17 @@
 			<!--  연관상품 슬라이드 (같은 카테고리 좋아요순 15개)  -->
 			<!-- ============================================= -->
 			<div class="row mt-5">
+				<div class="col-12 text-center">
+					<h5 class="fw-bold mb-4 text-start">상품 상세 이미지</h5>
+					<img src="${vo.subposter_url}" class="img-fluid w-100" alt="상품 상세설명">
+				</div>
+			</div>
+			<div class="row mt-5">
 				<div class="col-12">
-					<h5 class="fw-bold mb-3">이 카테고리 인기 상품</h5>
+					<h5 class="fw-bold mb-3">연관상품추천</h5>
 					<div class="swiper relatedSwiper">
 						<div class="swiper-wrapper">
-							<%-- 상품 1개 = swiper-slide 하나. <c:forEach var="rel" items="${relatedList}"> 로 반복 (15개) --%>
-							<!-- <c:forEach var="rel" items="${relatedList}"> -->
+						
 							<div class="swiper-slide">
 								<a href="../main/product.do?no=1"
 									class="text-decoration-none text-dark"> <img
@@ -213,15 +246,6 @@
 									alt="상품">
 									<div class="small mt-2">클래식 러너 스니커즈</div>
 								</a>
-							</div>
-							<!-- </c:forEach> -->
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=2"
-									class="text-decoration-none text-dark">
-									<img src="${vo.subposter_url }" 
-									     style="width: 100%; height: auto; display: block; border-radius: 8px; background: #f5f5f5;" 
-									     alt="상품 상세설명">
-									<div class="small mt-2">${vo.goods_name }</div></a>
 							</div>
 						</div>
 					</div>
@@ -233,8 +257,6 @@
 					<ul class="nav nav-tabs" id="pTab" role="tablist">
 						<li class="nav-item"><button class="nav-link active"
 								data-bs-toggle="tab" data-bs-target="#desc" type="button">상품 리뷰</button></li>
-						<!-- <li class="nav-item"><button class="nav-link"
-								data-bs-toggle="tab" data-bs-target="#spec" type="button">사양</button></li> -->
 						<li class="nav-item"><button class="nav-link"
 								data-bs-toggle="tab" data-bs-target="#qna" type="button">상품문의</button></li>
 					</ul>
@@ -332,32 +354,7 @@
 				</div>
 			</div>
 						</div>
-						<div class="tab-pane fade" id="spec">
-							<table class="table mb-0">
-								<tbody>
-									<tr>
-										<th style="width: 160px;">겉감</th>
-										<td>통기성 메시</td>
-									</tr>
-									<tr>
-										<th>미드솔</th>
-										<td>EVA 쿠셔닝</td>
-									</tr>
-									<tr>
-										<th>아웃솔</th>
-										<td>논슬립 러버</td>
-									</tr>
-									<tr>
-										<th>무게</th>
-										<td>약 260g (260mm 기준)</td>
-									</tr>
-									<tr>
-										<th>원산지</th>
-										<td>베트남</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+						
 						<div class="tab-pane fade" id="qna">
 							<%-- 상품 문의 내역 리스트 --%>
 							<table class="table align-middle">

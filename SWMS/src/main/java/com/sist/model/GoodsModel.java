@@ -9,11 +9,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
 import com.sist.dao.GoodsDAO;
+import com.sist.dao.LikeDAO;
 import com.sist.vo.GoodsVO;
+import com.sist.vo.LikeVO;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class GoodsModel {
@@ -35,7 +38,12 @@ public class GoodsModel {
         map.put("start", start);   
         map.put("sort", "default");         
 
-        List<GoodsVO> list = GoodsDAO.goodsListData(map);    
+        List<GoodsVO> list = GoodsDAO.goodsListData(map);   
+		
+		/*
+		 * for(GoodsVO vo:list) { LikeDAO.goodsLikeUpdate(vo.getGoods_no()); }
+		 */
+		 
         int totalpage = GoodsDAO.goodsTotalPage(Integer.parseInt(cno));        
 
         final int BLOCK=10;
@@ -96,8 +104,24 @@ public class GoodsModel {
         String goods_no=request.getParameter("goods_no");
         
         if(goods_no!=null) {
-            GoodsVO vo = GoodsDAO.goodsDetailData(Integer.parseInt(goods_no));
+        	int gno = Integer.parseInt(goods_no);
+            GoodsVO vo = GoodsDAO.goodsDetailData(gno);
             request.setAttribute("vo", vo);
+            
+            HttpSession session = request.getSession();
+            String id = (String) session.getAttribute("id");
+
+            int check = 0; // 기본은 안 누른 상태(0)
+            if(id != null) {
+                LikeVO lvo = new LikeVO();
+                lvo.setId(id);
+                lvo.setGoods_no(gno);
+                check = LikeDAO.likeCheck(lvo);
+            }
+            int likecount = LikeDAO.likeCount(gno);
+
+            request.setAttribute("check", check);
+            request.setAttribute("likecount", likecount);
         }
         
         request.setAttribute("main_jsp", "../goods/detail.jsp");
