@@ -1,5 +1,6 @@
 package com.sist.model;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.sist.controller.Controller;
@@ -21,8 +22,9 @@ public class OrderModel {
 		String quantity = request.getParameter("quantity");
 		HttpSession session = request.getSession();
 		String id = session.getAttribute("id").toString();
+		MemberVO mvo = MemberDAO.memberDetailData(id);
 		
-		System.out.println("stock_no: "+stock_no);
+		//System.out.println("stock_no: "+stock_no);
 		
 		Map map = new HashMap();
 		map.put("stock_no", Integer.parseInt(stock_no));
@@ -34,9 +36,16 @@ public class OrderModel {
 		int quantity_num = Integer.parseInt(quantity);
 		int totalPrice = quantity_num * Integer.parseInt(price);
 		
+		DecimalFormat df = new DecimalFormat("#,###");
+		String totalPrice_str = df.format(totalPrice);
+		
 		request.setAttribute("totalPrice", totalPrice);
+		request.setAttribute("totalPrice_str", totalPrice_str);
 		request.setAttribute("list", list);
 		request.setAttribute("quantity", quantity);
+		
+		request.setAttribute("mvo", mvo);
+		request.setAttribute("id", id);
 		
 		
 		request.setAttribute("main_jsp", "../order/checkout.jsp");
