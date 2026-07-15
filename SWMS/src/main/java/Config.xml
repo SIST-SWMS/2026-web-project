@@ -43,6 +43,7 @@
     <mapper resource="com/sist/mapper/cart-mapper.xml"/>
     <mapper resource="com/sist/mapper/order-mapper.xml"/>
     <mapper resource="com/sist/mapper/like-mapper.xml"/>
-    <mapper resource="com/sist/mapper/review-mapper.xml"/>
+    <mapper resource="com/sist/mapper/mypage-mapper.xml"/>
+	<mapper resource="com/sist/mapper/review-mapper.xml"/>
   </mappers>
 </configuration>
