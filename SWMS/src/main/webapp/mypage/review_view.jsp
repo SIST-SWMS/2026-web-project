@@ -56,8 +56,8 @@
 
 	<%-- 수정 / 삭제 버튼 --%>
 	<div class="d-flex gap-2 justify-content-end border-top pt-3">
-		<a href="#" class="btn btn-dark px-4">수정</a> <a href="#"
-			class="btn btn-outline-danger px-4">삭제</a>
+		<a href="#" class="btn btn-dark px-4">수정</a> 
+		<a href="#"	class="btn btn-outline-danger px-4">삭제</a>
 	</div>
 </body>
 </html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.review-mapper">
+ <insert id="reviewInsert" parameterType="ReviewVO">
+  INSERT INTO review(review_no,goods_no,subject,content,id,hit,like_count,created_at,order_no)
+  VALUES(review_no_seq.nextval,#{goods_no},#{subject},#{content},#{id},#{hit},0,SYSDATE,#{order_no})
+
+ </insert>
+ <select id="reviewCheck" parameterType="int">
+  SELECT CEIL(*)
+  FROM review
+  WHERE goods_no=#{goods_no} AND id=#{id}
+ </select>
+</mapper>
+
+<!-- 
+	    REVIEW_NO  NOT NULL NUMBER         
+		GOODS_NO   NOT NULL NUMBER         
+		SUBJECT    NOT NULL VARCHAR2(50)   
+		CONTENT    NOT NULL CLOB           
+		ID         NOT NULL VARCHAR2(20)   
+		HIT                 CHAR(1)        
+		LIKE_COUNT          NUMBER         
+		CREATED_AT          DATE           
+		IMAGE               VARCHAR2(2000) 
+ -->
+ 
+
