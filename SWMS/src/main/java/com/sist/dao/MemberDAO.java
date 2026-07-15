@@ -67,4 +67,43 @@ public class MemberDAO {
 		}
 		return vo;
 	}
+	
+	/*
+	 * <select id="memberDetailData" resultType="MemberVO"
+		parameterType="string">
+
+		select id,pwd,name,nickname,phone,zipcode,address,address_detail
+		from member
+		where id=#{id}
+	</select>
+	 */
+	
+	public static MemberVO memberDetailData(String id)
+	{
+		SqlSession session = ssf.openSession();
+		MemberVO vo = session.selectOne("memberDetailData",id);
+		session.close();
+		
+		return vo;
+		
+		
+	}
+	
+	/*
+	 *  <select id="memberFindPassword" resultType="string"
+		parameterType="string">
+		SELECT pwd FROM member
+		WHERE id = #{id}
+	    </select>
+	 */
+	// 디비에서 검색한 데이터 가져와서 담아놓고 모델에 전달만
+	public static String memberFindPassword(String id)
+	{
+		SqlSession session =ssf.openSession();
+		String dbpwd = session.selectOne("memberFindPassword",id);
+		session.close();
+		
+		return dbpwd;
+	}
+	
 }

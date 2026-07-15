@@ -1,3 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sist.mapper.order-mapper"></mapper>
+<mapper namespace="com.sist.mapper.order-mapper">
+	<resultMap type="OrderDetailVO" id="OrderDetailMap">
+		<result property="gvo.goods_name" column="goods_name"/>
+		<result property="gvo.goods_price" column="goods_price"/>
+		<result property="gvo.poster_url" column="poster_url"/>
+		<result property="sizes" column="goods_size"/>
+		<result property="price_str" column="goods_price"/>
+		
+	</resultMap>
+	<select id="orderListData" resultMap="OrderDetailMap" parameterType="hashmap" >
+		SELECT g.goods_name, s.goods_size, g.goods_price, g.poster_url
+		FROM stock s
+		JOIN goods g ON s.goods_no=g.goods_no
+		WHERE s.no=#{stock_no}
+	</select>
+</mapper>

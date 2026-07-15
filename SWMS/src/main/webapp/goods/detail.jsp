@@ -77,8 +77,8 @@
 				<li class="breadcrumb-item"><a href="main.do"
 					class="text-decoration-none text-dark">홈</a></li>
 				<li class="breadcrumb-item"><a href="index.html#men"
-					class="text-decoration-none text-dark">남성화</a></li>
-				<li class="breadcrumb-item active" aria-current="page">클래식 러너</li>
+					class="text-decoration-none text-dark">${vo.category_name}</a></li>
+				<li class="breadcrumb-item active" aria-current="page">${vo.goods_name}</li>
 			</ol>
 		</nav>
 	</div>
@@ -91,11 +91,11 @@
 				<!-- Gallery -->
 				<div class="col-lg-6">
 					<div class="border rounded-4 p-3 bg-light text-center mb-3">
-						<img id="mainImage" src="../resources/images/product-thumb-1.png"
+						<img id="mainImage" src="${vo.poster_url }"
 							alt="상품 이미지" class="img-fluid"
 							style="max-height: 460px; object-fit: contain;">
 					</div>
-					<div class="d-flex gap-2 flex-wrap">
+					<!-- <div class="d-flex gap-2 flex-wrap">
 						<img class="thumb border rounded-3 p-1 bg-light"
 							src="../resources/images/product-thumb-1.png" width="84"
 							height="84" style="cursor: pointer; object-fit: contain;">
@@ -108,16 +108,17 @@
 						<img class="thumb border rounded-3 p-1 bg-light"
 							src="../resources/images/product-thumb-4.png" width="84"
 							height="84" style="cursor: pointer; object-fit: contain;">
-					</div>
+					</div> -->
 				</div>
 
 				<!-- Info -->
 				<div class="col-lg-6">
-					<span class="badge bg-success mb-2">-30% 할인</span>
-					<h2 class="fw-bold">클래식 러너 스니커즈</h2>
+					<span class="badge bg-success mb-2">${vo.goods_discount }% 할인</span>
+					<h2 class="fw-bold">${vo.goods_name }</h2>
 					<div class="d-flex align-items-center gap-2 my-2">
 						<span class="d-flex"> <svg width="18" height="18"
 								class="text-warning">
+								<!-- 이부분은 나중에 리뷰 담당자와 논의 후 별점 유무 진행 -->
 								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
 								class="text-warning">
 								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
@@ -127,21 +128,25 @@
 								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
 								class="text-warning">
 								<use xlink:href="#star-solid"></use></svg>
-						</span> <small class="text-body-secondary">(리뷰 128개)</small>
+						</span> <small class="text-body-secondary">리뷰 ${review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
 					</div>
-
+					
+					<!-- <div id="goods-info" data-original-price="${goods_price}" data-discount-rate="${goods_discount}">
+  							정가: <span id="view-original">${goods_price}원</span> <br>
+  							할인율: <span id="view-discount">${goods_discount}%</span> <br> 
+  					-->
 					<div class="my-3">
-						<span class="fs-3 fw-bold text-dark">₩89,000</span>
-						<del class="text-body-secondary ms-2">₩128,000</del>
-						<span class="text-success ms-2 fw-bold">-30%</span>
+						<span class="fs-3 fw-bold text-dark">₩ ${vo.goods_price }</span><!-- 할인 후 가격 -->
+						<!-- var price= 금액 - (Math.floor((금액 * 할인율) / 100));-->
+						<del class="text-body-secondary ms-2">₩ ${vo.goods_price }</del><!-- 할인 전 가격 -->
+						<span class="text-success ms-2 fw-bold">- ${vo.goods_discount} %</span><!--  할인률 -->
 					</div>
 
-					<p class="text-body-secondary">가볍고 통기성이 뛰어난 데일리 러닝화. 쿠셔닝 미드솔과
-						논슬립 아웃솔로 일상과 운동 어디에나 어울립니다.</p>
+					<p class="text-body-secondary">배송비 무료</p>
 
 					<!-- 사이즈 -->
 					<div class="my-4">
-						<label class="fw-bold d-block mb-2">사이즈</label>
+						<label class="fw-bold d-block mb-2">사이즈</label><!-- 사이즈 버튼 클릭하면  -->
 						<div class="d-flex flex-wrap gap-2" id="sizeGroup">
 							<button type="button" class="btn btn-outline-dark size-btn">240</button>
 							<button type="button" class="btn btn-outline-dark size-btn">250</button>
@@ -182,7 +187,7 @@
 					</div>
 
 					<ul class="list-unstyled text-body-secondary small border-top pt-3">
-						<li class="mb-1">• 무료 배송 (5만원 이상 구매 시)</li>
+						<li class="mb-1">• 무료 배송 (3만원 이상 구매 시)</li>
 						<li class="mb-1">• 7일 이내 무료 반품</li>
 						<li class="mb-1">• 정품 인증 상품</li>
 					</ul>
@@ -212,119 +217,13 @@
 							<!-- </c:forEach> -->
 							<div class="swiper-slide">
 								<a href="../main/product.do?no=2"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-2.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">레더 브라운 로퍼</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=3"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-3.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">OORIGINAL 스타더스트</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=4"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-4.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">글리오 실버문</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=5"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-5.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">뉴포트 H2 샌들</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=6"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-6.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">993 메이드인 USA</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=7"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-7.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">삼바 OG 클라우드</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=8"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-1.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">에어포스1 화이트</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=9"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-2.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">클래식 클로그 블랙</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=10"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-3.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">1460 8홀 부츠</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=11"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-4.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">올드스쿨 클래식</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=12"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-5.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">본디 8 러닝화</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=13"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-6.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">에샤페 메리제인</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=14"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-7.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">베사 웨지 샌들</div></a>
-							</div>
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=15"
-									class="text-decoration-none text-dark"><img
-									src="../resources/images/product-thumb-1.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">스트라이커 Z1 블랙</div></a>
+									class="text-decoration-none text-dark">
+									<img src="${vo.subposter_url }" 
+									     style="width: 100%; height: auto; display: block; border-radius: 8px; background: #f5f5f5;" 
+									     alt="상품 상세설명">
+									<div class="small mt-2">${vo.goods_name }</div></a>
 							</div>
 						</div>
-						<div class="swiper-button-prev"></div>
-						<div class="swiper-button-next"></div>
 					</div>
 				</div>
 			</div>
@@ -333,16 +232,105 @@
 				<div class="col-12">
 					<ul class="nav nav-tabs" id="pTab" role="tablist">
 						<li class="nav-item"><button class="nav-link active"
-								data-bs-toggle="tab" data-bs-target="#desc" type="button">상세정보</button></li>
-						<li class="nav-item"><button class="nav-link"
-								data-bs-toggle="tab" data-bs-target="#spec" type="button">사양</button></li>
+								data-bs-toggle="tab" data-bs-target="#desc" type="button">상품 리뷰</button></li>
+						<!-- <li class="nav-item"><button class="nav-link"
+								data-bs-toggle="tab" data-bs-target="#spec" type="button">사양</button></li> -->
 						<li class="nav-item"><button class="nav-link"
 								data-bs-toggle="tab" data-bs-target="#qna" type="button">상품문의</button></li>
 					</ul>
 					<div class="tab-content border border-top-0 p-4 rounded-bottom">
 						<div class="tab-pane fade show active" id="desc">
-							<p class="mb-0 text-body-secondary">가벼운 메시 어퍼와 반응성 좋은 EVA
-								미드솔을 조합한 러닝화입니다. 장시간 착용에도 편안하며, 다양한 코디에 자연스럽게 어울립니다.</p>
+							<div class="row mt-5" id="reviewArea">
+				<div class="col-12">
+
+					<h4 class="fw-bold mb-4">상품 리뷰</h4>
+
+					<!-- (1) 평균 별점 요약 박스 -->
+					<div class="border rounded-4 p-4 mb-4 bg-light">
+						<div class="row align-items-center">
+
+							<!-- 평균 점수 -->
+							<div class="col-md-4 text-center border-end">
+								<!-- 평균 점수 숫자: JSP에서 ${avgRating} 등으로 교체 -->
+								<div class="display-4 fw-bold">4.5</div>
+								<span class="d-inline-flex"> <svg width="20" height="20"
+										class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg>
+								</span>
+								<!-- 전체 리뷰 개수: ${reviewCount} 등으로 교체 -->
+								<p class="text-body-secondary mb-0 mt-2">전체 리뷰 128개</p>
+							</div>
+
+							<!-- 점수 안내 문구 -->
+							<div class="col-md-8 mt-3 mt-md-0 ps-md-4">
+								<p class="mb-0 text-body-secondary">실제 구매 고객이 남긴 리뷰입니다. 평점은
+									5점 만점 기준입니다.</p>
+							</div>
+
+						</div>
+					</div>
+
+					<!-- (2) 리뷰 목록 -->
+					<!-- <c:forEach var="review" items="${reviewList}"> -->
+					<div class="review-card border rounded-4 p-4 mb-3">
+						<div class="d-flex justify-content-between align-items-start mb-2">
+							<div>
+								<!-- 리뷰 제목: ${review.title} -->
+								<h6 class="fw-bold mb-1">가볍고 편해서 매일 신어요</h6>
+								<!-- 작성자: ${review.writer} 작성자 이름 -->
+								<small class="text-body-secondary">작성자: 김민수</small>
+							</div>
+							<!-- 개별 평점: 별 개수를 ${review.rating} 값에 따라 표시 -->
+							<span class="d-inline-flex"> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg>
+							</span>
+						</div>
+						<!-- 리뷰 내용: ${review.content} -->
+						<p class="text-body-secondary mb-0">사이즈 정사이즈입니다. 착화감이 부드럽고 하루종일 신어도 발이 편했어요.</p>
+					</div>
+					<!-- </c:forEach> -->
+
+					<!-- (미리보기용 예시 리뷰 - JSTL 적용 후 삭제하세요) -->
+					<div class="review-card border rounded-4 p-4 mb-3">
+						<div class="d-flex justify-content-between align-items-start mb-2">
+							<div>
+								<h6 class="fw-bold mb-1">디자인이 예뻐요</h6>
+								<small class="text-body-secondary">작성자: 이서연</small>
+							</div>
+							<span class="d-inline-flex"> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-warning">
+								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
+									class="text-body-tertiary">
+								<use xlink:href="#star-outline"></use></svg>
+							</span>
+						</div>
+						<p class="text-body-secondary mb-0">색상이 화면과 동일하고 코디하기 좋아요. 배송도 빨랐습니다.</p>
+					</div>
+				</div>
+			</div>
 						</div>
 						<div class="tab-pane fade" id="spec">
 							<table class="table mb-0">
@@ -414,20 +402,20 @@
 			</div>
 
 			<!-- ============================================= -->
-			<!--  리뷰 영역 (상세 페이지 하단)                   -->
+			<!--  리뷰 영역 (상세 페이지 하단)      =>  리뷰 위로 옮기고 버튼으로 제어             -->
 			<!-- ============================================= -->
-			<div class="row mt-5" id="reviewArea">
+			<!-- <div class="row mt-5" id="reviewArea">
 				<div class="col-12">
 
 					<h4 class="fw-bold mb-4">상품 리뷰</h4>
 
-					<!-- (1) 평균 별점 요약 박스 -->
+					(1) 평균 별점 요약 박스
 					<div class="border rounded-4 p-4 mb-4 bg-light">
 						<div class="row align-items-center">
 
-							<!-- 평균 점수 -->
+							평균 점수
 							<div class="col-md-4 text-center border-end">
-								<!-- 평균 점수 숫자: JSP에서 ${avgRating} 등으로 교체 -->
+								평균 점수 숫자: JSP에서 ${avgRating} 등으로 교체
 								<div class="display-4 fw-bold">4.5</div>
 								<span class="d-inline-flex"> <svg width="20" height="20"
 										class="text-warning">
@@ -441,11 +429,11 @@
 										height="20" class="text-warning">
 									<use xlink:href="#star-outline"></use></svg>
 								</span>
-								<!-- 전체 리뷰 개수: ${reviewCount} 등으로 교체 -->
+								전체 리뷰 개수: ${reviewCount} 등으로 교체
 								<p class="text-body-secondary mb-0 mt-2">전체 리뷰 128개</p>
 							</div>
 
-							<!-- 점수 안내 문구 -->
+							점수 안내 문구
 							<div class="col-md-8 mt-3 mt-md-0 ps-md-4">
 								<p class="mb-0 text-body-secondary">실제 구매 고객이 남긴 리뷰입니다. 평점은
 									5점 만점 기준입니다.</p>
@@ -454,17 +442,17 @@
 						</div>
 					</div>
 
-					<!-- (2) 리뷰 목록 -->
-					<!-- <c:forEach var="review" items="${reviewList}"> -->
+					(2) 리뷰 목록
+					<c:forEach var="review" items="${reviewList}">
 					<div class="review-card border rounded-4 p-4 mb-3">
 						<div class="d-flex justify-content-between align-items-start mb-2">
 							<div>
-								<!-- 리뷰 제목: ${review.title} -->
+								리뷰 제목: ${review.title}
 								<h6 class="fw-bold mb-1">가볍고 편해서 매일 신어요</h6>
-								<!-- 작성자: ${review.writer} -->
+								작성자: ${review.writer} 작성자 이름
 								<small class="text-body-secondary">작성자: 김민수</small>
 							</div>
-							<!-- 개별 평점: 별 개수를 ${review.rating} 값에 따라 표시 -->
+							개별 평점: 별 개수를 ${review.rating} 값에 따라 표시
 							<span class="d-inline-flex"> <svg width="16" height="16"
 									class="text-warning">
 								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
@@ -478,12 +466,12 @@
 								<use xlink:href="#star-solid"></use></svg>
 							</span>
 						</div>
-						<!-- 리뷰 내용: ${review.content} -->
+						리뷰 내용: ${review.content}
 						<p class="text-body-secondary mb-0">사이즈 정사이즈입니다. 착화감이 부드럽고 하루종일 신어도 발이 편했어요.</p>
 					</div>
-					<!-- </c:forEach> -->
+					</c:forEach>
 
-					<!-- (미리보기용 예시 리뷰 - JSTL 적용 후 삭제하세요) -->
+					(미리보기용 예시 리뷰 - JSTL 적용 후 삭제하세요)
 					<div class="review-card border rounded-4 p-4 mb-3">
 						<div class="d-flex justify-content-between align-items-start mb-2">
 							<div>
@@ -506,7 +494,7 @@
 						<p class="text-body-secondary mb-0">색상이 화면과 동일하고 코디하기 좋아요. 배송도 빨랐습니다.</p>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</section>
 </body>

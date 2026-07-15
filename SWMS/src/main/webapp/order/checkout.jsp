@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
   <section class="py-5">
     <div class="container-fluid">
@@ -67,17 +67,22 @@
             <h5 class="fw-bold mb-3">주문 요약</h5>
 
             <ul class="list-group list-group-flush mb-3">
+            
+            <c:forEach var="vo" items="${list }">
               <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">
                 <div class="d-flex gap-2 align-items-center">
-                  <img src="../resources/images/product-thumb-1.png" width="48" height="48" style="object-fit:contain;" alt="item">
+                  <img src="${vo.gvo.poster_url }" width="48" height="48" style="object-fit:contain;" alt="item">
                   <div>
-                    <div class="fw-bold small">클래식 러너 스니커즈</div>
-                    <small class="text-body-secondary">260 / 수량 1</small>
+                    <div class="fw-bold small">${vo.gvo.goods_name }</div>
+                    <small class="text-body-secondary">${vo.sizes } / 수량 ${quantity }</small>
                   </div>
                 </div>
-                <span>₩89,000</span>
+                <span>${vo.price_str }</span>
               </li>
-              <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">
+              </c:forEach>
+              
+              <!-- 반복 폼 -->
+              <!-- <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">
                 <div class="d-flex gap-2 align-items-center">
                   <img src="../resources/images/product-thumb-2.png" width="48" height="48" style="object-fit:contain;" alt="item">
                   <div>
@@ -86,22 +91,23 @@
                   </div>
                 </div>
                 <span>₩112,000</span>
-              </li>
+              </li> -->
             </ul>
 
             <div class="d-flex justify-content-between mb-2">
-              <span class="text-body-secondary">상품 금액</span><span>₩201,000</span>
+              <span class="text-body-secondary">상품 금액</span><span>${totalPrice }</span>
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span class="text-body-secondary">배송비</span><span>무료</span>
             </div>
-            <div class="d-flex justify-content-between mb-2">
+            <!-- 할인금액 --%>
+            <!-- <div class="d-flex justify-content-between mb-2">
               <span class="text-body-secondary">할인</span><span class="text-success">-₩20,100</span>
-            </div>
+            </div> -->
             <hr>
             <div class="d-flex justify-content-between mb-4">
               <strong class="fs-5">총 결제금액</strong>
-              <strong class="fs-5 text-primary">₩180,900</strong>
+              <strong class="fs-5 text-primary">${totalPrice }</strong>
             </div>
 
             <div class="form-check mb-3">

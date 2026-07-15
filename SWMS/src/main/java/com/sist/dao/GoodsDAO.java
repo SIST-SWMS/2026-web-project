@@ -40,4 +40,51 @@ public class GoodsDAO {
 		 session.close();
 		 return total;
 	 }
+	 /*
+	  * <update id="goodsHitIncrement" parameterType="int">
+			UPDATE goods SET
+			hit=hit+1
+			WHERE goods_no=#{goods_no}
+		</update>
+		*/
+	 /*
+		<select id="goodsDetailData" resultType="GoodsVO" parameterType="int">
+			SELECT goods_no, goods_name, goods_code, b.brand_name, goods_price, poster_url, subposter_url, hit
+			FROM goods g JOIN brand b
+			ON g.brand_no=b.brand_no AND g.goods_no=#{goods_no} 	
+		</select>
+	  */
+	 public static GoodsVO goodsDetailData (int no) {
+		 SqlSession session=ssf.openSession(true);
+		 session.update("goodsHitIncrement",no);
+		 GoodsVO vo=session.selectOne("goodsDetailData",no);
+		 session.close();
+		 return vo;
+	 }
+	 /*
+	  * <select id="goodsFindListData" resultType="GoodsVO" parameterType="hashmap">
+			SELECT goods_no, goods_name
+			FROM goods
+			WHERE ${column} LIKE '%'||#{fd}||'%'
+			ORDER BY goods_no ASC
+			OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY	
+		</select>
+		<select id="goodsFindTotalPage" resultType="int" parameterType="hashmap">
+			SELECT CEIL(COUNT(*)/12.0)
+			FROM goods
+			WHERE ${cno} LIKE '%'||#{fd}||'%'
+		</select>
+	  */
+	 public static List<GoodsVO> goodsFindListData(Map map) {
+		 SqlSession session=ssf.openSession();
+		 List<GoodsVO> list=session.selectList("goodsFindListData",map);
+		 session.close();
+		 return list;
+	 }
+	 public static int goodsFindTotalPage(Map map) {
+		 SqlSession session=ssf.openSession();
+		 int total=session.selectOne("goodsFindTotalPage",map);
+		 session.close();
+		 return total;
+	 }
 }

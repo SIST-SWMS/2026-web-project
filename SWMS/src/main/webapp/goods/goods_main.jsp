@@ -106,13 +106,12 @@
 	border-color: #000;
 }
 </style>
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
 <script>
-/* $(function() {
-    // 사용자의 카테고리, 페이지 상태를 기억할 전역 변수
-    let currentCno = 1;
-    let currentPage = 1;
+$(function() {
+    let currentCno=${currentCno!=null ? currentCno : 1};
+    let currentPage=${curPage!=null ? curPage : 1};
 
-    // 통합 비동기 Ajax 
     function getProductList(cno, sortVal, pageNum) {
         currentPage = pageNum;
         $.ajax({
@@ -120,7 +119,8 @@
             url: '../goods/goods_main_ajax.do',
             data: { category_no: cno, sort: sortVal, page: pageNum },
             success: function(res) {
-                $('#product-card').html(res);
+
+                $('#product-list-box').html(res);
             },
             error: function() {
                 alert("데이터를 불러오는 중 오류가 발생했습니다.");
@@ -128,111 +128,96 @@
         });
     }
 
-    // 1. 좌측 사이드바 카테고리 클릭 
     $('.category-menu').on('click', '.category-btn', function(e) {
         e.preventDefault(); 
-        
-        $('.category-btn').removeClass('active');
+        $('.category-menu .category-btn').removeClass('active');
         $(this).addClass('active');
         
-        currentCno = $(this).attr('data-cno');
-        let sortVal = $('#sort-select').val();
+        currentCno=$(this).attr('data-cno');
+        let sortVal=$('#sort-select').val();
         getProductList(currentCno, sortVal, 1); 
     });
 
-    // 2. 정렬 셀렉트박스 변경
+    // 셀렉트박스 변경
     $('#sort-select').change(function() {
-        let sortVal = $(this).val();
+        let sortVal=$(this).val();
         getProductList(currentCno, sortVal, 1);
     });
 
-    // 3. 하단 페이지네이션 번호 클릭
+    // 페이지네이션 클릭
     $('#product-list-box').on('click', '.page-link-btn', function(e) {
         e.preventDefault();
         let targetPage = $(this).attr('data-page');
         let sortVal = $('#sort-select').val();
-        
         getProductList(currentCno, sortVal, targetPage);
     });
-}); */
-    
-    // $(function(){
-    	
-   // }) 으로 단축형으로 교체
-
+});
 </script>
 </head>
 <body>
-	<!-- 카테고리  -->
-	<div class="category-menu mb-4">
-    	<!-- <button type="button" class="btn btn-primary category=btn" data-cno="0">All</button> -->
-        <button type="button" class="btn btn-primary category-btn" data-cno="1">스포츠화</button> <!-- <a> 태그로 바꾸고 해당카테고리로 이동하는 코드 -->
-        <button type="button" class="btn btn-primary category-btn" data-cno="2">샌들/슬리퍼</button>
-        <button type="button" class="btn btn-light category-btn" data-cno="3">라이프스타일</button>
-        <button type="button" class="btn btn-light category-btn" data-cno="4">구두</button>
-        <button type="button" class="btn btn-primary category-btn" data-cno="5">부츠</button>
-    </div> 
-	<!-- 상단 정렬 드롭다운 -->
-	<div class="d-flex justify-content-end border-bottom pb-3 mb-4">
-		<select class="sort-select" style="width: 140px;"> <!-- class명 "form-select" 에서 변경 -->
-			<!-- *버튼 클릭시 해당 순서대로 나열 기능 구현 -->
-			<option value="price-asc">낮은가격순</option> 
-			<option value="price-desc">높은가격순</option>
-			<option value="hit-desc">조회수순</option>
-		</select>
-	</div>
+<div class="d-flex justify-content-end border-bottom pb-3 mb-4">
+    <select id="sort-select" class="sort-select" style="width: 140px;">
+        <option value="default">최신등록순</option> 
+        <option value="price_asc">낮은가격순</option> 
+        <option value="price_desc">높은가격순</option>
+        <option value="hit_desc">조회수순</option>
+    </select>
+</div>
 
-	<!-- 상품 그리드 (4열 x 3행 = 12개) -->
-	<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+<div id="product-list-box">
 
-		<!-- 카드 1 -->
-		<c:forEach var="vo" items="${list }">
-		<div class="col">
-			<div class="product-card">
-				<a href="../goods/detail.do">
-					<div class="thumb-box">
-						<img src="${vo.poster_url }" alt="상품">
-					</div>
-				</a>
-				<button type="button" class="like-btn">
-					<svg width="18" height="18" viewBox="0 0 24 24">
-						<use xlink:href="#heart"></use>
-					</svg>
-				</button>
-				<div class="product-brand">${vo.brand_name }</div>
-				<div class="product-name">${vo.goods_name }</div>
-				<div class="product-price">${vo.goods_price }</div>
-				<div class="product-meta">
-					<svg width="12" height="12" viewBox="0 0 24 24">
-					<use xlink:href="#heart"></use>
-					</svg>
-					${vo.like_count}<!-- 좋아요 들어갈 자리 -->
-					<svg width="12" height="12" viewBox="0 0 12 12">
-					<use xlink:href="#star-solid"></use>
-					</svg>
-					${vo.hit}<!-- 조회수 들어갈 자리 -->
-				</div>
-			</div>
-		</div>
-		</c:forEach>
-		</div>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+        <c:forEach var="vo" items="${list}">
+        <div class="col">
+            <div class="product-card">
+                <a href="../goods/detail.do?goods_no=${vo.goods_no}">
+                    <div class="thumb-box">
+                        <img src="${vo.poster_url}" alt="${vo.goods_name}">
+                    </div>
+                </a>
+                <button type="button" class="like-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24">
+                        <use xlink:href="#heart"></use>
+                    </svg>
+                </button>
+                <div class="product-brand">${vo.brand_name}</div>
+                <div class="product-name">${vo.goods_name}</div>
+                <div class="product-price">${vo.goods_price}</div>
+                <div class="product-meta">
+                    <svg width="12" height="12" viewBox="0 0 24 24">
+                    <use xlink:href="#heart"></use>
+                    </svg>
+                    ${vo.like_count}
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                    <use xlink:href="#eye"></use>
+                    </svg>
+                    ${vo.hit}
+                </div>
+            </div>
+        </div>
+        </c:forEach>
+    </div>
 
-	<!-- ================= 페이지네이션 ================= -->
-	<div class="row text-center" style="margin-top: 40px">
-		<div class="d-flex justify-content-center">
-			<ul class="pagination">
-				<c:if test="${startPage > 1 }">
-					<li><a href="list.do?page=${startPage - 1}">&laquo;</a></li>
-				</c:if>
-				<c:forEach var="i" begin="${startPage }" end="${endPage }">
-					<li ${i==curPage ? "class='active'" : ""}><a href="list.do?page=${i}">${i}</a></li>
-				</c:forEach>
-				<c:if test="${endPage < totalPage }">
-					<li><a href="list.do?page=${endPage + 1}">&raquo;</a></li>
-				</c:if>
-			</ul>
-		</div>
-	</div>
+    <div class="row text-center" style="margin-top: 40px">
+        <div class="d-flex justify-content-center">
+            <ul class="pagination">
+                <c:if test="${startPage > 1}">
+                    <li><a href="#" class="page-link-btn" data-page="${startPage - 1}">&laquo;</a></li>
+                </c:if>
+                <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                    <li ${i == curPage ? "class='active'" : ""}>
+                        <a href="#" class="page-link-btn" data-page="${i}">${i}</a>
+                    </li>
+                </c:forEach>
+                <c:if test="${endPage < totalPage}">
+                    <li><a href="#" class="page-link-btn" data-page="${endPage + 1}">&raquo;</a></li>
+                </c:if>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
 
 </body>
 </html>

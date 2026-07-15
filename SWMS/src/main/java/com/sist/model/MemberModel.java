@@ -25,7 +25,7 @@ public class MemberModel {
 		request.setAttribute("main_jsp", "../member/login.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	@RequestMapping("member/logout.do")
 	public String logout(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
@@ -46,7 +46,7 @@ public class MemberModel {
 			session.setAttribute("id", vo.getId());
 			session.setAttribute("name", vo.getName());
 			session.setAttribute("nickname", vo.getNickname());
-			session.setAttribute("auth", vo.getAuth()==0?"adm":"user");
+			session.setAttribute("auth", vo.getAuth() == 0 ? "adm" : "user");
 		}
 
 		try {
@@ -63,6 +63,43 @@ public class MemberModel {
 		request.setAttribute("mypage_content", "../member/detail.jsp");
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
+	}
+
+	// 수정버튼 메서드 만들기
+	// 비밀번호 입력화면 이동 -> jsp를 하나 새로 만들어야해 기존의 기능들과는 또다른 기능이라서
+	@RequestMapping("member/editMember.do")
+	public String member_editMember(HttpServletRequest request, HttpServletResponse response) {
+
+		return "../mypage/pwd_check.jsp";
+	}
+
+	// 비밀번호가 맞냐/틀리냐
+	@RequestMapping("member/pwdCheck.do")
+	public String member_pwdCheck(HttpServletRequest request, HttpServletResponse response) {
+		// 사용자가 입력한 비밀번호 가져오기
+		String pwd1 = request.getParameter("pwd");
+
+		// 세션 열어서 요청한 값 가져오기
+		// getAttribute => object를 반환해서 내가 꺼낸 값의 자료형 추가로 붙여주기
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
+
+		// dao 호출해서 부탁한 정보 가져온 거 담아
+		String pwd2 = MemberDAO.memberFindPassword(id);
+
+		// 그다음 둘을 비교 => 문자열 비교는 equals()
+		if(pwd1.equals(pwd2))
+		{
+			// 비번 일치 => 회원정보 수정페이지로 이동
+			return "../mypage/member_update.jsp";
+		}
+		else
+		{
+			request.setAttribute("msg", "비밀번호가 틀렸습니다.");
+			return "../mypage/pwd_check.jsp";
+		}
+
+		
 	}
 
 }

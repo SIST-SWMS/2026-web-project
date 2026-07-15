@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sist.mapper.member-mapper">
-	<select id="memberIdCheck" resultType="int" parameterType="string">
+	<select id="memberIdCheck" resultType="int"
+		parameterType="string">
 		SELECT COUNT(*)
-		 FROM member
+		FROM member
 		WHERE id=#{id}
 	</select>
-	<select id="memberGetPassword" resultType="MemberVO" parameterType="string">
-		SELECT id, pwd, name, nickname, phone, zipcode, address, address_detail, auth
-		 FROM member
+	<select id="memberGetPassword" resultType="MemberVO"
+		parameterType="string">
+		SELECT id, pwd, name, nickname, phone, zipcode, address,
+		address_detail, auth
+		FROM member
 		WHERE id=#{id}
+	</select>
+	<select id="memberDetailData" resultType="MemberVO"
+		parameterType="string">
+
+		select
+		id,pwd,name,nickname,phone,zipcode,address,address_detail
+		from member
+		where id=#{id}
+	</select>
+
+	<!-- 디비에 특정 비밀번호 조회 -->
+	<select id="memberFindPassword" resultType="string"
+		parameterType="string">
+		SELECT pwd FROM member
+		WHERE id = #{id}
 	</select>
 </mapper>
