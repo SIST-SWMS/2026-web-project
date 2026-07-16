@@ -1,37 +1,90 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<head>
+<script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+$(function(){
+	$('#postBtn').on('click',function(){
+		new daum.Postcode({
+			oncomplete(data)
+			{
+				$('#post').val(data.zonecode)
+				$('#addr1').val(data.address)
+			}
+		}).open()
+	})
+	
+	$('#info-clean').on('click', function(){
+		$('#name').val("")
+		$('#phone').val("")
+		$('#post').val("")
+		$('#addr1').val("")
+		$('#addr2').val("")
+	})
+	
+	$('#success-order').on('click', function(){
+		let isCheck = $('#agree').prop('checked')
+		//console.log(isCheck)
+		if(isCheck===false)
+		{
+			alert("결제 동의를 체크해주세요")
+			return
+		}
+		
+		// 결제하기 누르면 해야할 일 처리
+		// 주문서에 있는 이름, 연락처, 주소, 배송메모, 주문 내역(이름, 가격, 사이즈)들을 모아서 주문하기 내역에 insert
+		$.ajax({
+			type:'post',
+			url:'../order/order_ok.do',
+			data:{
+				//'name':
+			},
+			success:function(result)
+			{
+				
+			}
+		})
+		
+	})
+	
+})
+</script>
+</head>
+
 
   <section class="py-5">
     <div class="container-fluid">
       <h3 class="fw-bold mb-4">결제하기</h3>
       <div class="row g-5">
-
         <!-- 배송/결제 정보 -->
         <div class="col-lg-7">
           <div class="border rounded-4 p-4 mb-4">
             <h5 class="fw-bold mb-3">배송지 정보</h5>
+            <div class="text-end">
+				<button class="btn btn-outline-dark btn-sm" id="info-clean" type="button">새 배송지 입력</button>
+            </div>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">받는 사람</label>
-                <input type="text" class="form-control bg-light" placeholder="홍길동">
+                <input type="text" class="form-control bg-light" id="name" name="name" placeholder="홍길동" value="${mvo.name }">
               </div>
               <div class="col-md-6">
                 <label class="form-label">연락처</label>
-                <input type="tel" class="form-control bg-light" placeholder="010-0000-0000">
+                <input type="tel" class="form-control bg-light" id="phone" name="phone" placeholder="010-0000-0000" value="${mvo.phone }">
               </div>
               <div class="col-12">
                 <label class="form-label">주소</label>
                 <div class="input-group mb-2">
-                  <input type="text" class="form-control bg-light" placeholder="우편번호">
-                  <button class="btn btn-outline-dark" type="button">주소 찾기</button>
+                  <input type="text" class="form-control bg-light" id="post" name="post" placeholder="우편번호" readonly value="${mvo.zipcode }">
+                  <button class="btn btn-outline-dark" type="button" id="postBtn">우편번호 찾기</button>
                 </div>
-                <input type="text" class="form-control bg-light mb-2" placeholder="기본 주소">
-                <input type="text" class="form-control bg-light" placeholder="상세 주소">
+                <input type="text" class="form-control bg-light mb-2" id="addr1" name="addr1" placeholder="기본 주소" readonly value="${mvo.address }">
+                <input type="text" class="form-control bg-light" id="addr2" name="addr2" placeholder="상세 주소" value="${mvo.address_detail }">
               </div>
               <div class="col-12">
                 <label class="form-label">배송 메모</label>
-                <select class="form-select bg-light">
-                  <option>배송 시 요청사항을 선택하세요</option>
+                <select class="form-select bg-light" id="msg" name="msg">
+                  <option value="">배송 시 요청사항을 선택하세요</option>
                   <option>문 앞에 놓아주세요</option>
                   <option>경비실에 맡겨주세요</option>
                   <option>배송 전 연락 바랍니다</option>
@@ -95,7 +148,7 @@
             </ul>
 
             <div class="d-flex justify-content-between mb-2">
-              <span class="text-body-secondary">상품 금액</span><span>${totalPrice }</span>
+              <span class="text-body-secondary">상품 금액</span><span>${totalPrice_str }원</span>
             </div>
             <div class="d-flex justify-content-between mb-2">
               <span class="text-body-secondary">배송비</span><span>무료</span>
@@ -107,7 +160,7 @@
             <hr>
             <div class="d-flex justify-content-between mb-4">
               <strong class="fs-5">총 결제금액</strong>
-              <strong class="fs-5 text-primary">${totalPrice }</strong>
+              <strong class="fs-5 text-primary">${totalPrice_str }원</strong>
             </div>
 
             <div class="form-check mb-3">
@@ -115,7 +168,7 @@
               <label class="form-check-label small" for="agree">주문 내용을 확인했으며 결제에 동의합니다.</label>
             </div>
 
-            <button class="btn btn-primary btn-lg w-100">₩180,900 결제하기</button>
+            <button class="btn btn-primary btn-lg w-100" id="success-order">${totalPrice_str }원 결제하기</button>
           </div>
         </div>
       </div>

@@ -94,11 +94,11 @@
 	</select>
 	
 	<!-- 1. 재고 있는지 확인 -->
-	<select id="stockQuantityCheck" resultType="int" parameterType="map">    
-	SELECT quantity, sizes    
+	<select id="stockQuantityCheck" resultType="StockVO" parameterType="map">    
+	SELECT no, quantity, goods_size 
 	FROM stock     
 	WHERE goods_no = #{goods_no} 
-	AND sizes = #{sizes}
+	AND goods_size = #{goods_size}
 	</select>
 
 	<!-- 2. 장바구니에 똑같은 상품+사이즈가 있는지 확인  -->
@@ -120,14 +120,9 @@
 	</update>
 
 	<!-- 4. 장바구니에 없으면 새로 담기 -->
-
 	<insert id="cartInsert" parameterType="map">   
 	INSERT INTO cart (cart_no, id, stock_no, sizes, quantity)    
 	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity})
 	</insert>
 
-		<!-- 
-			INSERT INTO cart (cart_no,id,stock_no,sizes,quantity)
-			VALUES (cart_no_seq.NEXTVAL,'user',1,230,1);
- 		-->
 </mapper>
