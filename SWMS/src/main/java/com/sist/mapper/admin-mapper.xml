@@ -15,7 +15,7 @@
 	    <if test="fd != null and fd != ''">
 	        AND g.goods_name LIKE '%' || #{fd} || '%'
 	    </if>
-		ORDER BY g.goods_no
+		ORDER BY g.goods_no DESC
 		OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
 	</select>
 	<select id="adminGoodsTotal" resultType="int">
@@ -60,6 +60,8 @@
 		 FROM stock
 		WHERE goods_no = #{no}
 	</select>
+	
+	<!-- 상품 수정 -->
 	<update id="adminGoodsUpdate" parameterType="GoodsVO">
 		UPDATE goods
 		 SET goods_code = #{goods_code},
@@ -72,4 +74,57 @@
 		  subposter_url = #{subposter_url}
 		WHERE goods_no = #{goods_no}
 	</update>
+	
+	<insert id="adminGoodsInsert" parameterType="GoodsVO">
+	    <selectKey keyProperty="goods_no" resultType="int" order="BEFORE">
+	        SELECT goods_seq.NEXTVAL FROM dual
+	    </selectKey>
+	    INSERT INTO goods (goods_no, category_no, brand_no, goods_code, goods_name, goods_price, goods_discount, poster_url, subposter_url)
+	    VALUES (#{goods_no}, #{category_no}, #{brand_no}, #{goods_code}, #{goods_name}, #{goods_price}, #{goods_discount}, #{poster_url}, #{subposter_url})
+	</insert>
+	
+	<insert id="adminStockInsert" parameterType="StockVO">
+	    INSERT INTO stock (goods_no, goods_size, quantity)
+	    VALUES (#{goods_no}, #{goods_size}, #{quantity})
+	</insert>
+	
+	<resultMap type="com.sist.vo.OrderDetailVO" id="orderMap">
+		<result property="ovo.order_no" column="order_no"/>
+		<result property="ovo.id" column="id"/>
+		<result property="ovo.dbday" column="dbday"/>
+		<result property="gvo.goods_name" column="goods_name"/>
+		<result property="gvo.goods_no" column="goods_no"/>
+		<result property="ovo.order_date" column="order_date"/>
+	</resultMap>
+	<select id="adminOrderList" resultMap="orderMap">
+		select o.order_no, o.id, g.goods_name, d.sizes, d.quantity, to_char(o.order_date, 'yyyy-mm-dd') as dbday, d.status, d.order_detail_no, g.goods_no
+		from orders o, order_detail d, goods g
+		where o.order_no = d.order_no
+		and d.goods_no = g.goods_no
+	</select>
+	
+	<select id="getQuantity" parameterType="OrderDetailVO" resultType="StockVO">
+		SELECT quantity, no 
+		 FROM STOCK 
+		WHERE goods_no = #{goods_no} 
+		and goods_size = #{sizes}
+	</select>
+	
+	<update id="updateStockOut" parameterType="OrderDetailVO">
+	    UPDATE stock
+	       SET quantity = quantity - #{quantity}
+	     WHERE goods_no = #{goods_no}
+	       AND goods_size = #{sizes}
+	</update>
+	<insert id="insertStockHistory" parameterType="HistoryVO">
+		INSERT INTO stock_history (stock_no, order_no, quantity, inout_size, chk, inout_date, created_at, created_by)
+         VALUES (#{stock_no}, #{order_no}, #{quantity}, #{inout_size}, #{chk}, sysdate, sysdate, #{created_by})
+	</insert>
+	
+	<update id="updateOrderDetailStatus" parameterType="OrderDetailVO">
+		UPDATE order_detail
+		 set status = '배송완료'
+		where order_detail_no = #{order_detail_no}
+	</update>
+	
 </mapper>

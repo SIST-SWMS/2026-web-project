@@ -3,7 +3,7 @@
     <Resources className="org.apache.catalina.webresources.StandardRoot">
         <PreResources 
             className="org.apache.catalina.webresources.DirResourceSet"
-            base="C:\uploads"
+            base="C:\uploads" 
             webAppMount="/uploads" />
     </Resources>
 </Context>
