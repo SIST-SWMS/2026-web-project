@@ -1,9 +1,13 @@
 package com.sist.model;
 
+import java.util.List;
+
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
 import com.sist.dao.MemberDAO;
+import com.sist.dao.OrderDAO;
 import com.sist.vo.MemberVO;
+import com.sist.vo.OrderDetailVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +18,16 @@ public class MypageModel {
 
 	@RequestMapping("mypage/mypage.do")
 	public String mypage(HttpServletRequest request, HttpServletResponse response) {
+		// 최근목록 불러오기
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("id");
+
+		List<OrderDetailVO> list = OrderDAO.myOrderDetailData(id);
+		request.setAttribute("list", list);
+		
+		
+		
+		
 		request.setAttribute("mypage_content", "../mypage/mypage_main.jsp");
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
@@ -71,6 +85,26 @@ public class MypageModel {
 		return "../main/main.jsp";
 	}
 	
+	// 최근 주문 내역
+	@RequestMapping("mypage/recent_order.do")
+	public String mypage_recent_order(HttpServletRequest request, HttpServletResponse response)
+	{
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("id");
+		System.out.println(id);
+		
+		// dao에 특정 아이디에 대한 정보 보내고 dao에서 보낸 데이터까지 받음
+	    List<OrderDetailVO> list =	OrderDAO.myOrderDetailData(id);
+	    // jsp에 내용 전송
+	    
+	    request.setAttribute("list", list);
+	    
+	    
+	    
+	    request.setAttribute("mypage_content", "../mypage/recent_order.jsp");
+		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
+		return "../main/main.jsp";
+	}
 	
 	
 }

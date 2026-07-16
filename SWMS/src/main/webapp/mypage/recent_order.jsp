@@ -9,11 +9,9 @@
 <body>
 
 	<%-- ===================== 최근 주문 ===================== --%>
-	<div
-		class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-3">
+	<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-3">
 		<h4 class="fw-bold mb-0">최근 주문</h4>
-		<a href="../mypage/recent_order.do"
-			class="text-body-secondary text-decoration-none small">더보기›</a>
+		<a href="../mypage/recent_order.do" class="text-body-secondary text-decoration-none small"></a>
 	</div>
 
 	<table class="table align-middle">
@@ -22,31 +20,33 @@
 				<th style="width: 120px;">주문일</th>
 				<th>주문내역</th>
 				<th style="width: 220px;">주문번호</th>
-				
+				<th class="text-end" style="width: 120px;">결제금액</th>
+				<th class="text-center" style="width: 110px;">상태</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach var="vo" items="${list}">
-				<tr>
-					<td class="text-body-secondary">${vo.ovo.dbday}</td>
-					<td>
-						<div class="d-flex align-items-center gap-3">
-							<img src="../resources/images/product-thumb-1.png" width="60"
-								height="60" style="object-fit: cover; border-radius: 6px;"
-								alt="상품"> <span>${vo.gvo.goods_name}</span>
-						</div>
-					</td>
-					<td class="fw-bold">${vo.ovo.order_no}</td>
-
-
-				</tr>
-			</c:forEach>
+    <tr>
+        <td class="text-body-secondary">${vo.ovo.dbday}</td>
+        <td>
+            <div class="d-flex align-items-center gap-3">
+                <img src="../resources/images/product-thumb-1.png"
+                     width="60" height="60"
+                     style="object-fit: cover; border-radius: 6px;"
+                     alt="상품">
+                <span>${vo.gvo.goods_name}</span>
+            </div>
+        </td>
+        <td class="fw-bold">${vo.ovo.order_no}</td>
+        <td class="text-end">${vo.ovo.total_price}</td>
+        <td class="text-center"><span class="badge bg-success">${vo.ovo.delivery_status }</span></td>
+    </tr>
+</c:forEach>
 		</tbody>
 	</table>
 
 	<%-- ===================== 나의 좋아요 ===================== --%>
-	<div
-		class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4 mt-5">
+	<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4 mt-5">
 		<h4 class="fw-bold mb-0">나의 좋아요</h4>
 		<a href="#" class="text-body-secondary text-decoration-none small">더보기›</a>
 	</div>
@@ -54,10 +54,8 @@
 	<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
 		<div class="col">
 			<div style="position: relative;">
-				<img src="../resources/images/product-thumb-5.png" class="w-100"
-					style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-					alt="상품"> <span
-					style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
+				<img src="../resources/images/product-thumb-5.png" class="w-100" style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;" alt="상품">
+				<span style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
 					<svg width="22" height="22" viewBox="0 0 24 24">
 						<use xlink:href="#heart"></use>
 					</svg>
