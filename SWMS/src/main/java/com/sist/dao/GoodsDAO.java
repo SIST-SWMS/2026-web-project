@@ -90,16 +90,17 @@ public class GoodsDAO {
 	 /*
 	<!-- 1. 재고 있는지 확인 -->
 	<select id="stockQuantityCheck" resultType="int" parameterType="map">    
-	SELECT COUNT(*)    
+	SELECT quantity  
 	FROM stock     
 	WHERE goods_no = #{goods_no} 
-	AND size = #{size}
+	AND goods_size = #{goods_size}
 	</select>
 	*/
-	public static void checkStockQuantity() {
+	public static StockVO stockQuantityCheck(Map map) {
 		SqlSession session=ssf.openSession();
-		int count=session.selectOne("checkStockQuantity");
+		StockVO vo=session.selectOne("stockQuantityCheck", map);
 		session.close();
+		return vo;
 	}
 		
 	 /*
@@ -112,10 +113,11 @@ public class GoodsDAO {
 	AND sizes = #{sizes}
 	</select>
 	*/
-	 public static void cartCount() {
+	 public static int cartCount(Map map) {
 		 SqlSession session=ssf.openSession();
-		 int count=session.selectOne("cartCount");
+		 int count=session.selectOne("cartCount",map);
 		 session.close();
+		 return count;
 	 }
 	 /*
 	<!-- 3. 장바구니에 이미 있으면 수량만 추가  -->
@@ -127,9 +129,10 @@ public class GoodsDAO {
 	AND sizes = #{sizes}
 	</update>
 	*/
-	public static void cartUpdate() {
-		SqlSession session=ssf.openSession();
-		session.update("cartUpdate");
+	public static void cartUpdate(Map map) {
+		SqlSession session=ssf.openSession(true);
+		session.update("cartUpdate",map);
+		session.commit();
 		session.close();
 	}
 	 /*
@@ -139,10 +142,12 @@ public class GoodsDAO {
 	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity})
 	</insert>
 	  */
-	public static void cartInsert() {
-		SqlSession session=ssf.openSession();
-		session.insert("cartInsert");
+	public static void cartInsert(Map map) {
+		SqlSession session=ssf.openSession(true);
+		session.insert("cartInsert",map);
+		session.commit();
 		session.close();
 	}
+	
 
 }

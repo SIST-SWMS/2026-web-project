@@ -47,37 +47,76 @@ $(function() {
 		if (parseInt(qty.value) > 1)
 			qty.value = parseInt(qty.value) - 1;
 	});
-
-	// 연관상품 슬라이드 초기화 (한 화면에 6개씩, 옆으로 넘김)
-	new Swiper('.relatedSwiper', {
-		slidesPerView:6,
-		spaceBetween:16,
-		navigation:{
-			nextEl:'.relatedSwiper .swiper-button-next',
-			prevEl:'.relatedSwiper .swiper-button-prev'
-		},
-		breakpoints:{
-			0:{
-				slidesPerView:2
-			},
-			768:{
-				slidesPerView:4
-			},
-			992:{
-				slidesPerView:6
-			}
-		}
-	});
 	
+
 	    $('#likeOn').on('click', function() {
-	        let gno = $(this).attr('data-no');
-	        location.href = "../like/likeOn.do?goods_no=" + gno;
+	        let gno=$(this).attr('data-no');
+	        location.href = "../like/likeOn.do?goods_no="+gno;
 	    });
 
 	    $('#likeOff').on('click', function() {
-	        let gno = $(this).attr('data-no');
-	        location.href = "../like/likeOff.do?goods_no=" + gno;
+	        let gno=$(this).attr('data-no');
+	        location.href = "../like/likeOff.do?goods_no="+gno;
 	    });
+	    
+		$('#cartBtn').on('click', function() {
+			let gno = $(this).attr('data-no');
+			
+			let selectedSizeBtn=$('.size-btn.active');
+			if(selectedSizeBtn.length===0) {
+				alert("상품 사이즈를 먼저 선택해주세요.");
+				return;
+			}
+			let size=selectedSizeBtn.text().trim(); 
+			
+			let qty=$('#qtyInput').val(); 
+			
+			$.ajax({
+				type: 'post',
+				url: '../goods/cart_insert.do',
+				data: {
+					goods_no: gno,
+					sizes: size,
+					quantity: qty
+				},
+				success: function(res) {
+					let result=res.trim(); 
+					
+					if(result==='NO_LOGIN') {
+						alert("로그인이 필요한 서비스입니다.");
+						location.href = "../member/login.do"; 
+						
+					} else if(result==='NO_STOCK_DATA') {
+						alert("죄송합니다. 해당 사이즈의 상품 정보가 존재하지 않습니다");
+						
+					} else if(result==='OUT_OF_STOCK') {
+						alert("죄송합니다. 선택하신 제품의 재고가 부족합니다.");
+						
+					} else if(result==='SUCCESS') {
+						alert("장바구니에 상품이 담겼습니다. 장바구니로 이동합니다.");
+						location.href = "../cart/cart.do"; 
+					} 
+				},
+				error: function(err) {
+					console.log(err);
+					alert("서버에러가 발생했습니다.");
+				}
+			});
+		});
+		$('#buyBtn').on('click', function() {
+		    let gno=$(this).attr('data-no'); 
+		    let selectedSizeBtn=$('.size-btn.active'); 
+		    
+		    if(selectedSizeBtn.length===0) {
+		        alert("상품 사이즈를 먼저 선택해주세요.");
+		        return;
+		    }
+		    
+		    let size=selectedSizeBtn.text().trim(); 
+		    let qty=$('#qtyInput').val();
+
+		    location.href="checkout.do?goods_no="+gno+"&sizes="+size+"&quantity="+qty;
+		});
 	});
 </script>
 </head>
@@ -107,21 +146,7 @@ $(function() {
 						<img id="mainImage" src="${vo.poster_url }"
 							alt="상품 이미지" class="img-fluid"
 							style="max-height: 460px; object-fit: contain;">
-					</div>
-					<!-- <div class="d-flex gap-2 flex-wrap">
-						<img class="thumb border rounded-3 p-1 bg-light"
-							src="../resources/images/product-thumb-1.png" width="84"
-							height="84" style="cursor: pointer; object-fit: contain;">
-						<img class="thumb border rounded-3 p-1 bg-light"
-							src="../resources/images/product-thumb-2.png" width="84"
-							height="84" style="cursor: pointer; object-fit: contain;">
-						<img class="thumb border rounded-3 p-1 bg-light"
-							src="../resources/images/product-thumb-3.png" width="84"
-							height="84" style="cursor: pointer; object-fit: contain;">
-						<img class="thumb border rounded-3 p-1 bg-light"
-							src="../resources/images/product-thumb-4.png" width="84"
-							height="84" style="cursor: pointer; object-fit: contain;">
-					</div> -->
+					</div> 
 				</div>
 
 				<!-- Info -->
@@ -157,10 +182,10 @@ $(function() {
 					<div class="my-4">
 						<label class="fw-bold d-block mb-2">사이즈</label><!-- 사이즈 버튼 클릭하면  -->
 						<div class="d-flex flex-wrap gap-2" id="sizeGroup">
+							<button type="button" class="btn btn-outline-dark size-btn">230</button>
 							<button type="button" class="btn btn-outline-dark size-btn">240</button>
 							<button type="button" class="btn btn-outline-dark size-btn">250</button>
-							<button type="button"
-								class="btn btn-outline-dark size-btn active">260</button>
+							<button type="button" class="btn btn-outline-dark size-btn active">260</button>
 							<button type="button" class="btn btn-outline-dark size-btn">270</button>
 							<button type="button" class="btn btn-outline-dark size-btn">280</button>
 						</div>
@@ -184,18 +209,16 @@ $(function() {
 					</div>
 
 					<!-- CTA -->
-					<c:if test="${sessionScope.id!=null }">
 					<div class="d-flex flex-wrap gap-2 my-4">
-						<button class="btn btn-primary btn-lg px-4"
-							data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart">
-							장바구니 담기</button>
-						<a href="checkout.do" class="btn btn-dark btn-lg px-4">바로 구매</a>
-						<!-- <button class="btn btn-outline-dark btn-lg" id=>
-							<svg width="22" height="22">
-								<use xlink:href="#heart"></use></svg>
-						</button> -->
-                        
-						<c:if test="${check == 0}">
+						<button class="btn btn-primary btn-lg px-4" id="cartBtn" data-no="${vo.goods_no}">
+   							장바구니 담기 
+   						</button>
+   							
+						<!--바로구매 버튼으로 수정 -->
+						<button type="button" class="btn btn-dark btn-lg px-4" id="buyBtn" data-no="${vo.goods_no}">
+    						바로 구매
+						</button> 
+						<c:if test="${check==0}">
 						    <button class="btn btn-outline-dark btn-lg" id="likeOn" data-no="${vo.goods_no}">
 						        <svg width="22" height="22">
 						            <use xlink:href="#heart-empty"></use> 
@@ -203,7 +226,7 @@ $(function() {
 						        <span class="ms-2">${like_count}</span>
 						    </button>
 						</c:if>
-						<c:if test="${check == 1}">
+						<c:if test="${check==1}">
 						    <button class="btn btn-danger btn-lg" id="likeOff" data-no="${vo.goods_no}">
 						        <svg width="22" height="22" fill="white">
 						            <use xlink:href="#heart-fill"></use> 
@@ -212,7 +235,6 @@ $(function() {
 						    </button>
 						</c:if>
 					</div>
-					</c:if>
 
 					<ul class="list-unstyled text-body-secondary small border-top pt-3">
 						<li class="mb-1">• 무료 배송 (3만원 이상 구매 시)</li>
@@ -397,101 +419,6 @@ $(function() {
 					</div>
 				</div>
 			</div>
-
-			<!-- ============================================= -->
-			<!--  리뷰 영역 (상세 페이지 하단)      =>  리뷰 위로 옮기고 버튼으로 제어             -->
-			<!-- ============================================= -->
-			<!-- <div class="row mt-5" id="reviewArea">
-				<div class="col-12">
-
-					<h4 class="fw-bold mb-4">상품 리뷰</h4>
-
-					(1) 평균 별점 요약 박스
-					<div class="border rounded-4 p-4 mb-4 bg-light">
-						<div class="row align-items-center">
-
-							평균 점수
-							<div class="col-md-4 text-center border-end">
-								평균 점수 숫자: JSP에서 ${avgRating} 등으로 교체
-								<div class="display-4 fw-bold">4.5</div>
-								<span class="d-inline-flex"> <svg width="20" height="20"
-										class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg>
-								</span>
-								전체 리뷰 개수: ${reviewCount} 등으로 교체
-								<p class="text-body-secondary mb-0 mt-2">전체 리뷰 128개</p>
-							</div>
-
-							점수 안내 문구
-							<div class="col-md-8 mt-3 mt-md-0 ps-md-4">
-								<p class="mb-0 text-body-secondary">실제 구매 고객이 남긴 리뷰입니다. 평점은
-									5점 만점 기준입니다.</p>
-							</div>
-
-						</div>
-					</div>
-
-					(2) 리뷰 목록
-					<c:forEach var="review" items="${reviewList}">
-					<div class="review-card border rounded-4 p-4 mb-3">
-						<div class="d-flex justify-content-between align-items-start mb-2">
-							<div>
-								리뷰 제목: ${review.title}
-								<h6 class="fw-bold mb-1">가볍고 편해서 매일 신어요</h6>
-								작성자: ${review.writer} 작성자 이름
-								<small class="text-body-secondary">작성자: 김민수</small>
-							</div>
-							개별 평점: 별 개수를 ${review.rating} 값에 따라 표시
-							<span class="d-inline-flex"> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg>
-							</span>
-						</div>
-						리뷰 내용: ${review.content}
-						<p class="text-body-secondary mb-0">사이즈 정사이즈입니다. 착화감이 부드럽고 하루종일 신어도 발이 편했어요.</p>
-					</div>
-					</c:forEach>
-
-					(미리보기용 예시 리뷰 - JSTL 적용 후 삭제하세요)
-					<div class="review-card border rounded-4 p-4 mb-3">
-						<div class="d-flex justify-content-between align-items-start mb-2">
-							<div>
-								<h6 class="fw-bold mb-1">디자인이 예뻐요</h6>
-								<small class="text-body-secondary">작성자: 이서연</small>
-							</div>
-							<span class="d-inline-flex"> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="16" height="16"
-									class="text-body-tertiary">
-								<use xlink:href="#star-outline"></use></svg>
-							</span>
-						</div>
-						<p class="text-body-secondary mb-0">색상이 화면과 동일하고 코디하기 좋아요. 배송도 빨랐습니다.</p>
-					</div>
-				</div>
-			</div> -->
 		</div>
 	</section>
 </body>

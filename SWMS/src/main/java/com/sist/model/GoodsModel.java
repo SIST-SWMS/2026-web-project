@@ -18,6 +18,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import com.sist.vo.*;
+import com.sist.dao.*;
 @Controller
 public class GoodsModel {
 
@@ -82,11 +84,11 @@ public class GoodsModel {
         map.put("sort", sort);         
 
         List<GoodsVO> list = GoodsDAO.goodsListData(map);    
-        int totalpage = GoodsDAO.goodsTotalPage(Integer.parseInt(cno));        
+        int totalpage=GoodsDAO.goodsTotalPage(Integer.parseInt(cno));        
 
         final int BLOCK = 10;
-        int startPage = ((curpage-1)/BLOCK*BLOCK)+1;
-        int endPage = ((curpage-1)/BLOCK*BLOCK)+BLOCK;
+        int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+        int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
         if(endPage>totalpage) endPage=totalpage;
 
         request.setAttribute("list", list);   
@@ -107,6 +109,8 @@ public class GoodsModel {
         	int gno = Integer.parseInt(goods_no);
             GoodsVO vo = GoodsDAO.goodsDetailData(gno);
             request.setAttribute("vo", vo);
+            
+            
             
             HttpSession session = request.getSession();
             String id = (String) session.getAttribute("id");
@@ -143,13 +147,13 @@ public class GoodsModel {
         String cno=request.getParameter("cno"); 
         String fd=request.getParameter("fd"); // 검색어 
         
-        if(page == null) page = "1";
-        if(cno == null) cno = "0"; 
+        if(page==null) page = "1";
+        if(cno==null) cno = "0"; 
         
         int curpage = Integer.parseInt(page);
         
         // DB 전송
-        Map map = new HashMap();
+        Map map=new HashMap();
         map.put("cno", Integer.parseInt(cno)); // 숫자로 형변환!
         map.put("fd", fd);
         map.put("start", (curpage*12)-12);
@@ -157,9 +161,9 @@ public class GoodsModel {
         List<GoodsVO> list=GoodsDAO.goodsFindListData(map);
         int totalpage=GoodsDAO.goodsFindTotalPage(map);
         
-        final int BLOCK = 10;
-        int startPage = ((curpage-1)/BLOCK*BLOCK)+1;
-        int endPage = ((curpage-1)/BLOCK*BLOCK)+BLOCK;
+        final int BLOCK=10;
+        int startPage=((curpage-1)/BLOCK*BLOCK)+1;
+        int endPage=((curpage-1)/BLOCK*BLOCK)+BLOCK;
         if(endPage>totalpage) endPage=totalpage;
         
         try {
@@ -173,13 +177,73 @@ public class GoodsModel {
             responseMap.put("startPage", startPage);
             responseMap.put("endPage", endPage);
             
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(responseMap);
+            ObjectMapper mapper=new ObjectMapper();
+            String json=mapper.writeValueAsString(responseMap);
             
             // 전송
             response.setContentType("text/plain;charset=UTF-8");
             PrintWriter out = response.getWriter();
             out.write(json);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+ // 장바구니 담기
+    @RequestMapping("goods/cart_insert.do")
+    public void cart_insert(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            HttpSession session=request.getSession();
+            String id=(String) session.getAttribute("id");
+
+            response.setContentType("text/plain;charset=UTF-8");
+            PrintWriter out=response.getWriter();
+            
+            if(id==null) {
+                out.write("NO_LOGIN"); 
+                return;
+            }
+            
+            // 화면에서 보낸 데이터 받기
+            String goods_no=request.getParameter("goods_no");
+            String goods_size=request.getParameter("sizes");
+            String requestQty=request.getParameter("quantity"); 
+            int reqQuantity=Integer.parseInt(requestQty);
+            
+            // 재고번호와 남은 수량 가져오기
+            Map stockMap=new HashMap();
+            stockMap.put("goods_no", Integer.parseInt(goods_no));
+            stockMap.put("goods_size", Integer.parseInt(goods_size));
+            
+            StockVO svo=GoodsDAO.stockQuantityCheck(stockMap); ; 
+            
+            // 해당 사이즈의 재고 데이터 자체가 없을 때
+            if(svo==null) {
+                out.write("NO_STOCK_DATA");
+                return;
+            }
+            // 재고가 요청보다 적을때
+            if(svo.getQuantity() < reqQuantity) {
+                out.write("OUT_OF_STOCK");
+                return;
+            }
+            
+            Map cartMap=new HashMap();
+            cartMap.put("id", id);
+            cartMap.put("stock_no", svo.getNo()); 
+            cartMap.put("sizes", Integer.parseInt(goods_size));
+            cartMap.put("quantity", reqQuantity);
+            
+            // 장바구니 테이블 조회 및 담기
+            int cartCount=GoodsDAO.cartCount(cartMap);
+            
+            if(cartCount>0) {
+                GoodsDAO.cartUpdate(cartMap); // 이미 있으면 수량 증가
+            } else {
+                GoodsDAO.cartInsert(cartMap); // 없으면 새로 추가
+            }
+            
+            out.write("SUCCESS");
             
         } catch (Exception e) {
             e.printStackTrace();
