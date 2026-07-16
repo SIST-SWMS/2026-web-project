@@ -175,21 +175,31 @@ $(function() {
                         <img src="${vo.poster_url}" alt="${vo.goods_name}">
                     </div>
                 </a>
-                <button type="button" class="like-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24">
-                        <use xlink:href="#heart"></use>
-                    </svg>
-                </button>
+                <button type="button" class="like-btn" style="border:none; background:none;">
+			    <c:choose>
+			        <c:when test="${vo.like_count > 0}">
+			            <svg width="18" height="18" viewBox="0 0 24 24" fill="red">
+			                <use xlink:href="#heart-fill"></use>
+			            </svg>
+			        </c:when>
+			        <c:otherwise>
+			            <svg width="18" height="18" viewBox="0 0 24 24">
+			                <use xlink:href="#heart-empty"></use>
+			            </svg>
+			        </c:otherwise>
+			    </c:choose>
+			</button>
+                
                 <div class="product-brand">${vo.brand_name}</div>
                 <div class="product-name">${vo.goods_name}</div>
                 <div class="product-price">${vo.goods_price}</div>
                 <div class="product-meta">
                     <svg width="12" height="12" viewBox="0 0 24 24">
-                    <use xlink:href="#heart"></use>
+                    	<use xlink:href="#heart"></use>
                     </svg>
                     ${vo.like_count}
                     <svg width="12" height="12" viewBox="0 0 12 12">
-                    <use xlink:href="#eye"></use>
+                    	<use xlink:href="#eye"></use>
                     </svg>
                     ${vo.hit}
                 </div>
