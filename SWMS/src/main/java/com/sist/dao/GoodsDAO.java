@@ -149,5 +149,19 @@ public class GoodsDAO {
 		session.close();
 	}
 	
-
+	/*
+	 <!-- 상품의 리뷰 목록 가져오기 -->
+	 <select id="goodsReviewList" resultType="ReviewVO" parameterType="int">
+	    SELECT review_no, subject, content, id, hit, TO_CHAR(created_at, 'yyyy-MM-dd') as dbday
+	    FROM review
+	    WHERE goods_no = #{goods_no}
+	    ORDER BY review_no DESC
+	</select>
+	 */
+	public static List<ReviewVO> goodsReviewList(int goods_no) {
+		SqlSession session=ssf.openSession();
+		List<ReviewVO> list=session.selectList("goodsReviewList", goods_no);
+		session.close();
+		return list;
+	}
 }

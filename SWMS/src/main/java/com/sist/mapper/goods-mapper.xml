@@ -14,7 +14,8 @@
 			CREATED_AT     NOT NULL DATE        -->
 	<select id="goodsListData" resultType="GoodsVO" parameterType="map">
 		SELECT goods_no, goods_code, goods_name, goods_price, goods_discount, poster_url, subposter_url, b.brand_name, hit,
-				(SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count
+				(SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count, 
+				(SELECT COUNT(*) FROM review r WHERE r.goods_no=g.goods_no) as review_count 
 		FROM goods g JOIN brand b
 		ON g.brand_no=b.brand_no
 		
@@ -60,7 +61,8 @@
 		SELECT goods_no, goods_name, goods_code, goods_price, 
 		       goods_discount, poster_url, subposter_url, hit,
 		       b.brand_name, c.category_name,
-		       (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count 
+		       (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count,
+		       (SELECT COUNT(*) FROM review r WHERE r.goods_no=g.goods_no) as review_count 
 		FROM goods g JOIN brand b 
 		ON g.brand_no = b.brand_no
 		JOIN category c 
@@ -93,6 +95,7 @@
 		</where>
 	</select>
 	
+	<!-- 장바구니 이동 -->
 	<!-- 1. 재고 있는지 확인 -->
 	<select id="stockQuantityCheck" resultType="StockVO" parameterType="map">    
 	SELECT no, quantity, goods_size 
@@ -126,5 +129,15 @@
 	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity}, SYSDATE)
 	</insert>
 	
+	<!-- 상품 리뷰 / 문의하기 글목록 화면 출력 -->
+	<!-- 상품의 리뷰 목록 출력 -->
+	<select id="goodsReviewList" resultType="ReviewVO" parameterType="int">
+	    SELECT review_no, subject, content, id, hit, TO_CHAR(created_at, 'yyyy-MM-dd') as dbday
+	    FROM review
+	    WHERE goods_no = #{goods_no}
+	    ORDER BY review_no DESC
+	</select>
+	 
+	 <!-- 상품 리뷰 목록 출력 -->
 
 </mapper>
