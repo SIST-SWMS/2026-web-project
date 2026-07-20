@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sist.mapper.qna-mapper">
+  <select id="qnaListData" resultType="QnaVO" parameterType="string">
+   SELECT q.goods_no,
+          g.goods_name,
+          g.poster_url
+   FROM goods g
+   JOIN qna q ON g.goods_no=q.goods_no
+   WHERE q.id=#{id}
+   ORDER BY q.qna_no DESC                   
+  </select>
+  
+  <insert id="qnaInsert" parameterType="QnaVO">
+  INSERT INTO qna(qna_no,parent_no,type,subject,content,status,id,is_secret,created_at,goods_no)
+  VALUES(qna_no_seq.nextval,#{parent_no},#{type}#{subject},#{content},#{status},#{id},#{is_secret},SYSDATE,#{goods_no})
+  
+ </insert>
+</mapper>
+
+<!-- 
+    QNA_NO     NOT NULL NUMBER       
+	PARENT_NO           NUMBER       
+	TYPE                VARCHAR2(10) 
+	SUBJECT    NOT NULL VARCHAR2(50) 
+	CONTENT    NOT NULL CLOB         
+	STATUS     NOT NULL VARCHAR2(20) 
+	ID         NOT NULL VARCHAR2(20) 
+	IS_SECRET  NOT NULL VARCHAR2(10) 
+	CREATED_AT          DATE         
+	GOODS_NO            NUMBER
+
+ -->
+
+
