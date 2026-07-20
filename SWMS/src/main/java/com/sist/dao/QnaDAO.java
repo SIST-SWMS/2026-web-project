@@ -1,5 +1,7 @@
 package com.sist.dao;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -31,5 +33,15 @@ public class QnaDAO {
     	List<QnaVO> list=session.selectList("qnaListData",id);
     	session.close();
     	return list;
+    }
+    
+    public static QnaVO qnaDetailData(int goods_no)
+    {
+        SqlSession session = ssf.openSession();
+        Map<String, Object> params = new HashMap<>();
+        params.put("goods_no", goods_no);
+        QnaVO vo = session.selectOne("qnaDetailData", params);
+        session.close();
+        return vo;
     }
 }

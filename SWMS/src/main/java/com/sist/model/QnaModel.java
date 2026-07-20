@@ -22,5 +22,4 @@ public class QnaModel {
  	    request.setAttribute("main_jsp", "../mypage/mypage.jsp");
  	    return "../main/main.jsp";
     }
-    
 }

@@ -6,11 +6,61 @@
   VALUES(review_no_seq.nextval,#{goods_no},#{subject},#{content},#{id},#{hit},0,SYSDATE,#{order_no})
 
  </insert>
- <select id="reviewCheck" parameterType="int">
+ <!-- <select id="reviewCheck" parameterType="int">
   SELECT CEIL(*)
   FROM review
   WHERE goods_no=#{goods_no} AND id=#{id}
+ </select> -->
+ 
+ <select id="reviewDetail" resultType="ReviewVO" parameterType="int">
+    SELECT r.review_no, r.subject, r.content, r.hit, r.goods_no, r.id,
+           r.like_count, r.created_at, r.image,
+           g.goods_name AS "goods.goods_name",
+           g.poster_url AS "goods.poster_url",
+           m.nickname
+    FROM review r
+    JOIN goods g ON r.goods_no = g.goods_no
+        JOIN member m ON r.id = m.id
+    WHERE r.review_no = #{review_no}
+</select>
+ 
+ <select id="reviewListData" resultType="ReviewVO" parameterType="string">
+		SELECT od.order_no, od.goods_no,r.review_no,
+	       g.goods_name AS "goods.goods_name",
+	       g.poster_url AS "goods.poster_url",
+	       o.delivery_status AS "ov.delivery_status",
+	        o.order_date AS "ov.order_date"
+			FROM ORDER_DETAIL od
+			JOIN GOODS g ON od.goods_no = g.goods_no
+			JOIN ORDERS o ON od.order_no = o.order_no
+			LEFT JOIN REVIEW r ON r.order_no = od.order_no AND r.goods_no = od.goods_no
+			WHERE o.id = #{id}
+			 <!--  AND r.review_no IS NULL -->   
+			ORDER BY o.order_date DESC
  </select>
+ 
+ <select id="reviewDetailData" resultType="ReviewVO" parameterType="map">
+    SELECT od.order_no, od.goods_no,
+           g.goods_name AS "goods.goods_name",
+           g.poster_url AS "goods.poster_url"
+    FROM ORDER_DETAIL od
+    JOIN GOODS g ON od.goods_no = g.goods_no
+    WHERE od.order_no = #{order_no}
+      AND od.goods_no = #{goods_no}
+</select>
+
+<update id="reviewUpdate" parameterType="ReviewVO">
+    UPDATE review
+    SET subject = #{subject},
+        content = #{content},
+        hit = #{hit}
+    WHERE review_no = #{review_no}
+</update>
+
+<delete id="reviewDelete" parameterType="int">
+    DELETE FROM review
+    WHERE review_no = #{review_no}
+</delete>
 </mapper>
 
 <!-- 
@@ -24,5 +74,7 @@
 		CREATED_AT          DATE           
 		IMAGE               VARCHAR2(2000) 
  -->
+ 
+ 
  
 
