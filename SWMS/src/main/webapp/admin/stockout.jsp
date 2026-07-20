@@ -45,16 +45,14 @@ $(function(){
 		if(!confirm("반품 처리하시겠습니까?")) return;
 		$.ajax({
 			type:'post',
-			url:'../admin/refund_ok.do',
+			url:'../admin/return_ok.do',
 			data:{"order_detail_no":order_detail_no,
 					"sizes":sizes,
 					"quantity":quantity,
 					"goods_no":goods_no,
 					"order_no":order_no},
 			success:function(result){
-				if(result.trim() == 'YES'){
-					location.reload()
-				}
+				location.reload()
 			}
 		})
 	})

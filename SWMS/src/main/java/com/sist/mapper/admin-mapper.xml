@@ -103,28 +103,79 @@
 		and d.goods_no = g.goods_no
 	</select>
 	
-	<select id="getQuantity" parameterType="OrderDetailVO" resultType="StockVO">
+	<select id="getStock" parameterType="OrderDetailVO" resultType="StockVO">
 		SELECT quantity, no 
 		 FROM STOCK 
 		WHERE goods_no = #{goods_no} 
 		and goods_size = #{sizes}
 	</select>
 	
+	<!-- 재고 차감 -->
 	<update id="updateStockOut" parameterType="OrderDetailVO">
 	    UPDATE stock
 	       SET quantity = quantity - #{quantity}
 	     WHERE goods_no = #{goods_no}
 	       AND goods_size = #{sizes}
 	</update>
+	
+	<!-- 재고 차감 히스토리 추가 -->
 	<insert id="insertStockHistory" parameterType="HistoryVO">
 		INSERT INTO stock_history (stock_no, order_no, quantity, inout_size, chk, inout_date, created_at, created_by)
          VALUES (#{stock_no}, #{order_no}, #{quantity}, #{inout_size}, #{chk}, sysdate, sysdate, #{created_by})
 	</insert>
 	
+	<!-- 배송상태 변경 -->
 	<update id="updateOrderDetailStatus" parameterType="OrderDetailVO">
 		UPDATE order_detail
-		 set status = '배송완료'
+		 set status = #{status}
 		where order_detail_no = #{order_detail_no}
 	</update>
+	
+	<!-- 환불 처리 -->
+	<update id="updateStockReturn" parameterType="OrderDetailVO">
+		UPDATE stock
+		 SET quantity = quantity + #{quantity}
+		WHERE goods_no = #{goods_no}
+		 AND goods_size = ${sizes}
+	</update>
+	
+	<sql id="searchCondition">
+	    <if test="startDate != null and startDate != ''">
+	        AND h.inout_date &gt;= TO_DATE(#{startDate}, 'YYYY-MM-DD')
+	    </if>
+	    <if test="endDate != null and endDate != ''">
+	        AND h.inout_date &lt; TO_DATE(#{endDate}, 'YYYY-MM-DD') + 1
+	    </if>
+	</sql>
+	
+	<select id="ioListData" parameterType="hashmap" resultType="HistoryVO">
+	   SELECT h.no, h.chk, g.goods_name, h.inout_size, h.quantity, TO_CHAR(h.inout_date, 'YYYY-MM-DD') AS dbday, h.created_by
+	      FROM stock_history h, stock s, goods g
+	     WHERE h.stock_no = s.no
+	       AND s.goods_no = g.goods_no
+	    <include refid="searchCondition"/>
+	    <if test="chk != null and chk != ''">
+	        AND h.chk = #{chk}
+	    </if>
+	    <if test="goodsName != null and goodsName != ''">
+	        AND g.goods_name LIKE '%' || #{goodsName} || '%'
+	    </if>
+	     ORDER BY h.inout_date DESC, h.no DESC
+	    OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+	</select>
+	
+	<select id="ioListTotal" parameterType="hashmap" resultType="int">
+	   SELECT CEIL(COUNT(*)/10.0)
+	      FROM stock_history h, stock s, goods g
+	     WHERE h.stock_no = s.no
+	       AND s.goods_no = g.goods_no
+	    <include refid="searchCondition"/>
+	    <if test="chk != null and chk != ''">
+	        AND h.chk = #{chk}
+	    </if>
+	    <if test="keyword != null and keyword != ''">
+	        AND g.goods_name LIKE '%' || #{goodsName} || '%'
+	    </if>
+	</select>
 	
 </mapper>

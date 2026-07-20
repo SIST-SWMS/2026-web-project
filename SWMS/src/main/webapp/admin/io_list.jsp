@@ -29,158 +29,169 @@
 	border-color: #000;
 }
 </style>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('#init').on('click', function() {
+			location.href = "../admin/io_list.do"
+		})
+	})
+		
+</script>
 </head>
 <body>
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">입출고 조회</h4>
+	<div id="app">
+		<form @submit.prevent class="border rounded-4 p-4 mb-4 bg-light">
+			<div class="row g-3 align-items-end">
 
-	<%-- ===================== 검색 영역 ===================== --%>
-	<form action="io_list.do" method="get" class="border rounded-4 p-4 mb-4 bg-light">
-		<div class="row g-3 align-items-end">
-
-			<!-- 기간 선택 -->
-			<div class="col-md-4">
-				<label class="form-label small text-body-secondary">기간</label>
-				<div class="d-flex align-items-center gap-2">
-					<input type="date" name="startDate" class="form-control" value="${param.startDate}">
-					<span>~</span>
-					<input type="date" name="endDate" class="form-control" value="${param.endDate}">
+				<div class="col-md-4">
+					<label class="form-label small text-body-secondary">기간</label>
+					<div class="d-flex align-items-center gap-2">
+						<!-- type="date" :: 2026-07-20 = to_char(regdate,'yyyy-mm-dd') -->
+						<input type="date" id="startDate" class="form-control" v-model="startDate">
+						<span>~</span>
+						<input type="date" id="endDate" class="form-control" v-model="endDate">
+					</div>
 				</div>
-			</div>
 
-			<!-- 구분 콤보 -->
-			<div class="col-md-2">
-				<label class="form-label small text-body-secondary">구분</label>
-				<select name="chk" class="form-select">
-					<option value="">전체</option>
-					<option value="IN">입고</option>
-					<option value="OUT">출고</option>
-				</select>
-			</div>
+				<div class="col-md-2">
+					<label class="form-label small text-body-secondary">구분</label>
+					<select name="chk" class="form-select" v-model="chk">
+						<option value="">전체</option>
+						<option value="입고">입고</option>
+						<option value="출고">출고</option>
+						<option value="반품">반품</option>
+					</select>
+				</div>
 
-			<!-- 상품명 검색 -->
-			<div class="col-md-3">
-				<label class="form-label small text-body-secondary">상품명</label>
-				<input type="text" name="productName" class="form-control" placeholder="상품명 입력" value="${param.productName}">
-			</div>
+				<div class="col-md-3">
+					<label class="form-label small text-body-secondary">상품명</label>
+					<input type="text" name="goodsName" class="form-control" placeholder="상품명 입력" v-model="goodsName" @keydown.enter="find()">
+				</div> 
 
-			<!-- 버튼 -->
-			<div class="col-md-3 d-flex gap-2">
-				<button type="submit" class="btn btn-dark flex-fill">검색</button>
-				<a href="io_list.do" class="btn btn-outline-secondary flex-fill">초기화</a>
-			</div>
+				<div class="col-md-3 d-flex gap-2">
+					<button type="button" class="btn btn-dark flex-fill" @click="find()">검색</button>
+					<button type="button" class="btn btn-outline-secondary flex-fill" id="init">초기화</button>
+				</div>
 
+			</div>
+		</form>
+
+		<table class="table align-middle text-center">
+			<thead>
+				<tr class="text-body-secondary">
+					<th style="width: 60px;">번호</th>
+					<th style="width: 80px;">구분</th>
+					<th>상품명</th>
+					<th style="width: 70px;">사이즈</th>
+					<th style="width: 70px;">수량</th>
+					<th style="width: 110px;">입출고일</th>
+					<th style="width: 90px;">등록자</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="prod-row" v-for="(vo,index) in list" :key="index">
+					<td>{{vo.no}}</td>
+					<td>
+						<span class="badge bg-danger">{{vo.chk}}</span>
+					</td>
+					<td class="text-start">{{vo.goods_name}}</td>
+					<td>{{vo.inout_size}}</td>
+					<td>{{vo.quantity}}</td>
+					<td class="text-body-secondary">{{vo.dbday}}</td>
+					<td>{{vo.created_by}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="d-flex justify-content-center mt-4">
+			<ul class="pagination">
+				<li v-if="startPage > 1"><a @click="pageChange(startPage-1)">&laquo;</a></li>
+				<li :class="{ active: i == curpage }" v-for="(i, index) in range(startPage, endPage)" :key="index"><a @click="pageChange(i)">{{i}}</a></li>
+				<li v-if="endPage < totalpage"><a @click="pageChange(endPage+1)">&raquo;</a></li>
+			</ul>
 		</div>
-	</form>
-
-	<%-- ===================== 목록 테이블 ===================== --%>
-	<table class="table align-middle text-center">
-		<thead>
-			<tr class="text-body-secondary">
-				<th style="width: 60px;">번호</th>
-				<th style="width: 80px;">구분</th>
-				<th>상품명</th>
-				<th style="width: 70px;">사이즈</th>
-				<th style="width: 70px;">수량</th>
-				<th style="width: 110px;">입출고일</th>
-				<th style="width: 90px;">등록자</th>
-				<th style="width: 110px;">등록일</th>
-				<th style="width: 80px;">상세</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%-- 1건 = tr 하나. <c:forEach var="io" items="${ioList}"> 로 반복 --%>
-			<!-- <c:forEach var="io" items="${ioList}"> -->
-			<tr>
-				<td>1024</td>
-				<td>
-					<span class="badge bg-primary">입고</span>
-				</td>
-				<td class="text-start">스트라이커 (Z1)_Black</td>
-				<td>270</td>
-				<td>50</td>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>admin</td>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>
-					<a href="../admin/io_view.do?id=1024" class="btn btn-sm btn-outline-dark">상세</a>
-				</td>
-			</tr>
-			<!-- </c:forEach> -->
-			<tr>
-				<td>1023</td>
-				<td>
-					<span class="badge bg-danger">출고</span>
-				</td>
-				<td class="text-start">클래식 러너 스니커즈</td>
-				<td>265</td>
-				<td>2</td>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>admin</td>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>
-					<a href="../admin/io_view.do?id=1023" class="btn btn-sm btn-outline-dark">상세</a>
-				</td>
-			</tr>
-			<tr>
-				<td>1022</td>
-				<td>
-					<span class="badge bg-danger">출고</span>
-				</td>
-				<td class="text-start">레더 브라운 로퍼</td>
-				<td>280</td>
-				<td>1</td>
-				<td class="text-body-secondary">2026.07.04</td>
-				<td>admin</td>
-				<td class="text-body-secondary">2026.07.04</td>
-				<td>
-					<a href="../admin/io_view.do?id=1022" class="btn btn-sm btn-outline-dark">상세</a>
-				</td>
-			</tr>
-			<tr>
-				<td>1021</td>
-				<td>
-					<span class="badge bg-primary">입고</span>
-				</td>
-				<td class="text-start">뉴포트 H2 샌들</td>
-				<td>250</td>
-				<td>30</td>
-				<td class="text-body-secondary">2026.07.03</td>
-				<td>admin</td>
-				<td class="text-body-secondary">2026.07.03</td>
-				<td>
-					<a href="../admin/io_view.do?id=1021" class="btn btn-sm btn-outline-dark">상세</a>
-				</td>
-			</tr>
-			<tr>
-				<td>1020</td>
-				<td>
-					<span class="badge bg-danger">출고</span>
-				</td>
-				<td class="text-start">삼바 OG 클라우드</td>
-				<td>275</td>
-				<td>1</td>
-				<td class="text-body-secondary">2026.07.02</td>
-				<td>admin</td>
-				<td class="text-body-secondary">2026.07.02</td>
-				<td>
-					<a href="../admin/io_view.do?id=1020" class="btn btn-sm btn-outline-dark">상세</a>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<div class="d-flex justify-content-center mt-4">
-		<ul class="pagination">
-			<c:if test="${startPage > 1}">
-				<li><a href="../admin/io_list.do?page=${startPage - 1}">&laquo;</a></li>
-			</c:if>
-			<c:forEach var="i" begin="${startPage}" end="${endPage}">
-				<li ${i == curPage ? "class='active'" : ""}><a href="../admin/io_list.do?page=${i}">${i}</a></li>
-			</c:forEach>
-			<c:if test="${endPage < totalPage}">
-				<li><a href="../admin/io_list.do?page=${endPage + 1}">&raquo;</a></li>
-			</c:if>
-		</ul>
 	</div>
+	<script>
+		let app = Vue.createApp({
+			data(){
+				return {
+					curpage:1,
+					totalpage:0,
+					startPage:0,
+					endPage:0,
+					startDate:'',
+					endDate:'',
+					chk:'',
+					goodsName:'',
+					list:[]
+				}
+			},
+			mounted(){
+	            const today = new Date();
+	            
+	            const sevenDaysAgo = new Date();
+	            sevenDaysAgo.setDate(today.getDate() - 7);
+	            
+	            const formatDate = (date) => {
+	                const y = date.getFullYear();
+	                const m = String(date.getMonth() + 1).padStart(2, '0');
+	                const d = String(date.getDate()).padStart(2, '0');
+	                
+	                return y + '-' + m + '-' + d;
+	            };
+	            
+	            
+	            
+	            this.startDate = formatDate(sevenDaysAgo);
+	            this.endDate = formatDate(today);
+	            
+	            console.log(this.startDate)
+	            console.log(this.endDate)
+	            
+				this.dataRecv()
+			},
+			methods:{
+				async dataRecv(){
+					await axios.get('../admin/io_list_vue.do',{
+						params:{
+							page:this.curpage,
+							startDate:this.startDate,
+							endDate:this.endDate,
+							chk:this.chk,
+							goodsName:this.goodsName
+						}
+					}).then(response=>{
+	    				 console.log(response.data)
+	    				 this.list=response.data.list
+	    				 this.curpage=response.data.curpage
+	    				 this.totalpage=response.data.totalpage
+	    				 this.startPage=response.data.startPage
+	    				 this.endPage=response.data.endPage
+	    			 })
+	    		 },
+	    		 find(){
+	    			 this.curpage=1
+	    			 this.dataRecv()
+	    		 },
+	    		 range(start, end){
+					let arr = []
+					let length = end-start
+					for(let i=0; i<=length; i++){
+						arr[i] = start
+						start++
+					}
+					return arr
+	    		 },
+	    		 pageChange(page){
+	    			 this.curpage = page
+	    			 this.dataRecv()
+	    		 }
+			}
+		}).mount("#app")
+	</script>
 </body>
 </html>
