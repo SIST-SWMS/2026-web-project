@@ -532,7 +532,7 @@ public class AdminModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		 
 	}
 
 	// QNA 목록조회
