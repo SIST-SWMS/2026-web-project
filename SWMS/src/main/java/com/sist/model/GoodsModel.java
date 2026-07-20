@@ -110,7 +110,8 @@ public class GoodsModel {
             GoodsVO vo = GoodsDAO.goodsDetailData(gno);
             request.setAttribute("vo", vo);
             
-            
+            List<ReviewVO> rList = GoodsDAO.goodsReviewList(gno);
+            request.setAttribute("rList", rList);
             
             HttpSession session = request.getSession();
             String id = (String) session.getAttribute("id");
