@@ -288,17 +288,68 @@ public class AdminModel {
 		return "../main/main.jsp";
 	}
 
-	// 출고 관리 목록 조회
+	// 출고 관리 화면 전환
 	@RequestMapping("admin/stockout.do")
 	public String stockout_list(HttpServletRequest request, HttpServletResponse response) {
-		
-		List<OrderDetailVO> list = AdminDAO.adminOrderList();
-		
-		request.setAttribute("list", list);
 		
 		request.setAttribute("admin_content", "../admin/stockout.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
+	}
+	
+	// 출고 관리 목록 조회
+	@RequestMapping("admin/stockout_vue.do")
+	public void stockout_list_vue(HttpServletRequest request, HttpServletResponse response) {
+		
+		final int BLOCK = 10;
+		String page = request.getParameter("page");
+		String status = request.getParameter("status");
+		String memberId = request.getParameter("memberId");
+		
+		
+		System.out.println("page" + page);
+		System.out.println("status" + status);
+		System.out.println("memberId" + memberId);
+		
+		if (page == null) {
+			page = "1";
+		}
+		
+		int curpage = Integer.parseInt(page);
+		int start = (curpage - 1) * BLOCK;
+		
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("status", status);
+		map.put("memberId", memberId);
+		
+		int totalpage = AdminDAO.adminOrderTotal(map);
+		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
+		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
+		if (endPage > totalpage) {
+			endPage = totalpage;
+		}
+		List<OrderDetailVO> list = AdminDAO.adminOrderList(map);
+		
+		try {
+			map = new HashMap();
+			map.put("list", list);
+			map.put("curpage", curpage);
+			map.put("totalpage", totalpage);
+			map.put("startPage", startPage);
+			map.put("endPage", endPage);
+
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(map);
+
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(json);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	// 출고 처리

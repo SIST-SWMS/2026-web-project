@@ -55,6 +55,7 @@
 		 AND g.category_no = c.category_no
 		 AND g.goods_no = #{no}
 	</select>
+	
 	<select id="goodsStockList" resultType="StockVO" parameterType="int">
 		SELECT no, goods_no, goods_size, quantity, created_at, updated_at
 		 FROM stock
@@ -96,11 +97,31 @@
 		<result property="gvo.goods_no" column="goods_no"/>
 		<result property="ovo.order_date" column="order_date"/>
 	</resultMap>
-	<select id="adminOrderList" resultMap="orderMap">
+	<select id="adminOrderList" resultMap="orderMap" parameterType="hashmap">
 		select o.order_no, o.id, g.goods_name, d.sizes, d.quantity, to_char(o.order_date, 'yyyy-mm-dd') as dbday, d.status, d.order_detail_no, g.goods_no
 		from orders o, order_detail d, goods g
 		where o.order_no = d.order_no
 		and d.goods_no = g.goods_no
+		<if test="status != null and status != ''">
+	        AND d.status = #{status}
+	    </if>
+	    <if test="memberId != null and memberId != ''">
+	        AND o.id = #{memberId}
+	    </if>
+	    order by o.order_date desc, o.id
+	</select>
+	
+	<select id="adminOrderTotal" resultType="int" parameterType="hashmap">
+		select CEIL(count(*)/10.0)
+		from orders o, order_detail d, goods g
+		where o.order_no = d.order_no
+		and d.goods_no = g.goods_no
+		<if test="status != null and status != ''">
+	        AND d.status = #{status}
+	    </if>
+	    <if test="memberId != null and memberId != ''">
+	        AND o.id = #{memberId}
+	    </if>
 	</select>
 	
 	<select id="getStock" parameterType="OrderDetailVO" resultType="StockVO">

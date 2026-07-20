@@ -87,11 +87,18 @@ public class AdminDAO {
 		session.close();
 	}
 
-	public static List<OrderDetailVO> adminOrderList() {
+	public static List<OrderDetailVO> adminOrderList(Map map) {
 		SqlSession session = ssf.openSession();
-		List<OrderDetailVO> list = session.selectList("adminOrderList");
+		List<OrderDetailVO> list = session.selectList("adminOrderList", map);
 		session.close();
 		return list;
+	}
+	
+	public static int adminOrderTotal(Map map) {
+		SqlSession session = ssf.openSession();
+		int total = session.selectOne("adminOrderTotal", map);
+		session.close();
+		return total;
 	}
 
 	public static String adminDeliveryOk(OrderDetailVO vo, String id) {

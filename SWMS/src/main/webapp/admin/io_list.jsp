@@ -109,9 +109,15 @@
 
 		<div class="d-flex justify-content-center mt-4">
 			<ul class="pagination">
-				<li v-if="startPage > 1"><a @click="pageChange(startPage-1)">&laquo;</a></li>
-				<li :class="{ active: i == curpage }" v-for="(i, index) in range(startPage, endPage)" :key="index"><a @click="pageChange(i)">{{i}}</a></li>
-				<li v-if="endPage < totalpage"><a @click="pageChange(endPage+1)">&raquo;</a></li>
+				<li v-if="startPage > 1">
+					<a @click="pageChange(startPage-1)">&laquo;</a>
+				</li>
+				<li :class="{ active: i == curpage }" v-for="(i, index) in range(startPage, endPage)" :key="index">
+					<a @click="pageChange(i)">{{i}}</a>
+				</li>
+				<li v-if="endPage < totalpage">
+					<a @click="pageChange(endPage+1)">&raquo;</a>
+				</li>
 			</ul>
 		</div>
 	</div>
