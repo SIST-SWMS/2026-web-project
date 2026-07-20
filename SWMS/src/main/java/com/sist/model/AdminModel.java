@@ -270,9 +270,9 @@ public class AdminModel {
 	public void stock_list_vue(HttpServletRequest request, HttpServletResponse response) {
 		final int BLOCK = 10;
 		String page = request.getParameter("page");
-		String category = request.getParameter("category");
-		String brand = request.getParameter("brand");
-		String fd = request.getParameter("fd");
+		String goodsName = request.getParameter("goodsName");
+		String goodsCode = request.getParameter("goodsCode");
+		String lowStock = request.getParameter("lowStock");
 
 		if (page == null) {
 			page = "1";
@@ -280,29 +280,24 @@ public class AdminModel {
 
 		int curpage = Integer.parseInt(page);
 		int start = (curpage - 1) * BLOCK;
-		int category_no = Integer.parseInt(category);
-		int brand_no = Integer.parseInt(brand);
 
 		Map map = new HashMap();
 		map.put("start", start);
-		map.put("category", category_no);
-		map.put("brand", brand_no);
-		map.put("fd", fd);
+		map.put("goodsName", goodsName);
+		map.put("goodsCode", goodsCode);
+		map.put("lowStock", lowStock);
 
-		int totalpage = AdminDAO.adminGoodsTotal(map);
+		int totalpage = AdminDAO.adminStockTotal(map);
 		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
 		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
 		if (endPage > totalpage) {
 			endPage = totalpage;
 		}
-		List<GoodsVO> list = AdminDAO.adminGoodsList(map);
+		List<GoodsVO> list = AdminDAO.adminStockList(map);
 
 		try {
 
 			map = new HashMap();
-			map.put("fd", fd);
-			map.put("category", category);
-			map.put("brand", brand);
 			map.put("list", list);
 			map.put("curpage", curpage);
 			map.put("totalpage", totalpage);

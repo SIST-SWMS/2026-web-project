@@ -43,14 +43,17 @@
 <script type="text/javascript">
 	$(function() {
 		$('#init').on('click', function() {
-			location.href = "../admin/io_list.do"
+			location.href = "../admin/stock_list.do"
 		})
 	})
 		
 </script>
 </head>
 <body>
-	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">재고 조회</h4>
+	<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4">
+		<h4 class="fw-bold mb-0">재고 조회</h4>
+		<a href="../admin/stock_insert.do" class="btn btn-dark">재고 등록</a>
+	</div>
 
 	<div id="app">
 		<form @submit.prevent class="border rounded-4 p-4 mb-4 bg-light">
@@ -68,14 +71,14 @@
 
 				<div class="col-md-3">
 					<div class="form-check mt-4">
-						<input class="form-check-input" type="checkbox" name="lowStock" value="Y" id="lowStock" ${param.lowStock == 'Y' ? 'checked' : ''}>
-						<label class="form-check-label" for="lowStock">재고 부족만 보기 (10개 이하)</label>
+						<input class="form-check-input" type="checkbox" name="lowStock" id="lowStock" v-model="lowStock" true-value="Y" false-value="">
+       					<label class="form-check-label" for="lowStock">재고 부족만 보기 (10개 이하)</label>
 					</div>
 				</div>
 
 				<div class="col-md-3 d-flex gap-2">
-					<button type="submit" class="btn btn-dark flex-fill">검색</button>
-					<a href="stock_list.do" class="btn btn-outline-secondary flex-fill">초기화</a>
+					<button type="button" class="btn btn-dark flex-fill" @click="find()">검색</button>
+					<button type="button" class="btn btn-outline-secondary flex-fill" id="init">초기화</a>
 				</div>
 
 			</div>
@@ -84,23 +87,23 @@
 		<table class="table align-middle text-center">
 			<thead>
 				<tr class="text-body-secondary">
-					<th style="width: 130px;">상품코드</th>
-					<th>상품명</th>
-					<th style="width: 110px;">브랜드</th>
-					<th style="width: 110px;">카테고리</th>
-					<th style="width: 90px;">총재고</th>
-					<th style="width: 90px;">상태</th>
+					<th width="30%">상품코드</th>
+					<th width="30%">상품명</th>
+					<th width="10%">브랜드</th>
+					<th width="10%">카테고리</th>
+					<th width="10%">총재고</th>
+					<th width="10%">상태</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr class="stock-row" v-for="(vo,index) in list" :key="index" @click="goView(vo.goods_no)"> 
-					<td>SHOE-1002</td>
-					<td class="text-start">클래식 러너 스니커즈</td>
-					<td>스파크</td>
-					<td>스니커즈</td>
-					<td>8</td>
+					<td>{{vo.goods_code}}</td>
+					<td class="text-start">{{vo.goods_name}}</td>
+					<td>{{vo.brand_name}}</td>
+					<td>{{vo.category_name}}</td>
+					<td>{{vo.svo.total_quantity}}</td>
 					<td>
-						<span class="badge bg-warning text-dark">부족</span>
+						<span class="badge bg-warning text-dark">{{vo.svo.stock_status}}</span>
 					</td>
 				</tr>
 			</tbody>
@@ -128,10 +131,9 @@
 					totalpage:0,
 					startPage:0,
 					endPage:0,
-					startDate:'',
-					endDate:'',
-					chk:'',
 					goodsName:'',
+					goodsCode:'',
+					lowStock: '',
 					list:[]
 				}
 			},
@@ -143,10 +145,9 @@
 					await axios.get('../admin/stock_list_vue.do',{
 						params:{
 							page:this.curpage,
-							startDate:this.startDate,
-							endDate:this.endDate,
-							chk:this.chk,
-							goodsName:this.goodsName
+							goodsName:this.goodsName,
+							goodsCode:this.goodsCode,
+							lowStock:this.lowStock
 						}
 					}).then(response=>{
 	    				 console.log(response.data)

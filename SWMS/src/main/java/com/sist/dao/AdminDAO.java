@@ -171,4 +171,18 @@ public class AdminDAO {
 		session.close();
 		return total;
 	}
+	
+	public static List<GoodsVO> adminStockList(Map map) {
+		SqlSession session = ssf.openSession();
+		List<GoodsVO> list = session.selectList("adminStockList", map);
+		session.close();
+		return list;
+	}
+	
+	public static int adminStockTotal(Map map) {
+		SqlSession session = ssf.openSession();
+		int total = session.selectOne("adminStockTotal", map);
+		session.close();
+		return total;
+	}
 }

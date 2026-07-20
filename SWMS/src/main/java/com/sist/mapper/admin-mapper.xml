@@ -199,4 +199,66 @@
 	    </if>
 	</select>
 	
+	<!-- 재고 확인  -->
+	<resultMap type="com.sist.vo.GoodsVO" id="stockMap">
+		<result property="svo.total_quantity" column="total_quantity"/>
+		<result property="svo.stock_status" column="stock_status"/>
+	</resultMap>
+	<select id="adminStockList" parameterType="hashmap" resultMap="stockMap">
+		SELECT 
+		    g.goods_no, 
+		    g.goods_name, 
+		    g.goods_code,
+		    b.brand_name, 
+		    c.category_name,
+		    SUM(NVL(rs.quantity, 0)) AS total_quantity, 
+		    CASE 
+		        WHEN COUNT(CASE WHEN rs.quantity &lt; 10 THEN 1 END) &gt; 0 THEN '확인필요'
+		        ELSE '정상'
+		    END AS stock_status
+		FROM goods g
+		JOIN (
+		    SELECT 
+		        no,
+		        goods_no, 
+		        goods_size, 
+		        quantity
+		    FROM stock
+		) rs ON g.goods_no = rs.goods_no 
+		JOIN brand b    ON g.brand_no = b.brand_no
+		JOIN category c ON g.category_no = c.category_no
+		WHERE 1=1
+		<if test="goodsName != null and goodsName != ''">
+			and g.goods_name like '%'||#{goodsName}||'%'
+		</if>
+		<if test="goodsCode != null and goodsCode != ''">
+			and g.goods_code like '%'||#{goodsCode}||'%'
+		</if>
+		<if test="lowStock != null and lowStock != ''">
+			and rs.quantity &lt; 10
+		</if>
+		GROUP BY g.goods_no, g.goods_name, g.goods_code, b.brand_name, c.category_name
+		ORDER BY total_quantity DESC
+		OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+	</select>
+	
+	<select id="adminStockTotal" parameterType="hashmap" resultType="int">
+		SELECT 
+		    CEIL(COUNT(distinct(g.goods_no))/10.0)
+		FROM goods g
+		JOIN stock rs ON g.goods_no = rs.goods_no 
+		JOIN brand b   ON g.brand_no = b.brand_no
+		JOIN category c  ON g.category_no = c.category_no
+		WHERE 1=1
+		<if test="goodsName != null and goodsName != ''">
+			and g.goods_name like '%'||#{goodsName}||'%'
+		</if>
+		<if test="goodsCode != null and goodsCode != ''">
+			and g.goods_code like '%'||#{goodsCode}||'%'
+		</if>
+		<if test="lowStock != null and lowStock != ''">
+			and rs.quantity &lt; 10
+		</if>
+	</select>
+	
 </mapper>
