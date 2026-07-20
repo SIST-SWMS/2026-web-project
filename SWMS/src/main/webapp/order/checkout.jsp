@@ -47,6 +47,11 @@ $(function(){
 				addr_detail:$('#addr2').val(),
 				msg:$('#msg').val(),
 				total_price:${totalPrice},
+				stock_no:$('#stock-no').val(),
+				goods_no:$('#goods-no').val(),
+				sizes:$('#sizes').val(),
+				quantity:$('#quantity').val(),
+				goods_price:$('#goods-price').val(),
 				success:function(result)
 				{
 					
@@ -139,8 +144,16 @@ $(function(){
                   </div>
                 </div>
                 <span>${vo.price_str }</span>
+              <input type="hidden" id="goods-no" value="${vo.goods_no }">
+              <input type="hidden" id="sizes" value="${vo.sizes }">
+              <input type="hidden" id="quantity" value="${quantity }">
+              <input type="hidden" id="stock-no" value="${stock_no }">
+              <input type="hidden" id="goods-price" value="${goods_price }">
+              
               </li>
+              
               </c:forEach>
+              
               
               <!-- 반복 폼 -->
               <!-- <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">

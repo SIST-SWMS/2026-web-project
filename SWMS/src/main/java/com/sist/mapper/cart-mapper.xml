@@ -26,14 +26,14 @@
 	
 	
 	
-	<select id="goodsStockData">
+<!-- 	<select id="goodsStockData1">
 		SELECT no
 		FROM stock
 		WHERE goods_no=#{goods_no} AND goods_size=#{sizes};
 	</select>
 	
-	<insert id="cartInsert">
+	<insert id="cartInsert1">
 		INSERT INTO cart (cart_no,id,stock_no,sizes,quantity)
 		VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, {#quantity})
-	</insert>
+	</insert> -->
 </mapper>

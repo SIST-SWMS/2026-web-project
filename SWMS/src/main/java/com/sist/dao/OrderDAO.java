@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import com.sist.commons.CreateSqlSessionFactory;
 import com.sist.vo.CartVO;
 import com.sist.vo.OrderDetailVO;
+import com.sist.vo.OrdersVO;
 
 import java.util.*;
 
@@ -25,6 +26,62 @@ public class OrderDAO {
 		List<OrderDetailVO> list = session.selectList("orderListData", map);
 		session.close();
 		return list;
+	}
+	
+	/*
+	 * 	<select id="getOrderNo" resultType="int">
+			SELECT order_no_seq.nextval from dual
+		</select>
+	 */
+	public static int getOrderNo()
+	{
+		SqlSession session = ssf.openSession();
+		int no = session.selectOne("getOrderNo");
+		session.close();
+		return no;
+	}
+	
+	/*
+	 * 	<insert id="insertOrderData" parameterType="OrdersVO">
+			INSERT INTO orders (order_no,id,delivery_name,delivery_phone,delivery_zipcode,delivery_addr,delivery_addr_detail,delivery_msg,total_price)
+			VALUES (
+				#{no},
+				#{id},
+				#{delivery_name},
+				#{delivery_phone},
+				#{delivery_zipcode},
+				#{delivery_addr},
+				#{delivery_addr_detail}',
+				#{delivery_msg},
+				#{price})
+		</insert>
+	 */
+	public static void insertOrderData(OrdersVO vo)
+	{
+		SqlSession session = ssf.openSession(true);
+		session.insert("insertOrderData");
+		session.close();
+	}
+	
+	/*
+	 * 	<insert id="insertOrderDetailData" parameterType="OrderDetailVO">
+			INSERT INTO order_detail (order_detail_no,order_no,goods_no,sizes,quantity,price,status)
+			VALUES (
+				order_detail_no_seq.NEXTVAL,
+				#{order_no},
+				#{goods_no},
+				#{sizes},
+				#{quantity},
+				#{price},
+				#{status}
+			)
+		</insert>
+	 */
+	public static void insertOrderDetailData(OrderDetailVO vo)
+	{
+		SqlSession session = ssf.openSession(true);
+		session.insert("insertOrderDetailData");
+		session.close();
 	}
 
 	/*
