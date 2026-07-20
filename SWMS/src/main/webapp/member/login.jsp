@@ -50,11 +50,11 @@ $(function() {
 						<h3 class="fw-bold text-center mb-4">로그인</h3>
 						<div class="mb-3">
 							<label for="id" class="form-label fw-bold">아이디</label>
-							<input type="text" class="form-control form-control-lg bg-light" id="id" name="id" placeholder="아이디 입력">
+							<input type="text" class="form-control form-control-lg bg-light" id="id" name="id" placeholder="아이디 입력" value="admin">
 						</div>
 						<div class="mb-4">
 							<label for="pwd" class="form-label fw-bold">비밀번호</label>
-							<input type="password" class="form-control form-control-lg bg-light" id="pwd" name="pwd" placeholder="비밀번호 입력">
+							<input type="password" class="form-control form-control-lg bg-light" id="pwd" name="pwd" placeholder="비밀번호 입력" value="11">
 						</div>
 						<div id="loginMsg" class="alert alert-danger" style="display: none;"></div>
 						<button class="btn btn-primary btn-lg w-100 mb-3" type="button" id="loginBtn">로그인</button>

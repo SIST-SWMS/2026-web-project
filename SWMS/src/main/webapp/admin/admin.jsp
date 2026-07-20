@@ -52,7 +52,7 @@
 					</div>
 					<nav class="admin-menu">
 						<a href="../admin/goods_list.do" class="${admin_menu == 'goods' ? 'active' : ''}">상품 관리</a>
-						<a href="../admin/stockin.do" class="${admin_menu == 'stockin' ? 'active' : ''}">입고 관리</a>
+						<a href="../admin/stock_list.do" class="${admin_menu == 'stockin' ? 'active' : ''}">입고 관리</a>
 						<a href="../admin/stockout.do" class="${admin_menu == 'stockout' ? 'active' : ''}">출고 관리</a>
 						<a href="../admin/io_list.do" class="${admin_menu == 'iolist' ? 'active' : ''}">입출고 조회</a>
 						<a href="../admin/qna_list.do" class="${admin_menu == 'qna' ? 'active' : ''}">QNA 관리</a>
