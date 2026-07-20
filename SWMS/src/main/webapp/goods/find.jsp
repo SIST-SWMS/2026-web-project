@@ -93,11 +93,14 @@
                     </div>
                 </a>
 
-                <button type="button" class="like-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24">
-                    <use xlink:href="#heart"></use>
-                    </svg>
-                </button>
+                <button type="button" class="like-btn" style="border:none; background:none;">
+				    <svg v-if="vo.like_count > 0" width="18" height="18" viewBox="0 0 24 24" fill="red">
+				        <use xlink:href="#heart-fill"></use>
+				    </svg>
+				    <svg v-else width="18" height="18" viewBox="0 0 24 24">
+				        <use xlink:href="#heart-empty"></use>
+				    </svg>
+				</button>
 
                 <div class="product-brand">{{ vo.brand_name }}</div>
                 <div class="product-name">{{ vo.goods_name }}</div>

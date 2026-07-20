@@ -10,6 +10,8 @@ import com.sist.commons.CreateSqlSessionFactory;
 import com.sist.vo.BrandVO;
 import com.sist.vo.CategoryVO;
 import com.sist.vo.GoodsVO;
+import com.sist.vo.HistoryVO;
+import com.sist.vo.OrderDetailVO;
 import com.sist.vo.StockVO;
 
 public class AdminDAO {
@@ -61,5 +63,73 @@ public class AdminDAO {
 		List<StockVO> list = session.selectList("goodsStockList", no);
 		session.close();
 		return list;
+	}
+
+	public static void adminGoodsUpdate(GoodsVO vo) {
+		SqlSession session = ssf.openSession(true);
+		session.update("adminGoodsUpdate", vo);
+		session.close();
+	}
+
+	public static int adminGoodsInsert(GoodsVO vo) {
+		SqlSession session = ssf.openSession();
+		session.insert("adminGoodsInsert", vo);
+		session.commit();
+		session.close();
+		return vo.getGoods_no();
+	}
+
+	public static void adminStockInsert(StockVO svo) {
+		SqlSession session = ssf.openSession();
+		session.insert("adminStockInsert", svo);
+		session.commit();
+		session.close();
+	}
+
+	public static List<OrderDetailVO> adminOrderList() {
+		SqlSession session = ssf.openSession();
+		List<OrderDetailVO> list = session.selectList("adminOrderList");
+		session.close();
+		return list;
+	}
+
+	public static String adminDeliveryOk(OrderDetailVO vo, String id) {
+		SqlSession session = ssf.openSession();
+		String msg = "";
+		// stock 테이블에 있는지 조회
+		StockVO svo = session.selectOne("getQuantity", vo);
+		if (vo.getQuantity() <= svo.getQuantity()) {
+		    msg = "YES";
+		    
+		    // 있으면 stock에서 차감하고
+		    session.update("updateStockOut",vo);
+		    
+			// history테이블에 insert
+		    HistoryVO hvo = new HistoryVO();
+		    hvo.setStock_no(svo.getNo());
+		    hvo.setOrder_no(vo.getOrder_no());
+		    hvo.setQuantity(vo.getQuantity());
+		    hvo.setInout_size(vo.getSizes());
+		    hvo.setChk("출고");
+		    hvo.setCreated_by(id);
+		    System.out.println("=====================================");
+		    System.out.println(hvo.toString());
+		    System.out.println("=====================================");
+		    session.insert("insertStockHistory", hvo);
+		    
+		    // 상태 업데이트
+		    session.update("updateOrderDetailStatus", vo);
+		    session.commit();
+		    
+		} else { // 부족하면 msg에 NO 보냄
+		    msg = "NO";
+		}
+		session.close();
+		return msg;
+	}
+
+	public static void adminReturnOk(int detail_no) {
+		// TODO Auto-generated method stub
+		
 	}
 }

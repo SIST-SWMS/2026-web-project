@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -112,7 +113,7 @@
 				<tr class="prod-row" v-for="(vo,index) in list" :key="index" @click="goView(vo.goods_no)">
 					<td>{{vo.goods_code}}</td>
 					<td>
-						<img :src="vo.poster_url" class="thumb-sm" alt="이미지">
+					    <img :src="vo.poster_url.startsWith('http') ? vo.poster_url : '/SWMS/uploads/' + vo.poster_url" class="thumb-sm" alt="이미지">
 					</td>
 					<td class="text-start">{{vo.goods_name }}</td>
 					<td>{{vo.brand_name }}</td>
@@ -123,7 +124,6 @@
 			</tbody>
 		</table>
 
-		<%-- ===================== 페이지네이션 ===================== --%>
 		<div class="d-flex justify-content-center mt-4">
 			<ul class="pagination">
 				<li v-if="startPage > 1">

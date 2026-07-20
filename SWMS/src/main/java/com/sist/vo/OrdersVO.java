@@ -19,6 +19,6 @@ import lombok.Data;
 public class OrdersVO {
 	private int order_no,total_price;
 	private String id,delivery_name,delivery_phone,delivery_zipcode,delivery_addr,delivery_addr_detail,
-		delivery_msg,delivery_status;
+		delivery_msg,delivery_status,dbday;
 	private Date order_date;
 }

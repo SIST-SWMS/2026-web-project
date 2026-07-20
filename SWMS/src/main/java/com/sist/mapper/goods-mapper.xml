@@ -113,7 +113,8 @@
 	<!-- 3. 장바구니에 이미 있으면 수량만 추가  -->
 	<update id="cartUpdate" parameterType="map">   
 	UPDATE cart 
-	SET quantity = quantity + #{quantity}   
+	SET quantity = quantity + #{quantity}  , 
+		created_at = SYSDATE
 	WHERE id = #{id}       
 	AND stock_no = #{stock_no}       
 	AND sizes = #{sizes}
@@ -121,8 +122,9 @@
 
 	<!-- 4. 장바구니에 없으면 새로 담기 -->
 	<insert id="cartInsert" parameterType="map">   
-	INSERT INTO cart (cart_no, id, stock_no, sizes, quantity)    
-	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity})
+	INSERT INTO cart (cart_no, id, stock_no, sizes, quantity, created_at)    
+	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity}, SYSDATE)
 	</insert>
+	
 
 </mapper>

@@ -254,25 +254,6 @@ $(function() {
 					<img src="${vo.subposter_url}" class="img-fluid w-100" alt="상품 상세설명">
 				</div>
 			</div>
-			<div class="row mt-5">
-				<div class="col-12">
-					<h5 class="fw-bold mb-3">연관상품추천</h5>
-					<div class="swiper relatedSwiper">
-						<div class="swiper-wrapper">
-						
-							<div class="swiper-slide">
-								<a href="../main/product.do?no=1"
-									class="text-decoration-none text-dark"> <img
-									src="../resources/images/product-thumb-1.png"
-									style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-									alt="상품">
-									<div class="small mt-2">클래식 러너 스니커즈</div>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 
 			<div class="row mt-5">
 				<div class="col-12">
@@ -321,6 +302,7 @@ $(function() {
 
 						</div>
 					</div>
+					
 
 					<!-- (2) 리뷰 목록 -->
 					<!-- <c:forEach var="review" items="${reviewList}"> -->
@@ -349,7 +331,7 @@ $(function() {
 						<!-- 리뷰 내용: ${review.content} -->
 						<p class="text-body-secondary mb-0">사이즈 정사이즈입니다. 착화감이 부드럽고 하루종일 신어도 발이 편했어요.</p>
 					</div>
-					<!-- </c:forEach> -->
+					<!-- </c:forEach> --> 
 
 					<!-- (미리보기용 예시 리뷰 - JSTL 적용 후 삭제하세요) -->
 					<div class="review-card border rounded-4 p-4 mb-3">

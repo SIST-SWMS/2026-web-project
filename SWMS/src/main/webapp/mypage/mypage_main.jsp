@@ -7,10 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
+
 	<%-- ===================== 최근 주문 ===================== --%>
-	<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-3">
+	<div
+		class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-3">
 		<h4 class="fw-bold mb-0">최근 주문</h4>
-		<a href="#" class="text-body-secondary text-decoration-none small">더보기›</a>
+		<a href="../mypage/recent_order.do"
+			class="text-body-secondary text-decoration-none small">더보기›</a>
 	</div>
 
 	<table class="table align-middle">
@@ -19,70 +22,31 @@
 				<th style="width: 120px;">주문일</th>
 				<th>주문내역</th>
 				<th style="width: 220px;">주문번호</th>
-				<th class="text-end" style="width: 120px;">결제금액</th>
+				
 			</tr>
 		</thead>
 		<tbody>
-			<%-- 주문 1건 = tr 하나. 나중에 <c:forEach var="order" items="${orderList}"> 로 감싸면 반복 출력됨 --%>
-			<!-- <c:forEach var="order" items="${orderList}"> -->
-			<tr>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>
-					<div class="d-flex align-items-center gap-3">
-						<img src="../resources/images/product-thumb-1.png" width="60"
-							height="60" style="object-fit: cover; border-radius: 6px;"
-							alt="상품"> <span>스트라이커 (Z1)_Black_DUS25N73Z1</span>
-					</div>
-				</td>
-				<td class="fw-bold">ORD20260705-4253501</td>
-				<td class="text-end">84,150원</td>
-			</tr>
-			<!-- </c:forEach> -->
+			<c:forEach var="vo" items="${list}">
+				<tr>
+					<td class="text-body-secondary">${vo.ovo.dbday}</td>
+					<td>
+						<div class="d-flex align-items-center gap-3">
+							<img src="../resources/images/product-thumb-1.png" width="60"
+								height="60" style="object-fit: cover; border-radius: 6px;"
+								alt="상품"> <span>${vo.gvo.goods_name}</span>
+						</div>
+					</td>
+					<td class="fw-bold">${vo.ovo.order_no}</td>
 
-			<tr>
-				<td class="text-body-secondary">2026.05.14</td>
-				<td>
-					<div class="d-flex align-items-center gap-3">
-						<img src="../resources/images/product-thumb-2.png" width="60"
-							height="60" style="object-fit: cover; border-radius: 6px;"
-							alt="상품"> <span>(7차) Cation Cotton Vest _ 2 colors</span>
-					</div>
-				</td>
-				<td class="fw-bold">ORD20260514-2447373</td>
-				<td class="text-end">83,010원</td>
-			</tr>
 
-			<tr>
-				<td class="text-body-secondary">2026.05.14</td>
-				<td>
-					<div class="d-flex align-items-center gap-3">
-						<img src="../resources/images/product-thumb-3.png" width="60"
-							height="60" style="object-fit: cover; border-radius: 6px;"
-							alt="상품"> <span>클래식 데님_light indigo</span>
-					</div>
-				</td>
-				<td class="fw-bold">ORD20260514-2438721</td>
-				<td class="text-end">125,820원</td>
-			</tr>
-
-			<tr>
-				<td class="text-body-secondary">2026.04.21</td>
-				<td>
-					<div class="d-flex align-items-center gap-3">
-						<img src="../resources/images/product-thumb-4.png" width="60"
-							height="60" style="object-fit: cover; border-radius: 6px;"
-							alt="상품"> <span>릴리프 스티치 백팩 M_3Color/ 도난방지 RFID차단
-							여행가방</span>
-					</div>
-				</td>
-				<td class="fw-bold">ORD20260421-7168658</td>
-				<td class="text-end">103,390원</td>
-			</tr>
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
 
 	<%-- ===================== 나의 좋아요 ===================== --%>
-	<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4 mt-5">
+	<div
+		class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4 mt-5">
 		<h4 class="fw-bold mb-0">나의 좋아요</h4>
 		<a href="#" class="text-body-secondary text-decoration-none small">더보기›</a>
 	</div>
@@ -90,8 +54,10 @@
 	<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
 		<div class="col">
 			<div style="position: relative;">
-				<img src="../resources/images/product-thumb-5.png" class="w-100" style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;" alt="상품">
-				<span style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
+				<img src="../resources/images/product-thumb-5.png" class="w-100"
+					style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
+					alt="상품"> <span
+					style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
 					<svg width="22" height="22" viewBox="0 0 24 24">
 						<use xlink:href="#heart"></use>
 					</svg>

@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 
-<%-- 출고 처리 --%>
 <style type="text/css">
 .pagination {
 	display: inline-flex;
@@ -32,24 +31,67 @@
 	border-color: #000;
 }
 </style>
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
 <script type="text/javascript">
-	// 출고처리: 재고 확인 → 부족 시 알림, 충분하면 확인 팝업 후 서버 전송
-	// 파라미터: 주문번호, 주문수량, 현재고 (실제로는 서버에서 재고 재확인 필요)
-	function processOut(orderNo, orderQty, currentStock) {
-		if (currentStock < orderQty) {
-			alert("재고가 부족합니다.");
-			return;
-		}
-		if (confirm("출고 처리하시겠습니까?")) {
-			// 서버로 전송 → stock.quantity 차감, stock_history INSERT(chk='OUT'), 주문상태 '배송중' 변경
-			location.href = "stockout_process.do?orderNo=" + orderNo;
-		}
-	}
+$(function(){
+	$('.refunds').on('click',function(){
+		let order_detail_no = $(this).attr('data-dno')
+		let order_no = $(this).attr('data-ono')
+		let sizes = $(this).attr('data-size')
+		let quantity = $(this).attr('data-quantity')
+		let goods_no = $(this).attr('data-gno')
+		
+		
+		if(!confirm("반품 처리하시겠습니까?")) return;
+		$.ajax({
+			type:'post',
+			url:'../admin/refund_ok.do',
+			data:{"order_detail_no":order_detail_no,
+					"sizes":sizes,
+					"quantity":quantity,
+					"goods_no":goods_no,
+					"order_no":order_no},
+			success:function(result){
+				if(result.trim() == 'YES'){
+					location.reload()
+				}
+			}
+		})
+	})
+	
+	$('.deliverys').on('click', function(){
+		let order_detail_no = $(this).attr('data-dno')
+		let order_no = $(this).attr('data-ono')
+		let sizes = $(this).attr('data-size')
+		let quantity = $(this).attr('data-quantity')
+		let goods_no = $(this).attr('data-gno')
+		
+        if(!confirm("출고 처리하시겠습니까?")) return;
+
+        $.ajax({
+            type: 'post',
+            url: '../admin/delivery_ok.do',
+            data: {"order_detail_no":order_detail_no,
+					"sizes":sizes,
+					"quantity":quantity,
+					"goods_no":goods_no,
+					"order_no":order_no},
+            success: function(result){
+            	if(result.trim() == 'YES'){
+					location.reload()
+				}
+				else {
+					alert("재고가 부족합니다")
+					return
+				}
+            }
+        });
+    });
+})	
 </script>
 <body>
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">출고 처리</h4>
 
-	<%-- ===================== 검색 / 필터 영역 ===================== --%>
 	<form action="stockout.do" method="get" class="border rounded-4 p-4 mb-4 bg-light">
 		<div class="row g-3 align-items-end">
 
@@ -75,7 +117,6 @@
 		</div>
 	</form>
 
-	<%-- ===================== 목록 테이블 ===================== --%>
 	<table class="table align-middle text-center">
 		<thead>
 			<tr class="text-body-secondary">
@@ -90,67 +131,33 @@
 			</tr>
 		</thead>
 		<tbody>
-			<%-- 주문 1건 = tr 하나. <c:forEach var="order" items="${orderList}"> 로 반복 --%>
-			<!-- <c:forEach var="order" items="${orderList}"> -->
-			<tr>
-				<td class="fw-bold">ORD20260705-4253501</td>
-				<td>ups****</td>
-				<td class="text-start">스트라이커 (Z1)_Black</td>
-				<td>270</td>
-				<td>1</td>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>
-					<span class="badge bg-secondary">미출고</span>
-				</td>
-				<td>
-					<%-- 미출고 주문: 출고처리 버튼 활성 --%>
-					<button type="button" class="btn btn-sm btn-dark" onclick="processOut('ORD20260705-4253501', 1, 5)">출고처리</button>
-				</td>
-			</tr>
-			<!-- </c:forEach> -->
-			<tr>
-				<td class="fw-bold">ORD20260705-4253498</td>
-				<td>kim****</td>
-				<td class="text-start">클래식 러너 스니커즈</td>
-				<td>265</td>
-				<td>2</td>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>
-					<span class="badge bg-secondary">미출고</span>
-				</td>
-				<td>
-					<button type="button" class="btn btn-sm btn-dark" onclick="processOut('ORD20260705-4253498', 2, 1)">출고처리</button>
-				</td>
-			</tr>
-			<tr>
-				<td class="fw-bold">ORD20260704-4251102</td>
-				<td>lee****</td>
-				<td class="text-start">레더 브라운 로퍼</td>
-				<td>280</td>
-				<td>1</td>
-				<td class="text-body-secondary">2026.07.04</td>
-				<td>
-					<span class="badge bg-primary">배송중</span>
-				</td>
-				<td>
-					<%-- 이미 출고된 주문: 버튼 비활성 + 출고완료 텍스트 --%>
-					<span class="text-body-secondary small">출고완료</span>
-				</td>
-			</tr>
-			<tr>
-				<td class="fw-bold">ORD20260704-4250887</td>
-				<td>park***</td>
-				<td class="text-start">뉴포트 H2 샌들</td>
-				<td>250</td>
-				<td>1</td>
-				<td class="text-body-secondary">2026.07.04</td>
-				<td>
-					<span class="badge bg-success">배송완료</span>
-				</td>
-				<td>
-					<span class="text-body-secondary small">출고완료</span>
-				</td>
-			</tr>
+			<c:forEach var="vo" items="${list }">
+				<tr>
+					<td class="fw-bold">${vo.ovo.order_no }</td>
+					<td>${vo.ovo.id }</td>
+					<td class="text-start">${vo.gvo.goods_name }</td>
+					<td>${vo.sizes }</td>
+					<td>${vo.quantity }</td>
+					<td class="text-body-secondary">${vo.ovo.dbday }</td>
+					<td>
+						<span class="badge bg-secondary">${vo.status }</span>
+					</td>
+					<td>
+						<c:choose>
+							<c:when test="${vo.status == '반품요청'}">
+								<button type="button" class="btn btn-sm btn-danger refunds" data-ono="${vo.ovo.order_no }" data-dno="${vo.order_detail_no }" data-size="${vo.sizes }" data-quantity="${vo.quantity }" data-gno="${vo.gvo.goods_no }">환불처리</button>
+							</c:when>
+							<c:when test="${vo.status == '결제완료'}">
+								<button type="button" class="btn btn-sm btn-dark deliverys" data-ono="${vo.ovo.order_no }" data-dno="${vo.order_detail_no }" data-size="${vo.sizes }" data-quantity="${vo.quantity }" data-gno="${vo.gvo.goods_no }">출고처리</button>
+							</c:when>
+							<c:otherwise>
+								<span class="badge bg-secondary">처리완료</span>
+							</c:otherwise>
+						</c:choose>
+					</td>
+
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
 
