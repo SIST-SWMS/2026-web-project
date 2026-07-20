@@ -4,6 +4,7 @@
 <script type="text/javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 $(function(){
+	
 	$('#postBtn').on('click',function(){
 		new daum.Postcode({
 			oncomplete(data)
@@ -31,20 +32,27 @@ $(function(){
 			return
 		}
 		
+		//orderList()
+		
 		// 결제하기 누르면 해야할 일 처리
 		// 주문서에 있는 이름, 연락처, 주소, 배송메모, 주문 내역(이름, 가격, 사이즈)들을 모아서 주문하기 내역에 insert
 		$.ajax({
 			type:'post',
 			url:'../order/order_ok.do',
 			data:{
-				//'name':
-			},
-			success:function(result)
-			{
-				
+				name:$('#name').val(),
+				phone:$('#phone').val(),
+				zipcode:$('#post').val(),
+				addr:$('#addr1').val(),
+				addr_detail:$('#addr2').val(),
+				msg:$('#msg').val(),
+				total_price:${totalPrice},
+				success:function(result)
+				{
+					
+				}
 			}
 		})
-		
 	})
 	
 })

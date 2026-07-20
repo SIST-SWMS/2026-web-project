@@ -15,6 +15,7 @@ import com.sist.dao.AdminDAO;
 import com.sist.vo.BrandVO;
 import com.sist.vo.CategoryVO;
 import com.sist.vo.GoodsVO;
+import com.sist.vo.HistoryVO;
 import com.sist.vo.OrderDetailVO;
 import com.sist.vo.StockVO;
 
@@ -288,17 +289,68 @@ public class AdminModel {
 		return "../main/main.jsp";
 	}
 
-	// 출고 관리 목록 조회
+	// 출고 관리 화면 전환
 	@RequestMapping("admin/stockout.do")
 	public String stockout_list(HttpServletRequest request, HttpServletResponse response) {
-		
-		List<OrderDetailVO> list = AdminDAO.adminOrderList();
-		
-		request.setAttribute("list", list);
 		
 		request.setAttribute("admin_content", "../admin/stockout.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
+	}
+	
+	// 출고 관리 목록 조회
+	@RequestMapping("admin/stockout_vue.do")
+	public void stockout_list_vue(HttpServletRequest request, HttpServletResponse response) {
+		
+		final int BLOCK = 10;
+		String page = request.getParameter("page");
+		String status = request.getParameter("status");
+		String memberId = request.getParameter("memberId");
+		
+		
+		System.out.println("page" + page);
+		System.out.println("status" + status);
+		System.out.println("memberId" + memberId);
+		
+		if (page == null) {
+			page = "1";
+		}
+		
+		int curpage = Integer.parseInt(page);
+		int start = (curpage - 1) * BLOCK;
+		
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("status", status);
+		map.put("memberId", memberId);
+		
+		int totalpage = AdminDAO.adminOrderTotal(map);
+		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
+		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
+		if (endPage > totalpage) {
+			endPage = totalpage;
+		}
+		List<OrderDetailVO> list = AdminDAO.adminOrderList(map);
+		
+		try {
+			map = new HashMap();
+			map.put("list", list);
+			map.put("curpage", curpage);
+			map.put("totalpage", totalpage);
+			map.put("startPage", startPage);
+			map.put("endPage", endPage);
+
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(map);
+
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(json);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	// 출고 처리
@@ -319,6 +371,7 @@ public class AdminModel {
 		vo.setSizes(Integer.parseInt(sizes));
 		vo.setQuantity(Integer.parseInt(quantity));
 		vo.setGoods_no(Integer.parseInt(goods_no));
+		vo.setStatus("배송완료");
 		
 		String msg = AdminDAO.adminDeliveryOk(vo, id);
 		
@@ -341,24 +394,89 @@ public class AdminModel {
 		String quantity = request.getParameter("quantity");
 		String goods_no = request.getParameter("goods_no");
 		
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("id");
+		
 		OrderDetailVO vo = new OrderDetailVO();
 		vo.setOrder_detail_no(Integer.parseInt(order_detail_no));
 		vo.setSizes(Integer.parseInt(sizes));
 		vo.setQuantity(Integer.parseInt(quantity));
 		vo.setGoods_no(Integer.parseInt(goods_no));
+		vo.setStatus("반품완료");
 		
-//		AdminDAO.adminReturnOk(vo);
+		AdminDAO.adminReturnOk(vo, id);
 		
 		request.setAttribute("admin_content", "../admin/stockout.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 	}
 
-	// 입출고 내역 조회
+	// 입출고 내역 조회 화면 전환
 	@RequestMapping("admin/io_list.do")
 	public String io_list(HttpServletRequest request, HttpServletResponse response) {
+		
 		request.setAttribute("admin_content", "../admin/io_list.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
+	}
+	
+	// 입출고 내역 조회
+	@RequestMapping("admin/io_list_vue.do")
+	public void io_list_vue(HttpServletRequest request, HttpServletResponse response) {
+		
+		final int BLOCK = 10;
+		String page = request.getParameter("page");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		String chk = request.getParameter("chk");
+		String goodsName = request.getParameter("goodsName");
+		
+		System.out.println("page :: " + page);
+		System.out.println("startDate :: " + startDate);
+		System.out.println("endDate :: " + endDate);
+		System.out.println("chk :: " + chk);
+		System.out.println("goodsName :: " + goodsName);
+		
+		if (page == null) {
+			page = "1";
+		}
+		
+		int curpage = Integer.parseInt(page);
+		int start = (curpage - 1) * BLOCK;
+		
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+		map.put("chk", chk);
+		map.put("goodsName", goodsName);
+		
+		int totalpage = AdminDAO.ioListTotal(map);
+		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
+		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
+		if (endPage > totalpage) {
+			endPage = totalpage;
+		}
+		List<HistoryVO> list = AdminDAO.ioListData(map);
+		
+		try {
+			map = new HashMap();
+			map.put("list", list);
+			map.put("curpage", curpage);
+			map.put("totalpage", totalpage);
+			map.put("startPage", startPage);
+			map.put("endPage", endPage);
+
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(map);
+
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(json);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	// 입출고 내역 상세보기

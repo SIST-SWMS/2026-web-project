@@ -13,8 +13,7 @@
 		g.poster_url FROM stock s JOIN goods g ON s.goods_no=g.goods_no WHERE
 		s.no=#{stock_no} </select>
 		
-	<resultMap type="com.sist.vo.OrderDetailVO"
-		id="orderdetailMap">
+	<resultMap type="com.sist.vo.OrderDetailVO" id="orderdetailMap1">
 		<association property="ovo" javaType="OrdersVO">
 			<result property="order_date" column="order_date" />
 			<result property="order_no" column="order_no" />
@@ -26,7 +25,7 @@
 			<result property="goods_name" column="goods_name" />
 		</association>
 	</resultMap>
-	<select id="myOrderDetailData" resultMap="orderdetailMap" parameterType="string">
+	<select id="myOrderDetailData" resultMap="orderdetailMap1" parameterType="string">
 	SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') as dbday,o.order_no,o.total_price,o.delivery_status,g.goods_name 
 	FROM order_detail od 
 	JOIN orders o ON od.order_no = o.order_no JOIN goods g

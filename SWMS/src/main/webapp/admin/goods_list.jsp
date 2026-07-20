@@ -64,7 +64,7 @@
 		<a href="../admin/goods_insert.do" class="btn btn-dark">상품 등록</a>
 	</div>
 	<div id="app">
-		<form action="../admin/goods_search.do" method="get" class="border rounded-4 p-4 mb-4 bg-light">
+		<form @submit.prevent class="border rounded-4 p-4 mb-4 bg-light">
 			<div class="row g-3 align-items-end">
 				<div class="col-md-3">
 					<label class="form-label small text-body-secondary">카테고리</label>

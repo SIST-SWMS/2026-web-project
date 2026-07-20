@@ -30,7 +30,7 @@ public class AdminDAO {
 		session.close();
 		return list;
 	}
-	
+
 	public static int adminGoodsTotal(Map map) {
 		SqlSession session = ssf.openSession();
 		int total = session.selectOne("adminGoodsTotal", map);
@@ -44,6 +44,7 @@ public class AdminDAO {
 		session.close();
 		return list;
 	}
+
 	public static List<BrandVO> SearchBrand() {
 		SqlSession session = ssf.openSession();
 		List<BrandVO> list = session.selectList("SearchBrand");
@@ -86,50 +87,88 @@ public class AdminDAO {
 		session.close();
 	}
 
-	public static List<OrderDetailVO> adminOrderList() {
+	public static List<OrderDetailVO> adminOrderList(Map map) {
 		SqlSession session = ssf.openSession();
-		List<OrderDetailVO> list = session.selectList("adminOrderList");
+		List<OrderDetailVO> list = session.selectList("adminOrderList", map);
 		session.close();
 		return list;
+	}
+	
+	public static int adminOrderTotal(Map map) {
+		SqlSession session = ssf.openSession();
+		int total = session.selectOne("adminOrderTotal", map);
+		session.close();
+		return total;
 	}
 
 	public static String adminDeliveryOk(OrderDetailVO vo, String id) {
 		SqlSession session = ssf.openSession();
 		String msg = "";
 		// stock 테이블에 있는지 조회
-		StockVO svo = session.selectOne("getQuantity", vo);
+		StockVO svo = session.selectOne("getStock", vo);
 		if (vo.getQuantity() <= svo.getQuantity()) {
-		    msg = "YES";
-		    
-		    // 있으면 stock에서 차감하고
-		    session.update("updateStockOut",vo);
-		    
+			msg = "YES";
+
+			// 있으면 stock에서 차감하고
+			session.update("updateStockOut", vo);
+
 			// history테이블에 insert
-		    HistoryVO hvo = new HistoryVO();
-		    hvo.setStock_no(svo.getNo());
-		    hvo.setOrder_no(vo.getOrder_no());
-		    hvo.setQuantity(vo.getQuantity());
-		    hvo.setInout_size(vo.getSizes());
-		    hvo.setChk("출고");
-		    hvo.setCreated_by(id);
-		    System.out.println("=====================================");
-		    System.out.println(hvo.toString());
-		    System.out.println("=====================================");
-		    session.insert("insertStockHistory", hvo);
-		    
-		    // 상태 업데이트
-		    session.update("updateOrderDetailStatus", vo);
-		    session.commit();
-		    
+			HistoryVO hvo = new HistoryVO();
+			hvo.setStock_no(svo.getNo());
+			hvo.setOrder_no(vo.getOrder_no());
+			hvo.setQuantity(vo.getQuantity());
+			hvo.setInout_size(vo.getSizes());
+			hvo.setChk("출고");
+			hvo.setCreated_by(id);
+			session.insert("insertStockHistory", hvo);
+
+			// 상태 업데이트
+			session.update("updateOrderDetailStatus", vo);
+			session.commit();
+
 		} else { // 부족하면 msg에 NO 보냄
-		    msg = "NO";
+			msg = "NO";
 		}
 		session.close();
 		return msg;
 	}
 
-	public static void adminReturnOk(int detail_no) {
-		// TODO Auto-generated method stub
+	public static void adminReturnOk(OrderDetailVO vo, String id) {
+		SqlSession session = ssf.openSession();
 		
+		//  get stock_no 
+		StockVO svo = session.selectOne("getStock", vo);
+		// stock 다시 올려주고
+		session.update("updateStockOut", vo);
+
+		// history테이블에 insert
+		HistoryVO hvo = new HistoryVO();
+		hvo.setStock_no(svo.getNo());
+		hvo.setOrder_no(vo.getOrder_no());
+		hvo.setQuantity(vo.getQuantity());
+		hvo.setInout_size(vo.getSizes());
+		hvo.setChk("반품");
+		hvo.setCreated_by(id);
+		session.insert("insertStockHistory", hvo);
+
+		// 상태 업데이트
+		session.update("updateOrderDetailStatus", vo);
+		session.commit();
+
+		session.close();
+	}
+	
+	public static List<HistoryVO> ioListData(Map map) {
+		SqlSession session = ssf.openSession();
+		List<HistoryVO> list = session.selectList("ioListData", map);
+		session.close();
+		return list;
+	}
+
+	public static int ioListTotal(Map map) {
+		SqlSession session = ssf.openSession();
+		int total = session.selectOne("ioListTotal", map);
+		session.close();
+		return total;
 	}
 }
