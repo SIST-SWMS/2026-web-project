@@ -256,12 +256,68 @@ public class AdminModel {
 		return "redirect:../admin/goods_view.do?no=" + goods_no;
 	}
 
-	// 재고 관리 목록 조회
+	// 재고 관리 화면 전환
 	@RequestMapping("admin/stock_list.do")
 	public String stock_list(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("admin_content", "../admin/stock_list.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
+	}
+	
+	// 재고 관리 목록 조회
+	@RequestMapping("admin/stock_list_vue.do")
+	public void stock_list_vue(HttpServletRequest request, HttpServletResponse response) {
+		final int BLOCK = 10;
+		String page = request.getParameter("page");
+		String category = request.getParameter("category");
+		String brand = request.getParameter("brand");
+		String fd = request.getParameter("fd");
+
+		if (page == null) {
+			page = "1";
+		}
+
+		int curpage = Integer.parseInt(page);
+		int start = (curpage - 1) * BLOCK;
+		int category_no = Integer.parseInt(category);
+		int brand_no = Integer.parseInt(brand);
+
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("category", category_no);
+		map.put("brand", brand_no);
+		map.put("fd", fd);
+
+		int totalpage = AdminDAO.adminGoodsTotal(map);
+		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
+		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
+		if (endPage > totalpage) {
+			endPage = totalpage;
+		}
+		List<GoodsVO> list = AdminDAO.adminGoodsList(map);
+
+		try {
+
+			map = new HashMap();
+			map.put("fd", fd);
+			map.put("category", category);
+			map.put("brand", brand);
+			map.put("list", list);
+			map.put("curpage", curpage);
+			map.put("totalpage", totalpage);
+			map.put("startPage", startPage);
+			map.put("endPage", endPage);
+
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(map);
+
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(json);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	// 재고 관리 상세 조회
@@ -476,14 +532,6 @@ public class AdminModel {
 			e.printStackTrace();
 		}
 		
-	}
-
-	// 입출고 내역 상세보기
-	@RequestMapping("admin/io_view.do")
-	public String io_view(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute("admin_content", "../admin/io_view.jsp");
-		request.setAttribute("main_jsp", "../admin/admin.jsp");
-		return "../main/main.jsp";
 	}
 
 	// QNA 목록조회
