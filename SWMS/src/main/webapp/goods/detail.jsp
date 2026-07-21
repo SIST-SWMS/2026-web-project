@@ -488,45 +488,90 @@ $(function() {
 			</div>
 			</div>
 						
+						<%-- 상품 문의 내역 리스트 --%>
 						<div class="tab-pane fade" id="qna">
-							<%-- 상품 문의 내역 리스트 --%>
-							<table class="table align-middle">
-								<thead>
-									<tr class="text-body-secondary">
-										<th class="text-center" style="width: 110px;">유형</th>
-										<th>제목</th>
-										<th class="text-center" style="width: 130px;">작성일</th>
-										<th class="text-center" style="width: 110px;">답변상태</th>
-									</tr>
-								</thead>
-								<tbody>
-									<%-- 문의 1건 = tr 하나. <c:forEach var="qna" items="${qnaList}"> 로 반복 --%>
-									<!-- <c:forEach var="qna" items="${qnaList}"> -->
-									<tr>
-										<td class="text-center">상품 문의</td>
-										<td><a href="#" class="text-dark text-decoration-none">사이즈가
-												어떻게 되나요?</a></td>
-										<td class="text-center text-body-secondary">2026.07.03</td>
-										<td class="text-center"><span class="badge bg-success">답변완료</span></td>
-									</tr>
-									<!-- </c:forEach> -->
-									<tr>
-										<td class="text-center">배송 문의</td>
-										<td><a href="#" class="text-dark text-decoration-none">
-												<svg width="14" height="14" viewBox="0 0 24 24">
-												<use xlink:href="#lock"></use></svg> 비밀글입니다
-										</a></td>
-										<td class="text-center text-body-secondary">2026.06.28</td>
-										<td class="text-center"><span class="badge bg-secondary">답변대기</span></td>
-									</tr>
-								</tbody>
-							</table>
-
-							<%-- 상품문의 버튼 --%>
-							<div class="text-end mt-3">
-								<a href="../mypage/qna.do" class="btn btn-dark">상품문의</a>
-							</div>
-						</div>
+					    <table class="table align-middle">
+					        <thead>
+					            <tr class="text-body-secondary">
+					                <th class="text-center" style="width: 110px;">유형</th>
+					                <th>제목</th>
+					                <th class="text-center" style="width: 130px;">작성일</th>
+					                <th class="text-center" style="width: 110px;">답변상태</th>
+					            </tr>
+					        </thead>
+					        <tbody>
+					            <%-- 1. 문의글이 하나도 없을 경우 --%>
+					            <c:if test="${empty qList}">
+					                <tr>
+					                    <td colspan="4" class="text-center py-4 text-body-secondary">등록된 상품 문의가 없습니다.</td>
+					                </tr>
+					            </c:if>
+					
+					            <%-- 2. 문의글 목록 반복 출력 --%>
+					            <c:forEach var="qvo" items="${qList}">
+					                <tr>
+					                    <!-- 유형 -->
+					                    <td class="text-center">${qvo.type}</td>
+					                    
+					                    <!-- 제목 -->
+					                    <td>
+					                        <c:choose>
+					                            <%-- 비밀글인 경우 --%>
+					                            <c:when test="${qvo.is_secret == '비밀글'}">
+					                                
+					                                <%-- 작성자 본인이거나 관리자인 경우 --%>
+					                                <c:choose>
+					                                    <c:when test="${sessionScope.id == qvo.id || sessionScope.id == 'admin'}">
+					                                        <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
+					                                            <svg width="14" height="14" viewBox="0 0 24 24"><use xlink:href="#lock"></use></svg>
+					                                            ${qvo.subject}
+					                                        </a>
+					                                    </c:when>
+					                                    
+					                                    <%-- 권한이 없는 다른 사용자인 경우 --%>
+					                                    <c:otherwise>
+					                                        <span class="text-body-secondary" style="cursor: not-allowed;">
+					                                            <svg width="14" height="14" viewBox="0 0 24 24"><use xlink:href="#lock"></use></svg>
+					                                            비밀글입니다.
+					                                        </span>
+					                                    </c:otherwise>
+					                                </c:choose>
+					                                
+					                            </c:when>
+					                            
+					                            <%-- 공개글인 경우 --%>
+					                            <c:otherwise>
+					                                <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
+					                                    ${qvo.subject}
+					                                </a>
+					                            </c:otherwise>
+					                        </c:choose>
+					                    </td>              
+					                    
+					                    <!-- 작성일 -->
+					                    <td class="text-center text-body-secondary">${qvo.dbday}</td>
+					                    
+					                    <!-- 답변 상태 (상태값에 따라 뱃지 색상 다르게 처리) -->
+					                    <td class="text-center">
+					                        <c:choose>
+					                            <c:when test="${qvo.status == '답변완료'}">
+					                                <span class="badge bg-success">답변완료</span>
+					                            </c:when>
+					                            <c:otherwise>
+					                                <span class="badge bg-secondary">${qvo.status}</span>
+					                            </c:otherwise>
+					                        </c:choose>
+					                    </td>
+					                </tr>
+					            </c:forEach>
+					        </tbody>
+					    </table>
+					
+					    <%-- 상품문의 버튼 --%>
+					    <div class="text-end mt-3">
+					        <a href="../mypage/qna.do" class="btn btn-dark">상품문의</a>
+					    </div>
+					</div>
 					</div>
 				</div>
 			</div>

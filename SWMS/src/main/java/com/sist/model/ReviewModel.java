@@ -1,4 +1,6 @@
-package com.sist.model;
+ package com.sist.model;
+
+import java.util.*;
 
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
@@ -13,16 +15,17 @@ import com.sist.dao.*;
 public class ReviewModel {
 	@RequestMapping("mypage/review.do")
 	public String review(HttpServletRequest request, HttpServletResponse response) {
-		String no = request.getParameter("no");
-		request.setAttribute("no", no);
-		request.setAttribute("mypage_content", "../mypage/review.jsp");
-		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
-		return "../main/main.jsp";
-		/*
-		 * request.setAttribute("mypage_content", "../mypage/review_list.jsp");
-		 * request.setAttribute("main_jsp", "../mypage/mypage.jsp"); return
-		 * "../main/main.jsp";
-		 */
+	    int order_no = Integer.parseInt(request.getParameter("order_no"));
+	    int goods_no = Integer.parseInt(request.getParameter("goods_no"));
+
+	    ReviewVO vo = ReviewDAO.reviewDetailData(order_no, goods_no);
+	    List<ReviewVO> list = new ArrayList<>();
+	    list.add(vo);
+	    request.setAttribute("list", list);
+
+	    request.setAttribute("mypage_content", "../mypage/review.jsp");
+	    request.setAttribute("main_jsp", "../mypage/mypage.jsp");
+	    return "../main/main.jsp";
 	}
 
 	@RequestMapping("mypage/review_ok.do")
@@ -31,11 +34,12 @@ public class ReviewModel {
 		String hit = request.getParameter("rating");
 		String subject = request.getParameter("title");
 		String content = request.getParameter("content");
-		
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id"); // 사용자 id
+		String order_no = request.getParameter("order_no");
 
 		ReviewVO vo = new ReviewVO();
+		vo.setOrder_no(Integer.parseInt(order_no));
 		vo.setGoods_no(Integer.parseInt(goods_no));
 		vo.setSubject(subject);
 		vo.setContent(content);
@@ -47,6 +51,86 @@ public class ReviewModel {
 		ReviewDAO.reviewInsert(vo);
 		
 		return "redirect:../mypage/reviewList.do";
-	}	
+	}
+	
+	@RequestMapping("mypage/review_view.do")
+	public String review_view(HttpServletRequest request, HttpServletResponse response) {
+	    HttpSession session = request.getSession();
+	    String id = (String) session.getAttribute("id");
+	    String no = request.getParameter("no");
+	    if (id == null) {
+	        return "redirect:../member/login.do";
+	    }
+
+	    ReviewVO vo = ReviewDAO.reviewDetail(Integer.parseInt(no));
+	    if (vo == null || !id.equals(vo.getId())) {
+	        return "redirect:../mypage/reviewList.do";
+	    }
+
+	    request.setAttribute("vo", vo);
+	    request.setAttribute("mypage_content", "../mypage/review_view.jsp");
+	    request.setAttribute("main_jsp", "../mypage/mypage.jsp");
+	    return "../main/main.jsp";
+	}
+	
+	
+	@RequestMapping("mypage/review_edit.do")
+	public String review_edit(HttpServletRequest request, HttpServletResponse response)
+	{
+		HttpSession session = request.getSession();
+	    String id = (String) session.getAttribute("id");
+	    String no = request.getParameter("no");
+	    if (id == null) {
+	    	return "redirect:../member/login.do";
+	    }
+	    ReviewVO vo = ReviewDAO.reviewDetail(Integer.parseInt(no));
+	    if (vo == null || !id.equals(vo.getId())) {
+	        return "redirect:../mypage/reviewList.do";
+	    }
+
+	    request.setAttribute("vo", vo);
+	    request.setAttribute("mypage_content", "../mypage/review_edit.jsp");
+	    request.setAttribute("main_jsp", "../mypage/mypage.jsp");
+	    return "../main/main.jsp";
+	}
+	
+	@RequestMapping("mypage/review_edit_ok.do")
+	public String review_edit_ok(HttpServletRequest request, HttpServletResponse response)
+	{
+	    String no = request.getParameter("review_no");
+	    String hit = request.getParameter("rating");
+	    String subject = request.getParameter("title");
+	    String content = request.getParameter("content");
+
+	    ReviewVO vo = new ReviewVO();
+	    vo.setReview_no(Integer.parseInt(no));
+	    vo.setSubject(subject);
+	    vo.setContent(content);
+	    vo.setHit(hit);
+
+	    ReviewDAO.reviewUpdate(vo);
+
+	    return "redirect:../mypage/review_view.do?no=" + no;
+	}
+
+	@RequestMapping("mypage/review_delete.do")
+	public String review_delete(HttpServletRequest request, HttpServletResponse response)
+	{
+	    HttpSession session = request.getSession();
+	    String id = (String) session.getAttribute("id");
+	    String no = request.getParameter("no");
+	    if (id == null) {
+	        return "redirect:../member/login.do";
+	    }
+
+	    ReviewVO vo = ReviewDAO.reviewDetail(Integer.parseInt(no));
+	    if (vo == null || !id.equals(vo.getId())) {
+	        return "redirect:../mypage/reviewList.do";
+	    }
+
+	    ReviewDAO.reviewDelete(Integer.parseInt(no));
+
+	    return "redirect:../mypage/reviewList.do";
+	}
 	
 }

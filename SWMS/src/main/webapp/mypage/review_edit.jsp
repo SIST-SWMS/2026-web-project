@@ -49,14 +49,15 @@
 
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">리뷰
 		수정</h4>
-
+    <form action="../mypage/review_edit_ok.do" method="post">
+    <input type="hidden" name="review_no" value="${vo.review_no}">
 	<%-- 상품 정보 --%>
 	<div class="d-flex align-items-center gap-3 pb-4 border-bottom mb-4">
-		<img src="../resources/images/product-thumb-4.png" width="70"
+		<img src="../resources/images/${vo.goods.poster_url }" width="70"
 			height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
 		<div>
-			<div class="fw-bold">${review.brand}</div>
-			<div class="text-body-secondary small">${review.productName}</div>
+			<div class="fw-bold">${vo.goods.goods_name}</div>
+			<%-- <div class="text-body-secondary small">${review.productName}</div> --%>
 		</div>
 	</div>
 
@@ -68,12 +69,12 @@
 		<div class="star-rating" id="starRating">
 			<c:forEach var="i" begin="1" end="5">
 				<svg width="30" height="30" viewBox="0 0 12 12" data-score="${i}"
-					class="${i <= review.rating ? 'on' : ''}">
+					class="${i <= vo.hit ? 'on' : ''}">
 					<use xlink:href="#star-solid"></use></svg>
 			</c:forEach>
 		</div>
 		<input type="hidden" id="ratingValue" name="rating"
-			value="${review.rating}">
+			value="${vo.hit }">
 	</div>
 
 	<%-- 사진 --%>
@@ -102,24 +103,24 @@
 			<label class="col-sm-1 col-form-label">제목</label>
 			<div class="col-sm-11">
 				<input type="text" class="form-control" name="title"
-					value="${review.title}">
+					value="${vo.subject}">
 			</div>
 		</div>
 
 		<div class="row">
 			<label class="col-sm-1 col-form-label">내용</label>
 			<div class="col-sm-11">
-				<textarea class="form-control" name="content" rows="6">${review.content}</textarea>
+				<textarea class="form-control" name="content" rows="6">${vo.content}</textarea>
 			</div>
 		</div>
 	</div>
 
 	<%-- 버튼 --%>
 	<div class="d-flex gap-2 justify-content-center mt-4">
-		<a href="#" class="btn btn-outline-secondary btn-lg px-5">취소</a>
-		<button type="button" class="btn btn-dark btn-lg px-5">수정 완료</button>
+		<a href="../mypage/review_view.do?no=${vo.review_no}" class="btn btn-outline-secondary btn-lg px-5">취소</a>
+		<button type="submit" class="btn btn-dark btn-lg px-5">수정 완료</button>
 	</div>
-
+    </form>
 
 </body>
 </html>

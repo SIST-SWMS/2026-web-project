@@ -250,8 +250,8 @@
 					this.id = response.data.id
 					
 					console.log(response)
-					console.log(this.id)
-					console.log(this.checked)
+					//console.log(this.id)
+					//console.log(this.checked)
 				})
 			},
 			toggleAll() {

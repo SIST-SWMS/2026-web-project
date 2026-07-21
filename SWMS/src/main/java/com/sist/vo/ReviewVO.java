@@ -16,8 +16,11 @@ import lombok.Data;
  */
 @Data
 public class ReviewVO {
-     private int review_no,goods_no,like_count;
-     private String subject,content,hit,image,dbday,id;
+     private int review_no,goods_no,like_count,order_no;
+     private String subject,content,hit,image,dbday,id,nickname;
      private Date created_at;
      private Boolean bCheck;
+     private GoodsVO goods;
+     private OrderDetailVO od;
+     private OrdersVO ov;
 }

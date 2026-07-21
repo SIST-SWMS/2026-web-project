@@ -14,13 +14,12 @@ public class QnaModel {
     {
     	int goods_no=Integer.parseInt(request.getParameter("goods_no"));
     	
-    	QnaVO vo=QnaDAO.qnaListData(null);
-    	List<QnaVO> list=new ArrayList<QnaVO>();
+    	QnaVO vo=QnaDAO.qnaDetailData(goods_no);
+    	List<QnaVO> list=new ArrayList<>();
     	list.add(vo);
     	request.setAttribute("list", list);
     	 request.setAttribute("mypage_content", "../mypage/qna.jsp");
  	    request.setAttribute("main_jsp", "../mypage/mypage.jsp");
  	    return "../main/main.jsp";
     }
-    
 }

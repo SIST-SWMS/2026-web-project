@@ -50,16 +50,18 @@
 
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">리뷰 등록</h4>
 	<form action="../mypage/review_ok.do" method="post">
+	 <c:forEach var="vo" items="${list }">
 		<!-- 상품 정보 -->
-		<input type="hidden" name="goods_no" value="${no}">
+		<input type="hidden" name="goods_no" value="${vo.goods_no}">
+		<input type="hidden" name="order_no" value="${vo.order_no}">
 		<div class="d-flex align-items-center gap-3 pb-4 border-bottom mb-4">
-			<img src="../resources/images/product-thumb-4.png" width="70" height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
+			<img src="../resources/images/${vo.goods.poster_url }" width="70" height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
 			<div>
-				<div class="fw-bold">리드볼트_잡화</div>
-				<div class="text-body-secondary small">릴리프 스티치 백팩 M_3Color/ 도난방지 RFID차단 여행가방</div>
+				<div class="fw-bold">${vo.goods.goods_name}</div>
+				<!-- <div class="text-body-secondary small">릴리프 스티치 백팩 M_3Color/ 도난방지 RFID차단 여행가방</div> -->
 			</div>
 		</div>
-
+     </c:forEach>
 		<!-- 별점 -->
 		<div class="mb-4">
 			<div class="fw-bold mb-2">
@@ -113,7 +115,7 @@
 
 		<!-- 버튼 -->
 		<div class="d-flex gap-2 justify-content-center mt-4">
-			<a href="#" class="btn btn-outline-secondary btn-lg px-5" onclick="javascript:history.back()">취소</a>
+			<a href="../mypage/reviewList.do" class="btn btn-outline-secondary btn-lg px-5" onclick="javascript:history.back()">취소</a>
 			<button type="submit" class="btn btn-dark btn-lg px-5">등록</button>
 		</div>
 	</form>

@@ -3,10 +3,17 @@
 <mapper namespace="com.sist.mapper.qna-mapper">
   <select id="qnaListData" resultType="QnaVO" parameterType="string">
    SELECT q.goods_no,
-          g.goods_name,
-          g.poster_url
-   FROM goods g
-   JOIN qna q ON g.goods_no=q.goods_no
+          g.goods_name AS "goods.goods_name",
+          g.poster_url AS "goods.poster_url",
+          q.type,
+          q.created_at,
+          q.is_secret,
+          q.status,
+          q.qna_no,
+          q.subject
+          
+     FROM qna q
+    JOIN goods g ON g.goods_no = q.goods_no
    WHERE q.id=#{id}
    ORDER BY q.qna_no DESC                   
   </select>

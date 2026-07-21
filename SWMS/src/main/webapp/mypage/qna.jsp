@@ -7,24 +7,28 @@
 <title>Insert title here</title>
 </head>
 <body>
+    <c:forEach var="vo" items="${list }">
 	<!-- 상품 정보 -->
 	<div class="d-flex align-items-center gap-3 pb-4 border-bottom mb-4">
-		<img src="../resources/images/product-thumb-6.png" width="70"
+		<img src="../resources/images/${vo.goods.poster_url }" width="70"
 			height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
 		<div>
-			<div class="fw-bold">야세</div>
-			<div class="text-body-secondary small">송이송이 x 야세 고아웃 빈티지 스니커즈
-				그레이</div>
-			<div>
+			<div class="fw-bold">${vo.goods.goods_name }</div>
+			<!-- <div class="text-body-secondary small">송이송이 x 야세 고아웃 빈티지 스니커즈
+				그레이</div> -->
+			<!-- <div>
 				<span class="text-danger fw-bold">15%</span> <span class="fw-bold">152,150원</span>
-			</div>
+			</div> -->
 		</div>
 	</div>
+	</c:forEach>
 
 	<!-- 문의 유형 -->
+	<form action="../mypage/qna_ok.do" method="post">
 	<div class="mb-3">
 		<label class="form-label fw-bold">문의 유형 <span
-			class="text-danger">(필수)</span></label> <select
+			class="text-danger">(필수)</span></label> 
+			<select
 			class="form-select form-select-lg">
 			<option>선택해주세요</option>
 			<option>상품 문의</option>
@@ -69,7 +73,8 @@
 	<!-- 버튼 -->
 	<div class="d-flex gap-2">
 		<a href="#" class="btn btn-outline-secondary btn-lg w-50">취소</a>
-		<button type="button" class="btn btn-secondary btn-lg w-50">등록</button>
+		<button type="button" class="btn btn-secondary btn-lg w-50">등록</button>		
 	</div>
+	</form>
 </body>
 </html>

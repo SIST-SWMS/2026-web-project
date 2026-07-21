@@ -10,9 +10,8 @@
 	<div
 		class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4">
 		<h4 class="fw-bold mb-0">1:1 문의</h4>
-		<a href="#" class="btn btn-dark">문의하기</a>
+		<a href="../mypage/qna.do" class="btn btn-dark">문의하기</a>
 	</div>
-
 	<table class="table align-middle">
 		<thead>
 			<tr class="text-body-secondary">
@@ -25,14 +24,16 @@
 		<tbody>
 			<%-- 문의 1건 = tr 하나. <c:forEach var="qna" items="${qnaList}"> 로 반복 --%>
 			<!-- <c:forEach var="qna" items="${qnaList}"> -->
+			<c:forEach var="vo" items="${list}">
 			<tr>
-				<td class="text-center">상품 문의</td>
-				<td><a href="#" class="text-dark text-decoration-none">사이즈
-						문의드립니다</a></td>
-				<td class="text-center text-body-secondary">2026.07.03</td>
-				<td class="text-center"><span class="badge bg-success">답변완료</span></td>
-			</tr>
-			<!-- </c:forEach> -->
+				 <td class="text-center">${vo.type }</td> 
+				<td><a href="../mypage/qna_view.do" class="text-dark text-decoration-none">
+						${vo.subject }</a></td>
+				<td class="text-center text-body-secondary">${vo.created_at}</td>
+				<td class="text-center"><span class="badge bg-success">${vo.status }</span></td>
+			</tr> 
+			</c:forEach>   
+			 <!-- </c:forEach> -->
 
 			<tr>
 				<td class="text-center">배송 문의</td>
@@ -51,6 +52,7 @@
 				<td class="text-center text-body-secondary">2026.06.15</td>
 				<td class="text-center"><span class="badge bg-success">답변완료</span></td>
 			</tr>
+
 		</tbody>
 	</table>
 </body>
