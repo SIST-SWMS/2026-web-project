@@ -38,7 +38,7 @@
 		    <otherwise>    
 		        ORDER BY g.goods_no ASC  
     		</otherwise>
-</choose>
+		</choose>
 		OFFSET #{start} ROWS FETCH NEXT 12 ROWS ONLY
 	</select>
 	
@@ -145,4 +145,12 @@
 		WHERE goods_no = #{goods_no}
 		ORDER BY qna_no DESC
 	</select>
+	
+	<!-- 메인 진열 상품 -->
+	<select id="goodsMainView" resultType="GoodsVO">
+		SELECT goods_no, goods_name, poster_url, goods_price, goods_discount
+		FROM goods
+		WHERE goods_no IN (1, 69, 174, 332, 357)
+	</select>
+	
 </mapper>

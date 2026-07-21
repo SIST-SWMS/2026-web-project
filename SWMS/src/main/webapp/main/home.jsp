@@ -103,8 +103,8 @@
 						<div class="col-10">
 							<h4 class="element-title text-capitalize mb-2">Pick up in
 								store</h4>
-							<p>At imperdiet dui accumsan sit amet nulla risus est
-								ultricies quis.</p>
+							<!-- <p>Order online and collect your items at your nearest store for free.</p> -->
+							<p>온라인으로 주문하고 가까운 매장에서 무료로 수령하세요.</p>
 						</div>
 					</div>
 				</div>
@@ -118,8 +118,8 @@
 						<div class="col-10">
 							<h4 class="element-title text-capitalize mb-2">Special
 								packaging</h4>
-							<p>At imperdiet dui accumsan sit amet nulla risus est
-								ultricies quis.</p>
+							<!-- <p>Every order is carefully packed with our premium, signature materials.</p> -->
+							<p>모든 주문은 당사의 프리미엄 시그니처 소재로 정성껏 포장됩니다.</p>
 						</div>
 					</div>
 				</div>
@@ -133,8 +133,8 @@
 						<div class="col-10">
 							<h4 class="element-title text-capitalize mb-2">Free global
 								returns</h4>
-							<p>At imperdiet dui accumsan sit amet nulla risus est
-								ultricies quis.</p>
+							<!-- <p>Enjoy hassle-free shopping with free returns from anywhere in the world.</p> -->
+							<p>전 세계 어디서나 무료 반품으로 번거로움 없는 쇼핑을 즐기세요.</p>
 						</div>
 					</div>
 				</div>
@@ -145,188 +145,41 @@
 
 <section class="py-5">
 	<div class="container-fluid">
-
+		
 		<div class="row">
+		<h3>인기 상품</h3>
 			<div class="col-md-12">
 				<div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
-					<div class="col">
-						<div class="product-item">
-							<span class="badge bg-success position-absolute m-3">-30%</span>
-							<figure>
-								<a href="../goods/detail.do" title="Product Title"> 
-								<img src="../resources/images/product-thumb-1.png" alt="Product Thumbnail" class="img-fluid">
-								</a>
-							</figure>
-							<span>Super Shoes</span>
-							<div class="d-flex justify-content-between">
-								<p>
-									<span class="text-dark">$18.00</span>
-									<del>$23</del>
-									<span class="text-success">-30%</span>
-								</p>
-								<span class="d-flex"> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="product-item">
-							<span class="badge bg-success position-absolute m-3">-30%</span>
-							<figure>
-								<a href="../goods/detail.do" title="Product Title"> 
-								<img src="../resources/images/product-thumb-1.png" alt="Product Thumbnail" class="img-fluid">
-								</a>
-							</figure>
-							<span>Super Shoes</span>
-							<div class="d-flex justify-content-between">
-								<p>
-									<span class="text-dark">$18.00</span>
-									<del>$23</del>
-									<span class="text-success">-30%</span>
-								</p>
-								<span class="d-flex"> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="product-item">
-							<span class="badge bg-success position-absolute m-3">-30%</span>
-							<figure>
-								<a href="../goods/detail.do" title="Product Title"> 
-								<img src="../resources/images/product-thumb-1.png" alt="Product Thumbnail" class="img-fluid">
-								</a>
-							</figure>
-							<span>Super Shoes</span>
-							<div class="d-flex justify-content-between">
-								<p>
-									<span class="text-dark">$18.00</span>
-									<del>$23</del>
-									<span class="text-success">-30%</span>
-								</p>
-								<span class="d-flex"> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="product-item">
-							<span class="badge bg-success position-absolute m-3">-30%</span>
-							<figure>
-								<a href="../goods/detail.do" title="Product Title"> 
-								<img src="../resources/images/product-thumb-1.png" alt="Product Thumbnail" class="img-fluid">
-								</a>
-							</figure>
-							<span>Super Shoes</span>
-							<div class="d-flex justify-content-between">
-								<p>
-									<span class="text-dark">$18.00</span>
-									<del>$23</del>
-									<span class="text-success">-30%</span>
-								</p>
-								<span class="d-flex"> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-								</span>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="product-item">
-							<span class="badge bg-success position-absolute m-3">-30%</span>
-							<figure>
-								<a href="../goods/detail.do" title="Product Title"> 
-								<img src="../resources/images/product-thumb-1.png" alt="Product Thumbnail" class="img-fluid">
-								</a>
-							</figure>
-							<span>Super Shoes</span>
-							<div class="d-flex justify-content-between">
-								<p>
-									<span class="text-dark">$18.00</span>
-									<del>$23</del>
-									<span class="text-success">-30%</span>
-								</p>
-								<span class="d-flex"> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-									<svg width="18" height="18" class="text-warning">
-				                    	<use xlink:href="#star-solid"></use>
-				                    </svg> 
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- / product-grid -->
-
+			    <c:forEach var="vo" items="${gList}">
+			        <div class="col">
+			            <div class="product-item">
+			                <%-- 할인이 있을 때만 할인율 표시 --%>
+			                <c:if test="${vo.goods_discount > 0}">
+			                    <span class="badge bg-success position-absolute m-3">-${vo.goods_discount}%</span>
+			                </c:if>
+			                
+			                <figure>
+			                    <a href="../goods/detail.do?goods_no=${vo.goods_no}" title="${vo.goods_name}"> 
+			                        <img src="${vo.poster_url}" alt="${vo.goods_name}" class="img-fluid">
+			                    </a>
+			                </figure>
+			                
+							<span class="d-block text-truncate pb-1" title="${vo.goods_name}">${vo.goods_name}</span>
+			                
+			                <div class="d-flex justify-content-between align-items-center mt-2">
+			                    <p class="mb-0"> <span class="text-dark fw-bold">${vo.goods_price}</span></p>
+			                    <span class="d-flex"> 
+			                        <svg width="18" height="18" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+			                        <svg width="18" height="18" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+			                        <svg width="18" height="18" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+			                        <svg width="18" height="18" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+			                        <svg width="18" height="18" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+			                    </span>
+			                </div>
+			            </div>
+			        </div>
+			    </c:forEach>
+			</div>
 			</div>
 		</div>
 	</div>

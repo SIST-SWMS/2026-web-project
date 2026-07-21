@@ -178,4 +178,17 @@ public class GoodsDAO {
 		session.close();
 		return list;
 	}
+	/*
+	 *  <select id="goodsMainView" resultType="GoodsVO">
+			SELECT goods_no, goods_name, poster_url, goods_price, goods_discount
+			FROM goods
+			WHERE goods_no IN (1, 69, 174, 332, 357)
+		</select>
+	 */
+	public static List<GoodsVO> goodsMainView() {
+		SqlSession session=ssf.openSession();
+		List<GoodsVO> list=session.selectList("goodsMainView");
+		session.close();
+		return list;
+	}
 }

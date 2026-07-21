@@ -253,4 +253,13 @@ public class GoodsModel {
             e.printStackTrace();
         }
     }
+    @RequestMapping("main/main.do") 
+    public String main_page(HttpServletRequest request, HttpServletResponse response) {
+        
+        List<GoodsVO> gList = GoodsDAO.goodsMainView();
+        request.setAttribute("gList", gList);
+        
+        request.setAttribute("main_jsp", "../main/home.jsp");
+        return "../main/main.jsp";
+    }
 }

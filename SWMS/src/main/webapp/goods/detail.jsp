@@ -398,7 +398,8 @@ $(function() {
 					    <div class="d-flex justify-content-between align-items-start mb-2">
 					        <div>
 					            <h6 class="fw-bold mb-1">
-					                <a href="../review/detail.do?review_no=${rvo.review_no}" class="text-dark text-decoration-none">
+					                <%-- <a href="../review/detail.do?review_no=${rvo.review_no}" class="text-dark text-decoration-none"> --%>
+					                <a href="../mypage/reviewList.do?review_no=${rvo.review_no}" class="text-dark text-decoration-none">
 					                    ${rvo.subject}
 					                </a>
 					            </h6>
@@ -522,7 +523,8 @@ $(function() {
 					                                <%-- 작성자 본인이거나 관리자인 경우 --%>
 					                                <c:choose>
 					                                    <c:when test="${sessionScope.id == qvo.id || sessionScope.id == 'admin'}">
-					                                        <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
+					                                        <%-- <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none"> --%>
+					                                         <a href="../mypage/qnaList.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
 					                                            <svg width="14" height="14" viewBox="0 0 24 24"><use xlink:href="#lock"></use></svg>
 					                                            ${qvo.subject}
 					                                        </a>
@@ -541,17 +543,16 @@ $(function() {
 					                            
 					                            <%-- 공개글인 경우 --%>
 					                            <c:otherwise>
-					                                <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
+					                                <%-- <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none"> --%>
+					                                <a href="../mypage/qnaList.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
 					                                    ${qvo.subject}
 					                                </a>
 					                            </c:otherwise>
 					                        </c:choose>
 					                    </td>              
 					                    
-					                    <!-- 작성일 -->
 					                    <td class="text-center text-body-secondary">${qvo.dbday}</td>
-					                    
-					                    <!-- 답변 상태 (상태값에 따라 뱃지 색상 다르게 처리) -->
+					                    <!-- 답변 상태 -->
 					                    <td class="text-center">
 					                        <c:choose>
 					                            <c:when test="${qvo.status == '답변완료'}">
