@@ -44,4 +44,78 @@ public class QnaDAO {
         session.close();
         return vo;
     }
+    /*
+     * <insert id="qnaInsert" parameterType="QnaVO">
+		  INSERT INTO qna(qna_no,parent_no,type,subject,content,status,id,is_secret,created_at,goods_no)
+		  VALUES(qna_no_seq.nextval,#{parent_no},#{type}#{subject},#{content},#{status},#{id},#{is_secret},SYSDATE,#{goods_no})
+		  
+		 </insert>
+     * 
+     */
+    public static void qnaInsert(QnaVO vo)
+    {
+    	SqlSession session=ssf.openSession(true);
+    	session.insert("qnaInsert",vo);
+    	session.close();
+    }
+    /*
+     *  <select id="qnaDetail" resultType="QnaVO" parameterType="int">
+		   SELECT qna_no, parent_no, type, subject, content, status, id, is_secret, created_at, goods_no
+		    FROM qna
+		    WHERE qna_no = #{qna_no}
+		 </select>
+     * 
+     */
+    public static QnaVO qnaDetail(int qna_no)
+    {
+    	SqlSession session=ssf.openSession();
+    	QnaVO vo=session.selectOne("qnaDetail",qna_no);
+    	session.close();
+    	return vo;
+    }
+    
+    /*
+     * <update id="qnaUpdate" parameterType="QnaVO">
+	   UPDATE qna SET
+	   type=#{type},
+	   subject=#{subject},
+	   content=#{content},
+	   is_secret=#{is_secret}
+	   WHERE qna_no=#{qna_no}   
+	 </update>
+     * 
+     */
+    public static QnaVO qnaUpdateData(int no)
+    {
+        SqlSession session = ssf.openSession();
+        QnaVO vo = session.selectOne("qnaUpdateData", no);
+        session.close();
+        return vo;
+    }
+    
+    public static void qnaUpdate(QnaVO vo)
+    {
+    	SqlSession session=ssf.openSession();
+    	session.update("qnaUpdate",vo);
+    	session.commit();
+    	session.close();
+    }
+    
+   
+    
+    /*
+     * <delete id="qnaDelete" parameterType="int">
+	   DELETE FROM qna
+	   WHERE qna_no=#{qna_no}
+	 </delete>
+     * 
+     */
+    
+    public static void qnaDelete(int vo)
+    {
+    	SqlSession session=ssf.openSession();
+    	session.delete("qnaDelete",vo);
+    	session.commit();
+    	session.close();
+    }
 }

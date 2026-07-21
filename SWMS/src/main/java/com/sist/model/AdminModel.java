@@ -1,15 +1,15 @@
 package com.sist.model;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sist.commons.UploadConfig;
-import com.sist.commons.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sist.commons.FileUploadUtil;
+import com.sist.commons.UploadConfig;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
 import com.sist.dao.AdminDAO;
@@ -347,7 +347,41 @@ public class AdminModel {
 	@RequestMapping("admin/stock_save.do")
 	public String stock_save(HttpServletRequest request, HttpServletResponse response) {
 		
-		return "redirect:../admin/stock_view.do?no=";
+		String goods_no = request.getParameter("goods_no");
+		
+		String[] stockNos = request.getParameterValues("stock_nos");
+		String[] sizes = request.getParameterValues("sizes");
+		String[] quantities = request.getParameterValues("quantities");
+		
+		System.out.println(goods_no);
+		System.out.println(Arrays.toString(stockNos));
+		System.out.println(Arrays.toString(sizes));
+		System.out.println(Arrays.toString(quantities));
+		
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("id");
+
+		for (int i = 0; i < sizes.length; i++) {
+			int no = Integer.parseInt(stockNos[i]);
+			int size = Integer.parseInt(sizes[i]);
+			int qty = Integer.parseInt(quantities[i]);
+
+			StockVO vo = new StockVO();
+			vo.setNo(no);
+			vo.setGoods_no(Integer.parseInt(goods_no));
+			vo.setGoods_size(size);
+			vo.setQuantity(qty);
+			
+			if(no > 0) {
+				AdminDAO.stockUpdate(vo, id);
+			}
+			else {
+				AdminDAO.stockInsert(vo, id);
+			}
+
+		}
+		return "redirect:../admin/stock_view.do?no="+goods_no;
+		
 	}
 	
 	// 상품 검색

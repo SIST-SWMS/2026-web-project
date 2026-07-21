@@ -20,9 +20,51 @@
   
   <insert id="qnaInsert" parameterType="QnaVO">
   INSERT INTO qna(qna_no,parent_no,type,subject,content,status,id,is_secret,created_at,goods_no)
-  VALUES(qna_no_seq.nextval,#{parent_no},#{type}#{subject},#{content},#{status},#{id},#{is_secret},SYSDATE,#{goods_no})
+  VALUES(qna_no_seq.nextval,#{parent_no},#{type},#{subject},#{content},#{status},#{id},#{is_secret},SYSDATE,#{goods_no})
   
  </insert>
+ 
+ <select id="qnaDetailData" resultType="QnaVO" parameterType="map">
+    SELECT g.goods_no,
+           g.goods_name AS "goods.goods_name",
+           g.poster_url AS "goods.poster_url"
+    FROM goods g
+    WHERE g.goods_no = #{goods_no}
+</select>
+
+ <select id="qnaDetail" resultType="QnaVO" parameterType="int">
+   SELECT qna_no, parent_no, type, subject, content, status, id, is_secret, created_at, goods_no
+    FROM qna
+    WHERE qna_no = #{qna_no}
+ </select>
+ 
+ <update id="qnaUpdate" parameterType="QnaVO">
+   UPDATE qna SET
+   type=#{type},
+   subject=#{subject},
+   content=#{content},
+   is_secret=#{is_secret}
+   WHERE qna_no=#{qna_no}   
+ </update>
+ 
+ <select id="qnaUpdateData" resultType="QnaVO" parameterType="int">
+  SELECT g.goods_name AS "goods.goods_name",
+         g.poster_url AS "goods.poster_url",
+         q.type,
+         q.subject,
+         q.content,
+         q.is_secret,
+         q.id,
+         q.qna_no
+  FROM qna q
+  JOIN goods g ON q.goods_no=g.goods_no
+  WHERE q.qna_no=#{qna_no}
+ </select>
+ 
+ <delete id="qnaDelete" parameterType="int">
+   DELETE FROM qna
+   WHERE qna_no=#{qna_no}
+ </delete>
 </mapper>
 
 <!-- 
