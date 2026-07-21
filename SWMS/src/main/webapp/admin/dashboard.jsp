@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">대시보드</h4>
@@ -41,11 +42,9 @@
 
 	</div>
 
-	<%-- ===================== 최근 주문 목록 ===================== --%>
 	<div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
 		<h5 class="fw-bold mb-0">최근 주문</h5>
-		<%-- 더보기 → 출고처리 페이지로 이동 --%>
-		<a href="stockout.do" class="text-body-secondary text-decoration-none small">더보기 ›</a>
+		<a href="../admin/stockout.do" class="text-body-secondary text-decoration-none small">더보기 ›</a>
 	</div>
 
 	<table class="table align-middle mb-5">

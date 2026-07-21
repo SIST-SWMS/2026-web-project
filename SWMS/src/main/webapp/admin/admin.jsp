@@ -48,7 +48,7 @@
 
 				<div class="col-lg-2">
 					<div class="admin-title mb-4">
-						<a href="dashboard.do" class="text-dark text-decoration-none">관리자</a>
+						<a href="../admin/admin.do" class="text-dark text-decoration-none">관리자</a>
 					</div>
 					<nav class="admin-menu">
 						<a href="../admin/goods_list.do" class="${admin_menu == 'goods' ? 'active' : ''}">상품 관리</a>
