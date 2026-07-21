@@ -164,4 +164,18 @@ public class GoodsDAO {
 		session.close();
 		return list;
 	}
+	/*
+	 *  <select id="goodsQnaList" resultType="QnaVO" parameterType="int">
+			SELECT qna_no, subject, content, id, type, status, TO_CHAR(created_at, 'yyyy-MM-dd') as dbday
+			FROM qna
+			WHERE goods_no = #{goods_no}
+			ORDER BY qna_no DESC
+		</select>
+	 */
+	public static List<QnaVO> goodsQnaList(int goods_no) {
+		SqlSession session=ssf.openSession();
+		List<QnaVO> list=session.selectList("goodsQnaList", goods_no);
+		session.close();
+		return list;
+	}
 }

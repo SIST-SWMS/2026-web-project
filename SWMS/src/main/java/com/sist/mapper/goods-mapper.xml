@@ -139,5 +139,10 @@
 	</select>
 	 
 	 <!-- 상품 리뷰 목록 출력 -->
-
+	<select id="goodsQnaList" resultType="QnaVO" parameterType="int">
+		SELECT qna_no, subject, content, id, type, is_secret, status, TO_CHAR(created_at, 'yyyy-MM-dd') as dbday
+		FROM qna
+		WHERE goods_no = #{goods_no}
+		ORDER BY qna_no DESC
+	</select>
 </mapper>
