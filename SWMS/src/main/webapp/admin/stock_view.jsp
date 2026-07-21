@@ -36,33 +36,32 @@
 
 			<!-- 상품 이미지 -->
 			<div class="col-md-3">
-				<img src="../resources/images/product-thumb-1.png" class="w-100 rounded-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
+				<img src="${vo.poster_url}" class="w-100 rounded-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
 			</div>
 
 			<!-- 기본 정보 -->
 			<div class="col-md-9">
 				<div class="info-row">
 					<div class="label">상품명</div>
-					<div class="value">${stock.productName}</div>
+					<div class="value">${vo.goods_name}</div>
 				</div>
 				<div class="info-row">
 					<div class="label">브랜드</div>
-					<div class="value">${stock.brand}</div>
+					<div class="value">${vo.brand_name}</div>
 				</div>
 				<div class="info-row">
 					<div class="label">카테고리</div>
-					<div class="value">${stock.category}</div>
+					<div class="value">${vo.category_name}</div>
 				</div>
 				<div class="info-row">
 					<div class="label">상품코드</div>
-					<div class="value">${stock.productCode}</div>
+					<div class="value">${vo.goods_code}</div>
 				</div>
 			</div>
 
 		</div>
 	</div>
 
-	<%-- ===================== 하단 - 사이즈별 재고 테이블 ===================== --%>
 	<h5 class="fw-bold border-bottom pb-2 mb-3">사이즈별 재고</h5>
 
 	<table class="table align-middle text-center" style="max-width: 560px;">
@@ -74,46 +73,25 @@
 			</tr>
 		</thead>
 		<tbody>
-
-			<%-- 사이즈 1개 = tr 하나. <c:forEach var="s" items="${sizeStockList}"> 로 반복 --%>
-			<%-- 재고 0 행은 soldout-row 클래스로 빨간 강조 --%>
-			<!-- <c:forEach var="s" items="${sizeStockList}"> -->
-			<tr>
-				<td>230</td>
-				<td>32</td>
-				<td>
-					<span class="badge bg-success">정상</span>
-				</td>
-			</tr>
-			<!-- </c:forEach> -->
-			<tr>
-				<td>240</td>
-				<td>18</td>
-				<td>
-					<span class="badge bg-success">정상</span>
-				</td>
-			</tr>
-			<tr>
-				<td>250</td>
-				<td>7</td>
-				<td>
-					<span class="badge bg-warning text-dark">부족</span>
-				</td>
-			</tr>
-			<tr class="soldout-row">
-				<td>260</td>
-				<td class="text-danger fw-bold">0</td>
-				<td>
-					<span class="badge bg-danger">품절</span>
-				</td>
-			</tr>
-			<tr>
-				<td>270</td>
-				<td>25</td>
-				<td>
-					<span class="badge bg-success">정상</span>
-				</td>
-			</tr>
+			<c:forEach var="svo" items="${list }">
+				<tr>
+					<td>${svo.goods_size}</td>
+					<td>${svo.quantity }</td>
+					<td>
+						<c:choose>
+					        <c:when test="${svo.quantity == 0}">
+					            <span class="badge bg-danger">품절</span>
+					        </c:when>
+					        <c:when test="${svo.quantity < 10}">
+					            <span class="badge bg-warning text-dark">부족</span>
+					        </c:when>
+					        <c:otherwise>
+					            <span class="badge bg-success">정상</span>
+					        </c:otherwise>
+					    </c:choose>
+					</td>
+				</tr>
+			</c:forEach>
 		</tbody>
 	</table>
 

@@ -185,4 +185,18 @@ public class AdminDAO {
 		session.close();
 		return total;
 	}
+
+	public static List<GoodsVO> stockSearchList(String keyword) {
+		SqlSession session = ssf.openSession();
+		List<GoodsVO> list = session.selectList("stockSearchList", keyword);
+		session.close();
+		return list;
+	}
+	
+	public static List<StockVO> stockSizeData(int goods_no) {
+		SqlSession session = ssf.openSession();
+		List<StockVO> list = session.selectList("stockSizeData", goods_no);
+		session.close();
+		return list;
+	}
 }

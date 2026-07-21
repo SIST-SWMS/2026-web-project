@@ -261,4 +261,21 @@
 		</if>
 	</select>
 	
+	<!-- 재고 등록 화면 검색기능 -->
+	<select id="stockSearchList" parameterType="string" resultType="GoodsVO">
+		SELECT g.goods_code, g.goods_no, g.goods_name, b.brand_name, c.category_name
+	    FROM goods g, brand b, category c
+	    WHERE g.brand_no = b.brand_no
+	    AND g.category_no = c.category_no
+	    AND g.goods_name like '%'||#{keyword}||'%'
+	    ORDER BY GOODS_NO
+	</select>
+	
+	<select id="stockSizeData" parameterType="int" resultType="StockVO">
+		SELECT goods_size, quantity, no
+	     FROM stock
+	    WHERE goods_no = #{goods_no}
+	     ORDER BY goods_size ASC
+	</select>
+	
 </mapper>

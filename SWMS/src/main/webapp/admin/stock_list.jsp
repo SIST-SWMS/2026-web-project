@@ -78,7 +78,7 @@
 
 				<div class="col-md-3 d-flex gap-2">
 					<button type="button" class="btn btn-dark flex-fill" @click="find()">검색</button>
-					<button type="button" class="btn btn-outline-secondary flex-fill" id="init">초기화</a>
+					<button type="button" class="btn btn-outline-secondary flex-fill" id="init">초기화</button>
 				</div>
 
 			</div>
@@ -103,7 +103,8 @@
 					<td>{{vo.category_name}}</td>
 					<td>{{vo.svo.total_quantity}}</td>
 					<td>
-						<span class="badge bg-warning text-dark">{{vo.svo.stock_status}}</span>
+						<span v-if="vo.svo.stock_status == '정상'" class="badge bg-warning text-dark">{{vo.svo.stock_status}}</span>
+						<span v-else class="badge bg-danger text-dark">{{vo.svo.stock_status}}</span>
 					</td>
 				</tr>
 			</tbody>

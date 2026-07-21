@@ -1,6 +1,7 @@
 package com.sist.model;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -319,8 +320,18 @@ public class AdminModel {
 	// 재고 관리 상세 조회
 	@RequestMapping("admin/stock_view.do")
 	public String stock_view(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		int goods_no = Integer.parseInt(no);
+		
+		GoodsVO vo = AdminDAO.adminGoodsData(goods_no);
+		List<StockVO> list = AdminDAO.stockSizeData(goods_no);
+		
+		request.setAttribute("vo", vo);
+		request.setAttribute("list", list);
+		
 		request.setAttribute("admin_content", "../admin/stock_view.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
+		
 		return "../main/main.jsp";
 	}
 
@@ -330,6 +341,38 @@ public class AdminModel {
 		request.setAttribute("admin_content", "../admin/stock_insert.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
+	}
+	
+	// 재고 등록
+	@RequestMapping("admin/stock_save.do")
+	public String stock_save(HttpServletRequest request, HttpServletResponse response) {
+		
+		return "redirect:../admin/stock_view.do?no=";
+	}
+	
+	// 상품 검색
+	@RequestMapping("admin/stock_search.do")
+	public void stock_search(HttpServletRequest request, HttpServletResponse response) {
+		String keyword = request.getParameter("keyword");
+		List<GoodsVO> list = AdminDAO.stockSearchList(keyword);
+		for(GoodsVO vo : list) {
+			vo.setSizeList(AdminDAO.stockSizeData(vo.getGoods_no()));
+		}
+		try {
+			Map map = new HashMap();
+			map.put("list", list);
+
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(map);
+
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(json);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	// 재고 수정 화면 전환

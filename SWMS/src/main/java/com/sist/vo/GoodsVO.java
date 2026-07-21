@@ -1,11 +1,12 @@
 package com.sist.vo;
+
 import java.util.*;
 import java.util.Date;
 
 import lombok.Data;
 
-
 import java.sql.*;
+
 /*
  *  GOODS_NO       NOT NULL NUMBER        
 	GOODS_CODE     NOT NULL VARCHAR2(50)  
@@ -22,8 +23,10 @@ import java.sql.*;
  */
 @Data
 public class GoodsVO {
-	private int goods_no, goods_discount, brand_no, category_no, hit, like_count, price, review_count; 
+	private int goods_no, goods_discount, brand_no, category_no, hit, like_count, price, review_count;
 	private String goods_code, goods_name, goods_price, poster_url, subposter_url, dbday, brand_name, category_name;
 	private Date created_at;
 	private StockVO svo = new StockVO();
+	private List<StockVO> sizeList; 
+	
 }
