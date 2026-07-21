@@ -93,7 +93,7 @@ public class AdminDAO {
 		session.close();
 		return list;
 	}
-	
+
 	public static int adminOrderTotal(Map map) {
 		SqlSession session = ssf.openSession();
 		int total = session.selectOne("adminOrderTotal", map);
@@ -120,7 +120,7 @@ public class AdminDAO {
 			hvo.setInout_size(vo.getSizes());
 			hvo.setChk("출고");
 			hvo.setCreated_by(id);
-			session.insert("insertStockHistory", hvo);
+			session.insert("outStockHistory", hvo);
 
 			// 상태 업데이트
 			session.update("updateOrderDetailStatus", vo);
@@ -135,8 +135,8 @@ public class AdminDAO {
 
 	public static void adminReturnOk(OrderDetailVO vo, String id) {
 		SqlSession session = ssf.openSession();
-		
-		//  get stock_no 
+
+		// get stock_no
 		StockVO svo = session.selectOne("getStock", vo);
 		// stock 다시 올려주고
 		session.update("updateStockOut", vo);
@@ -149,7 +149,7 @@ public class AdminDAO {
 		hvo.setInout_size(vo.getSizes());
 		hvo.setChk("반품");
 		hvo.setCreated_by(id);
-		session.insert("insertStockHistory", hvo);
+		session.insert("outStockHistory", hvo);
 
 		// 상태 업데이트
 		session.update("updateOrderDetailStatus", vo);
@@ -157,7 +157,7 @@ public class AdminDAO {
 
 		session.close();
 	}
-	
+
 	public static List<HistoryVO> ioListData(Map map) {
 		SqlSession session = ssf.openSession();
 		List<HistoryVO> list = session.selectList("ioListData", map);
@@ -171,14 +171,14 @@ public class AdminDAO {
 		session.close();
 		return total;
 	}
-	
+
 	public static List<GoodsVO> adminStockList(Map map) {
 		SqlSession session = ssf.openSession();
 		List<GoodsVO> list = session.selectList("adminStockList", map);
 		session.close();
 		return list;
 	}
-	
+
 	public static int adminStockTotal(Map map) {
 		SqlSession session = ssf.openSession();
 		int total = session.selectOne("adminStockTotal", map);
@@ -192,11 +192,51 @@ public class AdminDAO {
 		session.close();
 		return list;
 	}
-	
+
 	public static List<StockVO> stockSizeData(int goods_no) {
 		SqlSession session = ssf.openSession();
 		List<StockVO> list = session.selectList("stockSizeData", goods_no);
 		session.close();
 		return list;
+	}
+
+	public static void stockInsert(StockVO vo, String id) {
+		SqlSession session = ssf.openSession();
+
+		// stock insert
+		session.insert("stockInsert", vo);
+
+		// history테이블에 insert
+		HistoryVO hvo = new HistoryVO();
+		hvo.setStock_no(vo.getNo());
+		hvo.setQuantity(vo.getQuantity());
+		hvo.setInout_size(vo.getGoods_size());
+		hvo.setChk("입고");
+		hvo.setCreated_by(id);
+		session.insert("inStockHistory", hvo);
+
+		session.commit();
+		session.close();
+	}
+
+	public static void stockUpdate(StockVO vo, String id) {
+		
+		SqlSession session = ssf.openSession();
+		
+		// stock update
+		session.update("stockUpdate", vo);
+
+		// history테이블에 insert
+		HistoryVO hvo = new HistoryVO();
+		hvo.setStock_no(vo.getNo());
+		hvo.setQuantity(vo.getQuantity());
+		hvo.setInout_size(vo.getGoods_size());
+		hvo.setChk("입고");
+		hvo.setCreated_by(id);
+		session.insert("inStockHistory", hvo);
+
+		session.commit();
+		session.close();
+
 	}
 }

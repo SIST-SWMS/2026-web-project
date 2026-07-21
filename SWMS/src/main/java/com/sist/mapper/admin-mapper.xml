@@ -85,8 +85,8 @@
 	</insert>
 	
 	<insert id="adminStockInsert" parameterType="StockVO">
-	    INSERT INTO stock (goods_no, goods_size, quantity)
-	    VALUES (#{goods_no}, #{goods_size}, #{quantity})
+	    INSERT INTO stock (no, goods_no, goods_size, quantity)
+	    VALUES (stock_no_seq.nextval, #{goods_no}, #{goods_size}, #{quantity})
 	</insert>
 	
 	<resultMap type="com.sist.vo.OrderDetailVO" id="orderMap">
@@ -140,7 +140,7 @@
 	</update>
 	
 	<!-- 재고 차감 히스토리 추가 -->
-	<insert id="insertStockHistory" parameterType="HistoryVO">
+	<insert id="outStockHistory" parameterType="HistoryVO">
 		INSERT INTO stock_history (stock_no, order_no, quantity, inout_size, chk, inout_date, created_at, created_by)
          VALUES (#{stock_no}, #{order_no}, #{quantity}, #{inout_size}, #{chk}, sysdate, sysdate, #{created_by})
 	</insert>
@@ -277,5 +277,26 @@
 	    WHERE goods_no = #{goods_no}
 	     ORDER BY goods_size ASC
 	</select>
+	
+	<insert id="stockInsert" parameterType="StockVO">
+	    <selectKey keyProperty="no" resultType="int" order="BEFORE">
+	        SELECT stock_no_seq.NEXTVAL FROM dual
+	    </selectKey>
+	    INSERT INTO stock (no, goods_no, goods_size, quantity)
+	    VALUES (#{no}, #{goods_no}, #{goods_size}, #{quantity})
+	</insert>
+	
+	<update id="stockUpdate" parameterType="StockVO">
+	    UPDATE stock 
+	     SET quantity = quantity + #{quantity}
+	    WHERE goods_no = #{goods_no}
+	     AND goods_size = #{goods_size}
+	</update>
+	
+	<!-- 재고 입고 히스토리 추가 -->
+	<insert id="inStockHistory" parameterType="HistoryVO">
+		INSERT INTO stock_history (stock_no, quantity, inout_size, chk, inout_date, created_at, created_by)
+         VALUES (#{stock_no}, #{quantity}, #{inout_size}, #{chk}, sysdate, sysdate, #{created_by})
+	</insert>
 	
 </mapper>
