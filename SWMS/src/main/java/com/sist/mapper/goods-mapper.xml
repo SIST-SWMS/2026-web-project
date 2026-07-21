@@ -97,7 +97,7 @@
 	
 	<!-- 장바구니 이동 -->
 	<!-- 1. 재고 있는지 확인 -->
-	<select id="stockQuantityCheck" resultType="StockVO" parameterType="map">    
+	<select id="stockQuantityCheck" resultType="StockVO" parameterType="map">    <!-- 재고번호, 수량 -->
 	SELECT no, quantity, goods_size 
 	FROM stock     
 	WHERE goods_no = #{goods_no} 
@@ -123,7 +123,7 @@
 	AND sizes = #{sizes}
 	</update>
 
-	<!-- 4. 장바구니에 없으면 새로 담기 -->
+	<!-- 4. 장바구니에 없으면 새로 담기 -->			<!-- 재고번호, 수량 -->
 	<insert id="cartInsert" parameterType="map">   
 	INSERT INTO cart (cart_no, id, stock_no, sizes, quantity, created_at)    
 	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity}, SYSDATE)

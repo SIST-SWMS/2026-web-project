@@ -116,7 +116,8 @@ $(function() {
 		    let size=selectedSizeBtn.text().trim(); 
 		    let qty=$('#qtyInput').val();
 
-		    location.href="checkout.do?goods_no="+gno+"&sizes="+size+"&quantity="+qty;
+		    location.href="checkout.do?goods_no="+gno+"&sizes="+size+"&quantity="+qty; 
+		    /* http://localhost/SWMS/order/order.do?stock_no=41&quantity=1 */
 		});
 	});
 </script>
@@ -155,19 +156,81 @@ $(function() {
 					<span class="badge bg-success mb-2">${vo.goods_discount }% 할인</span>
 					<h2 class="fw-bold">${vo.goods_name }</h2>
 					<div class="d-flex align-items-center gap-2 my-2">
-						<span class="d-flex"> <svg width="18" height="18"
-								class="text-warning">
-								<!-- 이부분은 나중에 리뷰 담당자와 논의 후 별점 유무 진행 -->
-								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
-								class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"S
-								class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
-								class="text-warning">
-								<use xlink:href="#star-solid"></use></svg> <svg width="18" height="18"
-								class="text-warning">
-								<use xlink:href="#star-solid"></use></svg>
-						</span> <small class="text-body-secondary">리뷰 ${vo.review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
+						<c:forEach var="rvo" items="${rList}">
+						<c:choose>
+					       		<c:when test="${rvo.hit==1}">
+									<span class="d-inline-flex"> <svg width="20" height="20"
+										class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg>
+									</span>
+								</c:when>
+								<c:when test="${rvo.hit==2}">
+									<span class="d-inline-flex"> <svg width="20" height="20"
+										class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg>
+									</span>
+								</c:when>
+								<c:when test="${rvo.hit==3}">
+									<span class="d-inline-flex"> <svg width="20" height="20"
+										class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg>
+									</span>
+								</c:when>
+								<c:when test="${rvo.hit==4}">
+									<span class="d-inline-flex"> <svg width="20" height="20"
+										class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-outline"></use></svg>
+									</span>
+								</c:when>
+								<c:when test="${rvo.hit==5}">
+									<span class="d-inline-flex"> <svg width="20" height="20"
+										class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg> <svg width="20"
+										height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg><svg width="20"
+										 height="20" class="text-warning">
+									<use xlink:href="#star-solid"></use></svg>
+									</span>
+								</c:when>
+					      	</c:choose>
+					      	</c:forEach>
+						<small class="text-body-secondary">리뷰 ${vo.review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
 					</div>
 					
 					<div class="my-3">
@@ -216,7 +279,7 @@ $(function() {
    						</button>
    							
 						<!--바로구매 버튼으로 수정 -->
-						<button type="button" class="btn btn-dark btn-lg px-4" id="buyBtn" data-no="${vo.goods_no}">
+						<button type="button" class="btn btn-dark btn-lg px-4" id="buyBtn" data-no="${svo.stock_no}">
     						바로 구매
 						</button> 
 						<c:if test="${check==0}">
@@ -246,9 +309,6 @@ $(function() {
 			</div>
 
 			<!-- Tabs -->
-			<!-- ============================================= -->
-			<!--  연관상품 슬라이드 (같은 카테고리 좋아요순 15개)  -->
-			<!-- ============================================= -->
 			<div class="row mt-5">
 				<div class="col-12 text-center">
 					<h5 class="fw-bold mb-4 text-start">상품 상세 이미지</h5>
@@ -511,10 +571,8 @@ $(function() {
 					            <%-- 2. 문의글 목록 반복 출력 --%>
 					            <c:forEach var="qvo" items="${qList}">
 					                <tr>
-					                    <!-- 유형 -->
 					                    <td class="text-center">${qvo.type}</td>
 					                    
-					                    <!-- 제목 -->
 					                    <td>
 					                        <c:choose>
 					                            <%-- 비밀글인 경우 --%>
