@@ -59,7 +59,7 @@ public class OrderDAO {
 	public static void insertOrderData(OrdersVO vo)
 	{
 		SqlSession session = ssf.openSession(true);
-		session.insert("insertOrderData");
+		session.insert("insertOrderData", vo);
 		session.close();
 	}
 	
@@ -80,7 +80,7 @@ public class OrderDAO {
 	public static void insertOrderDetailData(OrderDetailVO vo)
 	{
 		SqlSession session = ssf.openSession(true);
-		session.insert("insertOrderDetailData");
+		session.insert("insertOrderDetailData", vo);
 		session.close();
 	}
 

@@ -65,7 +65,6 @@ public class OrderModel {
 	{
 		HttpSession session = request.getSession();
 		String id = session.getAttribute("id").toString();
-		MemberVO mvo = MemberDAO.memberDetailData(id);
 		
 		// 배송 정보 받기
 		String delivery_name = request.getParameter("name");
@@ -112,17 +111,6 @@ public class OrderModel {
 		vo.setDelivery_msg(delivery_msg);
 		vo.setTotal_price(Integer.parseInt(total_price));
 		OrderDAO.insertOrderData(vo);
-//		System.out.println("vo 값 들어오는지 확인");
-//		System.out.println(vo.getOrder_no());
-//		System.out.println(vo.getId());
-//		System.out.println(vo.getDelivery_name());
-//		System.out.println(vo.getDelivery_phone());
-//		System.out.println(vo.getDelivery_zipcode());
-//		System.out.println(vo.getDelivery_addr());
-//		System.out.println(vo.getDelivery_addr_detail());
-//		System.out.println(vo.getDelivery_msg());
-//		System.out.println(vo.getTotal_price());
-		
 		
 		// 받아둔 주문번호로 주문 상세 생성하기
 		OrderDetailVO odvo = new OrderDetailVO();
@@ -132,7 +120,9 @@ public class OrderModel {
 		odvo.setQuantity(Integer.parseInt(quantity));
 		odvo.setPrice(Integer.parseInt(goods_price));
 		odvo.setStatus("결제완료"); // 정확히 뭐라고 넣어놔야하는지 확인
-		//OrderDAO.insertOrderDetailData(odvo);
+		OrderDAO.insertOrderDetailData(odvo);
+		
+		request.setAttribute("order_no", order_no);
 		
 		//List<OrderDetailVO> list = OrderDAO.orderListData(map);
 		
@@ -154,7 +144,19 @@ public class OrderModel {
 //			ex.printStackTrace();
 //		}
 		
-		//return "../main/main.jsp"; // 주문이 완료되었습니다 페이지를 보여줘야하는데 일단은
+//		request.setAttribute("main_jsp", "../order/complete_order.jsp");
+//		return "../main/main.jsp"; // 주문이 완료되었습니다 페이지를 보여줘야하는데 일단은
 	}
+	
+	// 주문이 완료되었습니다
+	@RequestMapping("order/complete_order.do")
+	public String complete_order(HttpServletRequest request, HttpServletResponse response) 
+	{
+		String order_no = request.getParameter("order_no");
+		request.setAttribute("order_no", order_no);
+		request.setAttribute("main_jsp", "../order/complete_order.jsp");
+		return "../main/main.jsp";
+	}
+	
 	
 }

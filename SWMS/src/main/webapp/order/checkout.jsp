@@ -51,11 +51,11 @@ $(function(){
 				goods_no:$('#goods-no').val(),
 				sizes:$('#sizes').val(),
 				quantity:$('#quantity').val(),
-				goods_price:$('#goods-price').val(),
-				success:function(result)
-				{
-					
-				}
+				goods_price:$('#goods-price').val()
+			},
+			success:function(result)
+			{
+				location.href="../order/complete_order.do"
 			}
 		})
 	})
