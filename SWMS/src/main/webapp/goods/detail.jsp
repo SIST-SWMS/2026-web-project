@@ -570,7 +570,7 @@ $(function() {
 					
 					    <%-- 상품문의 버튼 --%>
 					    <div class="text-end mt-3">
-					        <a href="../mypage/qna.do" class="btn btn-dark">상품문의</a>
+					        <a href="../mypage/qna.do?goods_no=${vo.goods_no}" class="btn btn-dark">상품문의</a>
 					    </div>
 					</div>
 					</div>

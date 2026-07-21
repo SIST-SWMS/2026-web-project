@@ -8,7 +8,8 @@ import com.sist.dao.MemberDAO;
 import com.sist.dao.OrderDAO;
 import com.sist.vo.MemberVO;
 import com.sist.vo.OrderDetailVO;
-
+import com.sist.dao.*;
+import com.sist.vo.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -59,6 +60,11 @@ public class MypageModel {
 	
 	@RequestMapping("mypage/reviewList.do")
 	public String mypage_review_list(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
+
+		List<ReviewVO> list = ReviewDAO.reviewListData(id);
+		request.setAttribute("list", list);
 		request.setAttribute("mypage_content", "../mypage/review_list.jsp");
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
@@ -67,6 +73,11 @@ public class MypageModel {
 	
 	@RequestMapping("mypage/qnaList.do")
 	public String mypage_qna_list(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
+
+		List<QnaVO> list = QnaDAO.qnaListData(id);
+		request.setAttribute("list", list);
 		request.setAttribute("mypage_content", "../mypage/qna_list.jsp");
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
@@ -76,10 +87,13 @@ public class MypageModel {
 	public String mypage_member_detail(HttpServletRequest request, HttpServletResponse response) {
 		// 디비에 있는 회원정보 가져온다
 		HttpSession session = request.getSession();
-		String id = (String)session.getAttribute("id");
-		
-	    MemberVO vo = MemberDAO.memberDetailData(id);
-		request.setAttribute("vo", vo);
+		String id = (String) session.getAttribute("id");
+		if (id == null) {
+			return "redirect:../member/login.do";
+		}
+
+		List<QnaVO> list = QnaDAO.qnaListData(id);
+		request.setAttribute("list", list);
 		request.setAttribute("mypage_content", "../mypage/member_detail.jsp");
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
@@ -105,6 +119,5 @@ public class MypageModel {
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
 	}
-	
 	
 }
