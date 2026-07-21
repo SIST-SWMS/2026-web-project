@@ -31,6 +31,8 @@ public class AdminModel {
 	// 관리자 메인화면 조회
 	@RequestMapping("admin/admin.do")
 	public String admin(HttpServletRequest request, HttpServletResponse response) {
+		
+		
 		request.setAttribute("admin_content", "../admin/dashboard.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
@@ -353,11 +355,6 @@ public class AdminModel {
 		String[] sizes = request.getParameterValues("sizes");
 		String[] quantities = request.getParameterValues("quantities");
 		
-		System.out.println(goods_no);
-		System.out.println(Arrays.toString(stockNos));
-		System.out.println(Arrays.toString(sizes));
-		System.out.println(Arrays.toString(quantities));
-		
 		HttpSession session = request.getSession();
 		String id = (String)session.getAttribute("id");
 
@@ -412,9 +409,48 @@ public class AdminModel {
 	// 재고 수정 화면 전환
 	@RequestMapping("admin/stock_update.do")
 	public String stock_update(HttpServletRequest request, HttpServletResponse response) {
+		
+		String goods_no = request.getParameter("no");
+		
+		GoodsVO vo = AdminDAO.adminGoodsData(Integer.parseInt(goods_no));
+		List<StockVO> list = AdminDAO.stockSizeData(Integer.parseInt(goods_no));
+		
+		request.setAttribute("vo", vo);
+		request.setAttribute("list", list);
+		
 		request.setAttribute("admin_content", "../admin/stock_update.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
+	}
+	
+	// 재고 수정
+	@RequestMapping("admin/stock_update_ok.do")
+	public String stock_update_ok(HttpServletRequest request, HttpServletResponse response) {
+		
+		String goods_no = request.getParameter("goods_no");
+		
+		String[] stockNos = request.getParameterValues("stock_nos");
+		String[] sizes = request.getParameterValues("sizes");
+		String[] quantities = request.getParameterValues("quantities");
+		
+		HttpSession session = request.getSession();
+		String id = (String)session.getAttribute("id");
+
+		for (int i = 0; i < sizes.length; i++) {
+			int no = Integer.parseInt(stockNos[i]);
+			int size = Integer.parseInt(sizes[i]);
+			int qty = Integer.parseInt(quantities[i]);
+
+			StockVO vo = new StockVO();
+			vo.setNo(no);
+			vo.setGoods_no(Integer.parseInt(goods_no));
+			vo.setGoods_size(size);
+			vo.setQuantity(qty);
+			
+			AdminDAO.stockForceUpdate(vo, id);
+		}
+		
+		return "redirect:../admin/stock_view.do?no="+goods_no;
 	}
 
 	// 출고 관리 화면 전환
@@ -434,11 +470,6 @@ public class AdminModel {
 		String page = request.getParameter("page");
 		String status = request.getParameter("status");
 		String memberId = request.getParameter("memberId");
-		
-		
-		System.out.println("page" + page);
-		System.out.println("status" + status);
-		System.out.println("memberId" + memberId);
 		
 		if (page == null) {
 			page = "1";

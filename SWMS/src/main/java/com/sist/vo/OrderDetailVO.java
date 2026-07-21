@@ -17,4 +17,5 @@ public class OrderDetailVO {
 	private String price_str;
 	private OrdersVO ovo = new OrdersVO();
 	private GoodsVO gvo = new GoodsVO();
+	private int stock_no;
 }

@@ -96,7 +96,7 @@
 	</table>
 
 	<div class="mt-4 d-flex gap-2">
-		<a href="../admin/stock_insert.do?code=${stock.productCode}" class="btn btn-dark px-4">등록</a>
+		<a href="../admin/stock_update.do?no=${vo.goods_no}" class="btn btn-dark px-4">수정</a>
 		<a href="../admin/stock_list.do" class="btn btn-outline-dark px-4">목록으로</a>
 	</div>
 </body>

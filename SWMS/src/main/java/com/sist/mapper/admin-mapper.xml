@@ -293,6 +293,13 @@
 	     AND goods_size = #{goods_size}
 	</update>
 	
+	<update id="stockForceUpdate" parameterType="StockVO">
+	    UPDATE stock 
+	     SET quantity = #{quantity}
+	    WHERE goods_no = #{goods_no}
+	     AND goods_size = #{goods_size}
+	</update>
+	
 	<!-- 재고 입고 히스토리 추가 -->
 	<insert id="inStockHistory" parameterType="HistoryVO">
 		INSERT INTO stock_history (stock_no, quantity, inout_size, chk, inout_date, created_at, created_by)

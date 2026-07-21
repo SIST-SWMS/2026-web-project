@@ -220,9 +220,9 @@ public class AdminDAO {
 	}
 
 	public static void stockUpdate(StockVO vo, String id) {
-		
+
 		SqlSession session = ssf.openSession();
-		
+
 		// stock update
 		session.update("stockUpdate", vo);
 
@@ -232,6 +232,26 @@ public class AdminDAO {
 		hvo.setQuantity(vo.getQuantity());
 		hvo.setInout_size(vo.getGoods_size());
 		hvo.setChk("입고");
+		hvo.setCreated_by(id);
+		session.insert("inStockHistory", hvo);
+
+		session.commit();
+		session.close();
+
+	}
+
+	public static void stockForceUpdate(StockVO vo, String id) {
+		SqlSession session = ssf.openSession();
+
+		// stock update
+		session.update("stockForceUpdate", vo);
+
+		// history테이블에 insert
+		HistoryVO hvo = new HistoryVO();
+		hvo.setStock_no(vo.getNo());
+		hvo.setQuantity(vo.getQuantity());
+		hvo.setInout_size(vo.getGoods_size());
+		hvo.setChk("수정");
 		hvo.setCreated_by(id);
 		session.insert("inStockHistory", hvo);
 

@@ -17,10 +17,81 @@ import com.sist.vo.*;
 
 @Controller
 public class OrderModel {
+	
+	// 장바구니에서 여러개 물품 결제하기 눌렀을때 주문서 작성 화면으로 넘어감
+	@RequestMapping("order/before_order.do")
+	public String before_order(HttpServletRequest request, HttpServletResponse response)
+	{
+		// 장바구니에서 여러개 물품 결제하기
+		String cart_nos = request.getParameter("cart_nos");
+		String stock_nos = request.getParameter("stock_nos");
+		String quantities = request.getParameter("quantities");
+		System.out.println("카트번호모음: "+cart_nos);
+		System.out.println("재고번호모음: "+stock_nos);
+		System.out.println("갯수모음: "+quantities);
+		
+		HttpSession session = request.getSession();
+		String id = session.getAttribute("id").toString();
+		MemberVO mvo = MemberDAO.memberDetailData(id);
+		
+		String[] cart_no = cart_nos.split(",");
+		String[] stock_no = stock_nos.split(",");
+		String[] quantity = quantities.split(",");
+		
+		List<String> cnList = new ArrayList<String>();
+		List<String> snList = new ArrayList<String>();
+		List<String> qList = new ArrayList<String>();
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<OrderDetailVO> list = new ArrayList<OrderDetailVO>();
+		
+		int totalPrice = 0;
+		List<String> plist = new ArrayList<String>();
+		//String price = "";
+		
+		for(int i = 0; i < cart_no.length; i++)
+		{			
+			map.put("stock_no", Integer.parseInt(stock_no[i]));
+			map.put("id", id);
+			OrderDetailVO vo = OrderDAO.orderListData(map);
+			vo.setQuantity(Integer.parseInt(quantity[i]));
+			list.add(vo);
+			cnList.add(cart_no[i]); // vo에 cart_no가 없어서 임의로 담아줌 (결제완료 후 장바구니 삭제 용도)
+			snList.add(quantity[i]);
+			qList.add(quantity[i]);
+			
+			// 주문서에 보여주는 총 상품 결제 가격
+			String price = vo.getPrice_str().replaceAll("[^0-9]", "");
+			totalPrice += vo.getQuantity() * Integer.parseInt(price);
+			vo.setPrice(Integer.parseInt(price));
+			vo.setStock_no(Integer.parseInt(stock_no[i]));
+		}
+		
+		
+		DecimalFormat df = new DecimalFormat("#,###");
+		String totalPrice_str = df.format(totalPrice);
+		
+		request.setAttribute("mvo", mvo);
+		request.setAttribute("id", id);
+		
+		request.setAttribute("list", list);		// 주문상세목록에 보여줄 상품들 리스트
+		request.setAttribute("quantity", qList);	// 각 상품 주문 갯수 리스트 (list에도 저장되어있긴 함)
+		
+		request.setAttribute("totalPrice", totalPrice);	// 총 상품 가격 int
+		request.setAttribute("totalPrice_str", totalPrice_str);	// 총 상품 가격 String+포맷팅
+		request.setAttribute("goods_price", plist);	// 숫자만 남겨놓은 개별 상품 가격 String
+		
+		request.setAttribute("stock_no", snList);
+		
+		request.setAttribute("main_jsp", "../order/checkout.jsp");
+		return "../main/main.jsp";
+	}
 
-	// 장바구니에서 결제하기 눌렀을때 주문서 작성 화면으로
+	// 장바구니에서 바로구매를 눌렀을때(1개 상품 구매) 주문서 작성 화면으로
 	@RequestMapping("order/order.do")
 	public String order(HttpServletRequest request, HttpServletResponse response) {
+		// 상세페이지에서 바로구매
+		// 장바구니에서 바로구매
 		String stock_no = request.getParameter("stock_no");
 		String quantity = request.getParameter("quantity");
 		HttpSession session = request.getSession();
@@ -33,26 +104,30 @@ public class OrderModel {
 		map.put("stock_no", Integer.parseInt(stock_no));
 		map.put("id", id);
 		
-		List<OrderDetailVO> list = OrderDAO.orderListData(map);
+		OrderDetailVO vo = OrderDAO.orderListData(map);
+		vo.setQuantity(Integer.parseInt(quantity)); // vo에도 갯수 담아주기
+		List<OrderDetailVO> list = new ArrayList<OrderDetailVO>();
+		list.add(vo); // 여러개 결제와 형태를 통일하기 위해 list에 담아줌
 		
-		String price = list.get(0).getPrice_str().replaceAll("[^0-9]", "");
+		String price = vo.getPrice_str().replaceAll("[^0-9]", "");
 		int quantity_num = Integer.parseInt(quantity);
 		int totalPrice = quantity_num * Integer.parseInt(price);
 		
 		DecimalFormat df = new DecimalFormat("#,###");
 		String totalPrice_str = df.format(totalPrice);
 		
-		request.setAttribute("totalPrice", totalPrice);
-		request.setAttribute("totalPrice_str", totalPrice_str);
-		request.setAttribute("list", list);
-		request.setAttribute("quantity", quantity);
-		request.setAttribute("goods_price", price);
-		
 		request.setAttribute("mvo", mvo);
 		request.setAttribute("id", id);
 		
+		request.setAttribute("list", list);
+		request.setAttribute("quantity", quantity);
+		
+		request.setAttribute("totalPrice", totalPrice);	// 총 상품 가격 int
+		request.setAttribute("totalPrice_str", totalPrice_str);	// 총 상품 가격 String+포맷팅
+		request.setAttribute("goods_price", price);	// 숫자만 남겨놓은 개별 상품 가격 String
+		
+		
 		request.setAttribute("stock_no", stock_no);
-		request.setAttribute("list_size", list.size());
 		
 		
 		request.setAttribute("main_jsp", "../order/checkout.jsp");
@@ -121,39 +196,12 @@ public class OrderModel {
 		odvo.setPrice(Integer.parseInt(goods_price));
 		odvo.setStatus("결제완료"); // 정확히 뭐라고 넣어놔야하는지 확인
 		OrderDAO.insertOrderDetailData(odvo);
-		
-		request.setAttribute("order_no", order_no);
-		
-		//List<OrderDetailVO> list = OrderDAO.orderListData(map);
-		
-//		try 
-//		{
-//			Map map2 = new HashMap();
-//			//map2.put("list",list);
-//			map2.put("id", id);
-//			map2.put("quantity", map2);
-//			
-//			ObjectMapper mapper = new ObjectMapper();
-//			String json = mapper.writeValueAsString(map2);
-//			
-//			response.setContentType("text/plain;charset=UTF-8");
-//			PrintWriter out = response.getWriter();
-//			out.write(json);
-//			
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-		
-//		request.setAttribute("main_jsp", "../order/complete_order.jsp");
-//		return "../main/main.jsp"; // 주문이 완료되었습니다 페이지를 보여줘야하는데 일단은
 	}
 	
 	// 주문이 완료되었습니다
 	@RequestMapping("order/complete_order.do")
 	public String complete_order(HttpServletRequest request, HttpServletResponse response) 
 	{
-		String order_no = request.getParameter("order_no");
-		request.setAttribute("order_no", order_no);
 		request.setAttribute("main_jsp", "../order/complete_order.jsp");
 		return "../main/main.jsp";
 	}
