@@ -215,7 +215,7 @@
 								class="fw-bold fs-5">{{totalPrice.toLocaleString()}}원</span>
 						</div>
 
-						<a href="../order/order.do" class="btn btn-dark btn-lg w-100">{{totalPrice.toLocaleString()}}원
+						<a href="#" class="btn btn-dark btn-lg w-100" @click="selectedOrder()">{{totalPrice.toLocaleString()}}원
 							결제하기</a>
 
 					</div>
@@ -293,13 +293,56 @@
 				
 			},
 			selectedOrder() {
-				axios.get('../order/order.do',{
+				let selected_cart_no = []
+				let selected_stock_no = []
+				let selected_quantity = []
+				for(let i = 0; i < this.list.length; i++)
+				{
+					if(this.list[i].checked)
+					{
+						selected_cart_no.push(this.list[i].cart_no)
+						selected_stock_no.push(this.list[i].svo.no)
+						selected_quantity.push(this.list[i].quantity)
+					}
+				}
+				//console.log(selected_cart_no)
+				//console.log(selected_stock_no)
+				//console.log(selected_quantity)
+				
+				/* axios.get('../order/before_order.do',{
 					params:{
-						
+						cart_nos:selected_cart_no.join(),
+						stock_nos:selected_stock_no.join(),
+						quantities:selected_quantity.join()
 					}
 				}).then(response=>{
 					location.href="../order/order.do"
-				})
+				}) */
+				
+				let form = document.createElement('form')
+				form.method = 'POST'
+				form.action = '../order/before_order.do'
+				
+				let input = document.createElement('input')
+				input.type = 'hidden'
+				input.name = 'cart_nos'
+				input.value = selected_cart_no.join()
+				form.appendChild(input)
+				
+				input = document.createElement('input')
+				input.type = 'hidden'
+				input.name = 'stock_nos'
+				input.value = selected_stock_no.join()
+				form.appendChild(input)
+				
+				input = document.createElement('input')
+				input.type = 'hidden'
+				input.name = 'quantities'
+				input.value = selected_quantity.join()
+				form.appendChild(input)
+				
+				document.body.appendChild(form)
+				form.submit()
 			}
 		},
 		computed:{

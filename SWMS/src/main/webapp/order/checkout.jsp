@@ -140,16 +140,23 @@ $(function(){
                   <img src="${vo.gvo.poster_url }" width="48" height="48" style="object-fit:contain;" alt="item">
                   <div>
                     <div class="fw-bold small">${vo.gvo.goods_name }</div>
-                    <small class="text-body-secondary">${vo.sizes } / 수량 ${quantity }</small>
+                    <small class="text-body-secondary">${vo.sizes } / 수량 ${vo.quantity }</small>
                   </div>
                 </div>
                 <span>${vo.price_str }</span>
+                <%-- <span>${(vo.sizes*quantity) }</span> --%>
               <input type="hidden" id="goods-no" value="${vo.goods_no }">
               <input type="hidden" id="sizes" value="${vo.sizes }">
-              <input type="hidden" id="quantity" value="${quantity }">
-              <input type="hidden" id="stock-no" value="${stock_no }">
-              <input type="hidden" id="goods-price" value="${goods_price }">
+              <input type="hidden" id="quantity" value="${vo.quantity }">
+              <input type="hidden" id="stock-no" value="${vo.stock_no }">
+              <input type="hidden" id="goods-price" value="${vo.price }">
               
+              <!-- 값 확인 용 -->
+              <div>goods_no : ${vo.goods_no }</div>
+              <div>sizes : ${vo.sizes }</div>
+              <div>quantity : ${vo.quantity }</div>
+              <div>stock_no : ${vo.stock_no }</div>
+              <div>goods_price : ${vo.price }</div>
               </li>
               
               </c:forEach>
