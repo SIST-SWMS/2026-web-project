@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,9 +70,8 @@
                     ${vo.ovo.order_no}
                 </td>
 
-                <td class="text-end">
-                    ${vo.ovo.total_price}
-                </td>
+                <td class="text-end"><fmt:formatNumber
+							value="${vo.ovo.total_price}" pattern="#,###" /></td>
 
                 <td class="text-center">
 

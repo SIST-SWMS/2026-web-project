@@ -80,13 +80,15 @@ public class MemberDAO {
 	
 	public static MemberVO memberDetailData(String id)
 	{
-		SqlSession session = ssf.openSession();
-		MemberVO vo = session.selectOne("memberDetailData",id);
-		session.close();
-		
-		return vo;
-		
-		
+	    SqlSession session=ssf.openSession();
+
+	    MemberVO vo=session.selectOne(
+	            "memberDetailData",
+	            id);
+
+	    session.close();
+
+	    return vo;
 	}
 	
 	/*
@@ -106,13 +108,41 @@ public class MemberDAO {
 		return dbpwd;
 	}
 	
-	// 회원가입하기 
-	public static void memberInsert(MemberVO vo)
+	
+	
+	// 회원정보 수정
+	public static void memberUpdate(MemberVO vo)
 	{
 	    SqlSession session = ssf.openSession(true);
 
-	    session.insert("memberInsert", vo);
+	    session.update("memberUpdate", vo);
 
 	    session.close();
+	}
+	
+	// 회원가입
+	public static void memberInsert(MemberVO vo)
+	{
+	    SqlSession session=ssf.openSession(true);
+	    session.insert("memberInsert",vo);
+	    session.close();
+	}
+	
+	// 디비에서 아이디 몇개인지 중복체크
+	public static int idCount(String id)
+	{
+	    SqlSession session=ssf.openSession();
+	    int count=session.selectOne("idCount", id);
+	    session.close();
+	    return count;
+	}
+	
+	// 닉네임 중복체크
+	public static int nickCount(String nickname)
+	{
+	    SqlSession session=ssf.openSession();
+	    int count=session.selectOne("nickCount", nickname);
+	    session.close();
+	    return count;
 	}
 }
