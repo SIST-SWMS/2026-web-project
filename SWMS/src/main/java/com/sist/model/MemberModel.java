@@ -21,7 +21,7 @@ public class MemberModel {
 		return "../main/main.jsp";
 	}
 	
-	// 회원가입
+	// 회원가입 
 	@RequestMapping("member/join_ok.do")
 	public String join_ok(HttpServletRequest request,
 	        HttpServletResponse response)
