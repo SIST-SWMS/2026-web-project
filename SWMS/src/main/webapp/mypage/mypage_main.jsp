@@ -1,136 +1,185 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>마이페이지</title>
 </head>
 <body>
 
-	<%-- ===================== 최근 주문 ===================== --%>
-	<div
-		class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-3">
-		<h4 class="fw-bold mb-0">최근 주문</h4>
-		<a href="../mypage/recent_order.do"
-			class="text-body-secondary text-decoration-none small">더보기›</a>
-	</div>
+<!-- ===================== 최근 주문 ===================== -->
+<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4">
+    <h4 class="fw-bold mb-0">최근 주문</h4>
 
-	<table class="table align-middle">
-		<thead>
-			<tr class="text-body-secondary">
-				<th style="width: 120px;">주문일</th>
-				<th>주문내역</th>
-				<th style="width: 220px;">주문번호</th>
-				
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="vo" items="${list}">
-				<tr>
-					<td class="text-body-secondary">${vo.ovo.dbday}</td>
-					<td>
-						<div class="d-flex align-items-center gap-3">
-							<img src="../resources/images/product-thumb-1.png" width="60"
-								height="60" style="object-fit: cover; border-radius: 6px;"
-								alt="상품"> <span>${vo.gvo.goods_name}</span>
-						</div>
-					</td>
-					<td class="fw-bold">${vo.ovo.order_no}</td>
+    <a href="../mypage/recent_order.do"
+       class="text-body-secondary text-decoration-none small">
+        더보기 ›
+    </a>
+</div>
 
 
-				</tr>
-			</c:forEach>
-		</tbody>
-	</table>
+<c:forEach var="vo" items="${list}">
 
-	<%-- ===================== 나의 좋아요 ===================== --%>
-	<div
-		class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4 mt-5">
-		<h4 class="fw-bold mb-0">나의 좋아요</h4>
-		<a href="#" class="text-body-secondary text-decoration-none small">더보기›</a>
-	</div>
+<div class="card shadow-sm mb-3">
 
-	<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
-		<div class="col">
-			<div style="position: relative;">
-				<img src="../resources/images/product-thumb-5.png" class="w-100"
-					style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-					alt="상품"> <span
-					style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
-					<svg width="22" height="22" viewBox="0 0 24 24">
-						<use xlink:href="#heart"></use>
-					</svg>
-				</span>
-			</div>
-			<div class="small mt-2">휠라 에샤페 메리제인_1XM02376H_063</div>
-			<div class="fw-bold">
-				<span class="text-danger">30%</span> 69,300
-			</div>
-		</div>
+    <div class="card-body">
 
-		<div class="col">
-			<div style="position: relative;">
-				<img src="../resources/images/product-thumb-6.png" class="w-100"
-					style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-					alt="상품"> <span
-					style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
-					<svg width="22" height="22" viewBox="0 0 24 24">
-						<use xlink:href="#heart"></use></svg>
-				</span>
-			</div>
-			<div class="small mt-2">Oversized World Best Print T-shirt
-				VW2SE116_2color</div>
-			<div class="fw-bold">63,000</div>
-		</div>
+        <div class="row align-items-center">
 
-		<div class="col">
-			<div style="position: relative;">
-				<img src="../resources/images/product-thumb-7.png" class="w-100"
-					style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-					alt="상품"> <span
-					style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
-					<svg width="22" height="22" viewBox="0 0 24 24">
-						<use xlink:href="#heart"></use></svg>
-				</span>
-			</div>
-			<div class="small mt-2">HICKIES 여행 방수 워터파크 수건 신발수납 드라이백</div>
-			<div class="fw-bold">
-				<span class="text-danger">43%</span> 7,360
-			</div>
-		</div>
+            <!-- 이미지 -->
+            <div class="col-md-2 text-center">
 
-		<div class="col">
-			<div style="position: relative;">
-				<img src="../resources/images/product-thumb-1.png" class="w-100"
-					style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-					alt="상품"> <span
-					style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
-					<svg width="22" height="22" viewBox="0 0 24 24">
-						<use xlink:href="#heart"></use></svg>
-				</span>
-			</div>
-			<div class="small mt-2">베사 웨지 샌들 BESSA WEDGE SANDAL (RW0163)</div>
-			<div class="fw-bold">
-				<span class="text-danger">40%</span> 144,000
-			</div>
-		</div>
+                <a href="../mypage/orderListDetail.do?order_no=${vo.ovo.order_no}">
+                    <img src="/uploads/${vo.gvo.poster_url}"
+                         width="90"
+                         height="90"
+                         style="object-fit:cover;border-radius:8px;">
+                </a>
 
-		<div class="col">
-			<div style="position: relative;">
-				<img src="../resources/images/product-thumb-2.png" class="w-100"
-					style="aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; background: #f5f5f5;"
-					alt="상품"> <span
-					style="position: absolute; right: 10px; bottom: 10px; color: #ff4d4d;">
-					<svg width="22" height="22" viewBox="0 0 24 24">
-						<use xlink:href="#heart"></use></svg>
-				</span>
-			</div>
-			<div class="small mt-2">[블루라이트렌즈]비비R C1</div>
-			<div class="fw-bold">
-				<span class="text-danger">21%</span> 204,780
-			</div>
-		</div>
-	</div>
+            </div>
+
+
+            <!-- 상품 정보 -->
+            <div class="col-md-10">
+
+                <a href="../mypage/orderListDetail.do?order_no=${vo.ovo.order_no}"
+                   class="text-decoration-none text-dark fw-bold fs-5">
+
+                    ${vo.gvo.goods_name}
+
+                </a>
+
+
+                <div class="text-secondary mt-2">
+                    주문일 : ${vo.ovo.dbday}
+                </div>
+
+
+                <div class="text-secondary">
+                    주문번호 : ${vo.ovo.order_no}
+                </div>
+
+
+                <!-- 상태 -->
+                <div class="mt-2">
+
+                    <c:choose>
+
+                        <c:when test="${vo.ovo.delivery_status=='상품준비중'}">
+                            <span class="badge"
+                                  style="background:#fff3cd;color:#664d03;border:1px solid #ffecb5;font-size:12px;">
+                                상품준비중
+                            </span>
+                        </c:when>
+
+
+                        <c:when test="${vo.ovo.delivery_status=='배송중'}">
+                            <span class="badge"
+                                  style="background:#cfe2ff;color:#084298;border:1px solid #b6d4fe;font-size:12px;">
+                                배송중
+                            </span>
+                        </c:when>
+
+
+                        <c:when test="${vo.ovo.delivery_status=='배송완료'}">
+                            <span class="badge"
+                                  style="background:#d1e7dd;color:#0f5132;border:1px solid #badbcc;font-size:12px;">
+                                배송완료
+                            </span>
+                        </c:when>
+
+
+                        <c:when test="${vo.ovo.delivery_status=='주문취소'}">
+                            <span class="badge"
+                                  style="background:#f8d7da;color:#842029;border:1px solid #f5c2c7;font-size:12px;">
+                                주문취소
+                            </span>
+                        </c:when>
+
+
+                        <c:otherwise>
+                            <span class="badge bg-secondary">
+                                ${vo.ovo.delivery_status}
+                            </span>
+                        </c:otherwise>
+
+                    </c:choose>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</c:forEach>
+
+
+
+<!-- ===================== 나의 좋아요 ===================== -->
+
+<div class="d-flex justify-content-between align-items-center border-bottom border-dark border-2 pb-2 mb-4 mt-5">
+
+    <h4 class="fw-bold mb-0">
+        나의 좋아요
+    </h4>
+
+    <a href="../mypage/likeList.do"
+       class="text-body-secondary text-decoration-none small">
+        더보기 ›
+    </a>
+
+</div>
+
+
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+
+<c:if test="${empty likeList}">
+    <div class="text-secondary">
+        좋아요한 상품이 없습니다.
+    </div>
+</c:if>
+
+
+<c:forEach var="vo" items="${likeList}">
+
+    <div class="col">
+
+        <a href="../goods/detail.do?goods_no=${vo.gvo.goods_no}"
+           class="text-decoration-none text-dark">
+
+            <img src="${vo.gvo.poster_url}"
+                 width="150"
+                 height="150"
+                 style="object-fit:cover;border-radius:8px;">
+
+
+            <div class="fw-bold mt-2">
+                ${vo.gvo.goods_name}
+            </div>
+
+
+            <div class="text-secondary">
+                ${vo.gvo.brand_name}
+            </div>
+
+
+            <div>
+                ${vo.gvo.goods_price}
+            </div>
+
+        </a>
+
+    </div>
+
+</c:forEach>
+
+</div>
+
 </body>
 </html>

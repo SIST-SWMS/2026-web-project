@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sist.mapper.goodslike-mapper">
+
+    <!-- 좋아요 목록 -->
+    <resultMap id="GoodsLikeMap" type="GoodsLikeVO">
+        <id property="like_no" column="like_no"/>
+        <result property="id" column="id"/>
+        <result property="goods_no" column="goods_no"/>
+        <result property="created_at" column="created_at"/>
+
+        <association property="gvo" javaType="GoodsVO">
+            <result property="goods_no" column="goods_no"/>
+            <result property="goods_name" column="goods_name"/>
+            <result property="goods_price" column="goods_price"/>
+            <result property="poster_url" column="poster_url"/>
+            <result property="brand_name" column="brand_name"/>
+        </association>
+    </resultMap>
+
+    <!-- 좋아요 목록 조회 -->
+    <select id="likeListData"
+            parameterType="string"
+            resultMap="GoodsLikeMap">
+        SELECT gl.like_no,
+               gl.id,
+               gl.goods_no,
+               gl.created_at,
+               g.goods_name,
+               g.goods_price,
+               g.poster_url,
+               b.brand_name
+        FROM goods_like gl
+        JOIN goods g
+          ON gl.goods_no = g.goods_no
+        JOIN brand b
+          ON g.brand_no = b.brand_no
+        WHERE gl.id = #{id}
+        ORDER BY gl.created_at DESC
+    </select>
+
+    <!-- 선택 삭제 -->
+    <delete id="likeDelete" parameterType="map">
+        DELETE FROM goods_like
+        WHERE id = #{id}
+          AND goods_no IN
+        <foreach collection="goodsList"
+                 item="goods_no"
+                 open="("
+                 close=")"
+                 separator=",">
+            #{goods_no}
+        </foreach>
+    </delete>
+
+</mapper>
