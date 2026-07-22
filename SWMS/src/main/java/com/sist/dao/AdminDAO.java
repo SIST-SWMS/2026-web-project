@@ -310,4 +310,56 @@ public class AdminDAO {
 		session.close();
 		return count;
 	}
+
+
+	public static List<QnaVO> adminQnaListData(Map map) {
+		SqlSession session = ssf.openSession();
+		List<QnaVO> list = session.selectList("adminQnaListData", map);
+		session.close();
+		return list;
+	}
+	
+	public static int adminQnaListTotal(Map map) {
+		SqlSession session = ssf.openSession();
+		int total = session.selectOne("adminQnaListTotal", map);
+		session.close();
+		return total;
+	}
+
+	public static QnaVO adminQnaData(int qna_no) {
+		SqlSession session = ssf.openSession();
+		QnaVO vo = session.selectOne("adminQnaData", qna_no);
+		session.close();
+		return vo;
+	}
+
+	public static QnaVO adminQnaParentData(int parent_no) {
+		SqlSession session = ssf.openSession();
+		QnaVO vo = session.selectOne("adminQnaParentData", parent_no);
+		session.close();
+		return vo;
+	}
+
+	public static int adminQnaAnswerInsert(QnaVO vo) {
+		SqlSession session = ssf.openSession();
+		session.insert("adminQnaAnswerInsert", vo);
+		session.commit();
+		session.close();
+		return vo.getQna_no();
+	}
+
+	public static void adminQnaOriginUpdate(QnaVO vo) {
+		SqlSession session = ssf.openSession();
+		session.update("adminQnaOriginUpdate", vo);
+		session.commit();
+		session.close();
+		
+	}
+
+	public static void adminQnaAnswerUpdate(QnaVO vo) {
+		SqlSession session = ssf.openSession();
+		session.update("adminQnaAnswerUpdate", vo);
+		session.commit();
+		session.close();
+	}
 }

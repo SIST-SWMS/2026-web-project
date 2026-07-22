@@ -31,35 +31,35 @@ public class AdminModel {
 	// 관리자 메인화면 조회
 	@RequestMapping("admin/admin.do")
 	public String admin(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		// 대시보드 차트
 		List<DashVO> salesList = AdminDAO.salesList();
 		request.setAttribute("salesList", salesList);
-		
+
 		// 오늘 주문건수
 		int order = AdminDAO.dashCountOrder();
 		request.setAttribute("order", order);
-		
+
 		// 이번 달 매출액
-		int price  = AdminDAO.dashTotalPrice();
+		int price = AdminDAO.dashTotalPrice();
 		request.setAttribute("price", price);
-		
+
 		// 재고 부족 상품 (10개 이하)
 		int stock = AdminDAO.dashCountStockLess();
 		request.setAttribute("stock", stock);
-		
+
 		// 미처리 출고 건수
 		int delivery = AdminDAO.dashCountNotDelivery();
 		request.setAttribute("delivery", delivery);
-		
-		// 주문 상품 목록	
+
+		// 주문 상품 목록
 		List<OrderDetailVO> oList = AdminDAO.dashOrderList();
 		request.setAttribute("oList", oList);
-		
+
 		// qna 미답변 목록
 		List<QnaVO> qList = AdminDAO.dashQnaList();
 		request.setAttribute("qList", qList);
-		
+
 		request.setAttribute("admin_content", "../admin/dashboard.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
@@ -202,20 +202,20 @@ public class AdminModel {
 		vo.setGoods_discount(Integer.parseInt(goods_discount));
 		vo.setPoster_url(poster_url);
 		vo.setSubposter_url(subposter_url);
-		
+
 		int goods_no = AdminDAO.adminGoodsInsert(vo);
-		
+
 		String[] sizes = request.getParameterValues("sizes");
 		if (sizes != null) {
-		    for (String size : sizes) {
-		        StockVO svo = new StockVO();
-		        svo.setGoods_no(goods_no);
-		        svo.setGoods_size(Integer.parseInt(size));
-		        svo.setQuantity(0);  // 초기 재고
-		        AdminDAO.adminStockInsert(svo);
-		    }
+			for (String size : sizes) {
+				StockVO svo = new StockVO();
+				svo.setGoods_no(goods_no);
+				svo.setGoods_size(Integer.parseInt(size));
+				svo.setQuantity(0); // 초기 재고
+				AdminDAO.adminStockInsert(svo);
+			}
 		}
-		
+
 		return "redirect:../admin/goods_view.do?no=" + goods_no;
 	}
 
@@ -280,8 +280,6 @@ public class AdminModel {
 		vo.setPoster_url(poster_url);
 		vo.setSubposter_url(subposter_url);
 
-		System.out.println(vo.toString());
-
 		AdminDAO.adminGoodsUpdate(vo);
 
 		return "redirect:../admin/goods_view.do?no=" + goods_no;
@@ -294,7 +292,7 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 재고 관리 목록 조회
 	@RequestMapping("admin/stock_list_vue.do")
 	public void stock_list_vue(HttpServletRequest request, HttpServletResponse response) {
@@ -351,16 +349,16 @@ public class AdminModel {
 	public String stock_view(HttpServletRequest request, HttpServletResponse response) {
 		String no = request.getParameter("no");
 		int goods_no = Integer.parseInt(no);
-		
+
 		GoodsVO vo = AdminDAO.adminGoodsData(goods_no);
 		List<StockVO> list = AdminDAO.stockSizeData(goods_no);
-		
+
 		request.setAttribute("vo", vo);
 		request.setAttribute("list", list);
-		
+
 		request.setAttribute("admin_content", "../admin/stock_view.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
-		
+
 		return "../main/main.jsp";
 	}
 
@@ -371,19 +369,19 @@ public class AdminModel {
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 재고 등록
 	@RequestMapping("admin/stock_save.do")
 	public String stock_save(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		String goods_no = request.getParameter("goods_no");
-		
+
 		String[] stockNos = request.getParameterValues("stock_nos");
 		String[] sizes = request.getParameterValues("sizes");
 		String[] quantities = request.getParameterValues("quantities");
-		
+
 		HttpSession session = request.getSession();
-		String id = (String)session.getAttribute("id");
+		String id = (String) session.getAttribute("id");
 
 		for (int i = 0; i < sizes.length; i++) {
 			int no = Integer.parseInt(stockNos[i]);
@@ -395,25 +393,24 @@ public class AdminModel {
 			vo.setGoods_no(Integer.parseInt(goods_no));
 			vo.setGoods_size(size);
 			vo.setQuantity(qty);
-			
-			if(no > 0) {
+
+			if (no > 0) {
 				AdminDAO.stockUpdate(vo, id);
-			}
-			else {
+			} else {
 				AdminDAO.stockInsert(vo, id);
 			}
 
 		}
-		return "redirect:../admin/stock_view.do?no="+goods_no;
-		
+		return "redirect:../admin/stock_view.do?no=" + goods_no;
+
 	}
-	
+
 	// 상품 검색
 	@RequestMapping("admin/stock_search.do")
 	public void stock_search(HttpServletRequest request, HttpServletResponse response) {
 		String keyword = request.getParameter("keyword");
 		List<GoodsVO> list = AdminDAO.stockSearchList(keyword);
-		for(GoodsVO vo : list) {
+		for (GoodsVO vo : list) {
 			vo.setSizeList(AdminDAO.stockSizeData(vo.getGoods_no()));
 		}
 		try {
@@ -430,38 +427,38 @@ public class AdminModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	// 재고 수정 화면 전환
 	@RequestMapping("admin/stock_update.do")
 	public String stock_update(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		String goods_no = request.getParameter("no");
-		
+
 		GoodsVO vo = AdminDAO.adminGoodsData(Integer.parseInt(goods_no));
 		List<StockVO> list = AdminDAO.stockSizeData(Integer.parseInt(goods_no));
-		
+
 		request.setAttribute("vo", vo);
 		request.setAttribute("list", list);
-		
+
 		request.setAttribute("admin_content", "../admin/stock_update.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 재고 수정
 	@RequestMapping("admin/stock_update_ok.do")
 	public String stock_update_ok(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		String goods_no = request.getParameter("goods_no");
-		
+
 		String[] stockNos = request.getParameterValues("stock_nos");
 		String[] sizes = request.getParameterValues("sizes");
 		String[] quantities = request.getParameterValues("quantities");
-		
+
 		HttpSession session = request.getSession();
-		String id = (String)session.getAttribute("id");
+		String id = (String) session.getAttribute("id");
 
 		for (int i = 0; i < sizes.length; i++) {
 			int no = Integer.parseInt(stockNos[i]);
@@ -473,43 +470,43 @@ public class AdminModel {
 			vo.setGoods_no(Integer.parseInt(goods_no));
 			vo.setGoods_size(size);
 			vo.setQuantity(qty);
-			
+
 			AdminDAO.stockForceUpdate(vo, id);
 		}
-		
-		return "redirect:../admin/stock_view.do?no="+goods_no;
+
+		return "redirect:../admin/stock_view.do?no=" + goods_no;
 	}
 
 	// 출고 관리 화면 전환
 	@RequestMapping("admin/stockout.do")
 	public String stockout_list(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		request.setAttribute("admin_content", "../admin/stockout.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 출고 관리 목록 조회
 	@RequestMapping("admin/stockout_vue.do")
 	public void stockout_list_vue(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		final int BLOCK = 10;
 		String page = request.getParameter("page");
 		String status = request.getParameter("status");
 		String memberId = request.getParameter("memberId");
-		
+
 		if (page == null) {
 			page = "1";
 		}
-		
+
 		int curpage = Integer.parseInt(page);
 		int start = (curpage - 1) * BLOCK;
-		
+
 		Map map = new HashMap();
 		map.put("start", start);
 		map.put("status", status);
 		map.put("memberId", memberId);
-		
+
 		int totalpage = AdminDAO.adminOrderTotal(map);
 		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
 		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
@@ -517,7 +514,7 @@ public class AdminModel {
 			endPage = totalpage;
 		}
 		List<OrderDetailVO> list = AdminDAO.adminOrderList(map);
-		
+
 		try {
 			map = new HashMap();
 			map.put("list", list);
@@ -536,21 +533,21 @@ public class AdminModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	// 출고 처리
 	@RequestMapping("admin/delivery_ok.do")
 	public void delivery_ok(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		String order_detail_no = request.getParameter("order_detail_no");
 		String order_no = request.getParameter("order_no");
 		String sizes = request.getParameter("sizes");
 		String quantity = request.getParameter("quantity");
 		String goods_no = request.getParameter("goods_no");
-		
+
 		HttpSession session = request.getSession();
-		String id = (String)session.getAttribute("id");
+		String id = (String) session.getAttribute("id");
 		OrderDetailVO vo = new OrderDetailVO();
 		vo.setOrder_detail_no(Integer.parseInt(order_detail_no));
 		vo.setOrder_no(Integer.parseInt(order_no));
@@ -558,9 +555,9 @@ public class AdminModel {
 		vo.setQuantity(Integer.parseInt(quantity));
 		vo.setGoods_no(Integer.parseInt(goods_no));
 		vo.setStatus("배송완료");
-		
+
 		String msg = AdminDAO.adminDeliveryOk(vo, id);
-		
+
 		try {
 			response.setContentType("text/html;charset=UTF-8");
 			PrintWriter out = response.getWriter();
@@ -568,9 +565,9 @@ public class AdminModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	// 반품 처리
 	@RequestMapping("admin/return_ok.do")
 	public void return_ok(HttpServletRequest request, HttpServletResponse response) {
@@ -579,19 +576,19 @@ public class AdminModel {
 		String sizes = request.getParameter("sizes");
 		String quantity = request.getParameter("quantity");
 		String goods_no = request.getParameter("goods_no");
-		
+
 		HttpSession session = request.getSession();
-		String id = (String)session.getAttribute("id");
-		
+		String id = (String) session.getAttribute("id");
+
 		OrderDetailVO vo = new OrderDetailVO();
 		vo.setOrder_detail_no(Integer.parseInt(order_detail_no));
 		vo.setSizes(Integer.parseInt(sizes));
 		vo.setQuantity(Integer.parseInt(quantity));
 		vo.setGoods_no(Integer.parseInt(goods_no));
 		vo.setStatus("반품완료");
-		
+
 		AdminDAO.adminReturnOk(vo, id);
-		
+
 		request.setAttribute("admin_content", "../admin/stockout.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 	}
@@ -599,43 +596,37 @@ public class AdminModel {
 	// 입출고 내역 조회 화면 전환
 	@RequestMapping("admin/io_list.do")
 	public String io_list(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		request.setAttribute("admin_content", "../admin/io_list.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
 		return "../main/main.jsp";
 	}
-	
+
 	// 입출고 내역 조회
 	@RequestMapping("admin/io_list_vue.do")
 	public void io_list_vue(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		final int BLOCK = 10;
 		String page = request.getParameter("page");
 		String startDate = request.getParameter("startDate");
 		String endDate = request.getParameter("endDate");
 		String chk = request.getParameter("chk");
 		String goodsName = request.getParameter("goodsName");
-		
-		System.out.println("page :: " + page);
-		System.out.println("startDate :: " + startDate);
-		System.out.println("endDate :: " + endDate);
-		System.out.println("chk :: " + chk);
-		System.out.println("goodsName :: " + goodsName);
-		
+
 		if (page == null) {
 			page = "1";
 		}
-		
+
 		int curpage = Integer.parseInt(page);
 		int start = (curpage - 1) * BLOCK;
-		
+
 		Map map = new HashMap();
 		map.put("start", start);
 		map.put("startDate", startDate);
 		map.put("endDate", endDate);
 		map.put("chk", chk);
 		map.put("goodsName", goodsName);
-		
+
 		int totalpage = AdminDAO.ioListTotal(map);
 		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
 		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
@@ -643,7 +634,7 @@ public class AdminModel {
 			endPage = totalpage;
 		}
 		List<HistoryVO> list = AdminDAO.ioListData(map);
-		
+
 		try {
 			map = new HashMap();
 			map.put("list", list);
@@ -662,10 +653,10 @@ public class AdminModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 
+
 	}
 
-	// QNA 목록조회
+	// QNA 목록조회 화면 전환
 	@RequestMapping("admin/qna_list.do")
 	public String qna_list(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("admin_content", "../admin/qna_list.jsp");
@@ -673,12 +664,123 @@ public class AdminModel {
 		return "../main/main.jsp";
 	}
 
+	// QNA 목록조회 화면
+	@RequestMapping("admin/qna_list_vue.do")
+	public void qna_list_vue(HttpServletRequest request, HttpServletResponse response) {
+
+		final int BLOCK = 10;
+		String page = request.getParameter("page");
+		String id = request.getParameter("id");
+		String status = request.getParameter("status");
+
+		if (page == null) {
+			page = "1";
+		}
+
+		int curpage = Integer.parseInt(page);
+		int start = (curpage - 1) * BLOCK;
+
+		Map map = new HashMap();
+		map.put("start", start);
+		map.put("id", id);
+		map.put("status", status);
+
+		int totalpage = AdminDAO.adminQnaListTotal(map);
+		int startPage = ((curpage - 1) / BLOCK * BLOCK) + 1;
+		int endPage = (((curpage - 1) / BLOCK) * BLOCK) + BLOCK;
+		if (endPage > totalpage) {
+			endPage = totalpage;
+		}
+		List<QnaVO> list = AdminDAO.adminQnaListData(map);
+
+		try {
+			map = new HashMap();
+			map.put("list", list);
+			map.put("curpage", curpage);
+			map.put("totalpage", totalpage);
+			map.put("startPage", startPage);
+			map.put("endPage", endPage);
+
+			ObjectMapper mapper = new ObjectMapper();
+			String json = mapper.writeValueAsString(map);
+
+			response.setContentType("text/plain;charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.write(json);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	// QNA 상세보기
 	@RequestMapping("admin/qna_view.do")
 	public String qna_view(HttpServletRequest request, HttpServletResponse response) {
+		
+		String qna_no = request.getParameter("no");
+		QnaVO vo = AdminDAO.adminQnaData(Integer.parseInt(qna_no));
+		QnaVO pvo = new QnaVO();
+		if("답변완료".equals(vo.getStatus())) {
+			pvo = AdminDAO.adminQnaParentData(vo.getParent_no());
+			request.setAttribute("pvo", pvo);		
+		}
+		
+		request.setAttribute("vo", vo);
+		
 		request.setAttribute("admin_content", "../admin/qna_view.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
+		
 		return "../main/main.jsp";
 	}
+	
+	// 답변 등록
+	@RequestMapping("admin/qna_answer_save.do")
+	public String qna_answer_save(HttpServletRequest request, HttpServletResponse response) {
+		
+		String qna_no = request.getParameter("qna_no");
+		String answer = request.getParameter("answer");
+		HttpSession session = request.getSession();
+		String adminId = (String)session.getAttribute("id");
+		
+		QnaVO origin = AdminDAO.adminQnaData(Integer.parseInt(qna_no));
+		
+		QnaVO vo = new QnaVO();
+		vo.setType("관리자답변");
+		vo.setSubject(origin.getSubject());
+		vo.setContent(answer);
+		vo.setStatus("답변완료");
+		vo.setId(adminId);
+		vo.setIs_secret("n");
+		vo.setGoods_no(origin.getGoods_no());
+		
+		int new_no = AdminDAO.adminQnaAnswerInsert(vo);
+		
+		QnaVO update = new QnaVO();
+		update.setQna_no(Integer.parseInt(qna_no));
+		update.setParent_no(new_no);
+		
+		AdminDAO.adminQnaOriginUpdate(update);
+		
+		return "redirect:../admin/qna_view.do?no="+qna_no;
+	}
+	
+	// 답변 수정
+	@RequestMapping("admin/qna_answer_update.do")
+	public String qna_answer_update(HttpServletRequest request, HttpServletResponse response) {
+		
+		String qna_no = request.getParameter("qna_no");
+		String parent_no = request.getParameter("parent_no");
+		String answer = request.getParameter("answer");
+		QnaVO vo = new QnaVO();
+		vo.setQna_no(Integer.parseInt(parent_no));
+		vo.setContent(answer);
+		
+		AdminDAO.adminQnaAnswerUpdate(vo);
+		
+		return "redirect:../admin/qna_view.do?no="+qna_no;
+	}
+	
+	
 
 }

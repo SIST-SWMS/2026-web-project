@@ -363,4 +363,102 @@
          VALUES (#{stock_no}, #{quantity}, #{inout_size}, #{chk}, sysdate, sysdate, #{created_by})
 	</insert>
 	
+	<!-- qna 기능  -->
+	<resultMap type="com.sist.vo.QnaVO" id="qnaMap">
+		<result property="goods.goods_name" column="goods_name"/>
+	</resultMap>
+	<select id="adminQnaListData" parameterType="hashmap" resultMap="qnaMap">
+		SELECT 
+			q.qna_no, 
+			q.parent_no, 
+			q.type, 
+			q.subject, 
+			q.content, 
+			q.status, 
+			q.id, 
+			TO_CHAR(q.CREATED_AT, 'yyyy-mm-dd') AS dbday, 
+			q.goods_no, 
+			g.goods_name
+		FROM qna q JOIN goods g 
+		ON q.goods_no = g.goods_no
+		<where>
+			<if test="status != null and status != ''">
+				AND q.status = #{status}
+			</if>
+			<if test="id != null and id != ''">
+				AND q.id = #{id}
+			</if>
+		</where>
+		ORDER BY q.qna_no DESC
+		OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+	</select>
+	
+	<select id="adminQnaListTotal" parameterType="hashmap" resultType="int">
+	   SELECT CEIL(COUNT(*)/10.0)
+		FROM qna q JOIN goods g 
+		ON q.goods_no = g.goods_no
+		<where>
+			<if test="status != null and status != ''">
+				AND q.status = #{status}
+			</if>
+			<if test="id != null and id != ''">
+				AND q.id = #{id}
+			</if>
+		</where>
+	</select>
+	
+	<select id="adminQnaData" resultMap="qnaMap" parameterType="int">
+		SELECT 
+			q.qna_no, 
+			q.parent_no, 
+			q.type, 
+			q.subject, 
+			q.content, 
+			q.status, 
+			q.id, 
+			q.is_secret,
+			TO_CHAR(q.CREATED_AT, 'yyyy-mm-dd') AS dbday, 
+			q.goods_no, 
+			g.goods_name
+		FROM qna q JOIN goods g 
+		ON q.goods_no = g.goods_no
+		WHERE qna_no = #{qna_no}
+	</select>
+	
+	<select id="adminQnaParentData" resultType="QnaVO" parameterType="int">
+		SELECT 
+			q.qna_no, 
+			q.parent_no, 
+			q.type, 
+			q.subject, 
+			q.content, 
+			q.status, 
+			q.id, 
+			q.is_secret,
+			TO_CHAR(q.CREATED_AT, 'yyyy-mm-dd') AS dbday, 
+			q.goods_no
+		FROM qna
+		WHERE parent_no = #{parent_no}
+	</select>
+	
+	<insert id="adminQnaAnswerInsert" parameterType="QnaVO">
+	    <selectKey keyProperty="qna_no" resultType="int" order="BEFORE">
+	        SELECT qna_no_seq.NEXTVAL FROM dual
+	    </selectKey>
+	    INSERT INTO qna (qna_no,parent_no,type,subject,content,status,id,is_secret,created_at,goods_no)
+		VALUES(#{qna_no},0,#{type},#{subject},#{content},#{status},#{id},#{is_secret},SYSDATE,#{goods_no})
+	</insert>
+	
+	<update id="adminQnaOriginUpdate" parameterType="QnaVO">
+		UPDATE qna
+		 SET parent_no = #{parent_no}
+		WHERE qna_no = #{qna_no}
+	</update>
+	
+	<update id="adminQnaAnswerUpdate" parameterType="QnaVO">
+		UPDATE qna
+		 SET content = #{content}
+		WHERE qna_no = #{qna_no}
+	</update>
+	
 </mapper>
