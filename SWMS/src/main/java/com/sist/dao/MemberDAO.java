@@ -16,7 +16,7 @@ public class MemberDAO {
 			e.printStackTrace();
 		}
 	}
-
+ 
 	public static int memberIdCheck(String id) {
 		SqlSession session = null;
 		int count = 0;
