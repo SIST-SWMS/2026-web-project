@@ -8,6 +8,7 @@
 		<result property="gvo.poster_url" column="poster_url"/>
 		<result property="gvo.goods_name" column="goods_name"/>
 		<result property="gvo.goods_price" column="goods_price"/>
+		<result property="gvo.goods_discount" column="goods_discount"/>
 	</resultMap>
 	<select id="cartListData" resultMap="cartMap" parameterType="string">
 		SELECT c.cart_no,s.no,g.goods_no,

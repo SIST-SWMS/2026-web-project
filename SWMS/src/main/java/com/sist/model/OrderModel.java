@@ -42,6 +42,7 @@ public class OrderModel {
 		int totalPrice = 0;
 		List<String> plist = new ArrayList<String>();
 		//String price = "";
+		DecimalFormat df = new DecimalFormat("#,###");
 		
 		for(int i = 0; i < cart_no.length; i++)
 		{			
@@ -49,20 +50,27 @@ public class OrderModel {
 			map.put("id", id);
 			OrderDetailVO vo = OrderDAO.orderListData(map);
 			vo.setQuantity(Integer.parseInt(quantity[i]));
-			list.add(vo);
 			cnList.add(cart_no[i]); // vo에 cart_no가 없어서 임의로 담아줌 (결제완료 후 장바구니 삭제 용도)
 			snList.add(quantity[i]);
 			qList.add(quantity[i]);
 			
 			// 주문서에 보여주는 총 상품 결제 가격
 			String price = vo.getPrice_str().replaceAll("[^0-9]", "");
-			totalPrice += vo.getQuantity() * Integer.parseInt(price);
-			vo.setPrice(Integer.parseInt(price));
+			int discount = vo.getGvo().getGoods_discount();
+			int price_num = Integer.parseInt(price);
+			if(discount != 0)
+			{
+				price_num = price_num - (price_num * discount / 100);
+			}
+			totalPrice += vo.getQuantity() * price_num;
+			vo.setPrice(price_num);
 			vo.setStock_no(Integer.parseInt(stock_no[i]));
+			String price_str = df.format(price_num);
+			vo.getGvo().setAfter_sPrice(price_str);
+			
+			list.add(vo);
 		}
 		
-		
-		DecimalFormat df = new DecimalFormat("#,###");
 		String totalPrice_str = df.format(totalPrice);
 		
 		request.setAttribute("mvo", mvo);
@@ -85,9 +93,8 @@ public class OrderModel {
 
 	// 장바구니에서 바로구매를 눌렀을때(1개 상품 구매) 주문서 작성 화면으로
 	@RequestMapping("order/order.do")
-	public String order(HttpServletRequest request, HttpServletResponse response) {
-		// 상세페이지에서 바로구매
-		// 장바구니에서 바로구매
+	public String order(HttpServletRequest request, HttpServletResponse response) 
+	{
 		String stock_no = request.getParameter("stock_no");
 		String quantity = request.getParameter("quantity");
 		HttpSession session = request.getSession();
@@ -101,17 +108,26 @@ public class OrderModel {
 		OrderDetailVO vo = OrderDAO.orderListData(map);
 		vo.setQuantity(Integer.parseInt(quantity)); // vo에도 갯수 담아주기
 		List<OrderDetailVO> list = new ArrayList<OrderDetailVO>();
-		list.add(vo); // 여러개 결제와 형태를 통일하기 위해 list에 담아줌
 		
 		String price = vo.getPrice_str().replaceAll("[^0-9]", "");
 		int quantity_num = Integer.parseInt(quantity);
-		int totalPrice = quantity_num * Integer.parseInt(price);
-		vo.setPrice(Integer.parseInt(price));
+		int discount = vo.getGvo().getGoods_discount();
+		int price_num = Integer.parseInt(price);
+		if(discount != 0)
+		{
+			price_num = price_num - (price_num * discount / 100);
+		}
+		int totalPrice = quantity_num * price_num;
+		vo.setPrice(price_num);
 		
 		DecimalFormat df = new DecimalFormat("#,###");
 		String totalPrice_str = df.format(totalPrice);
+		String price_str = df.format(price_num);
+		vo.getGvo().setAfter_sPrice(price_str);
 		
 		vo.setStock_no(Integer.parseInt(stock_no));
+		
+		list.add(vo); // 여러개 결제와 형태를 통일하기 위해 list에 담아줌
 		
 		request.setAttribute("mvo", mvo);
 		request.setAttribute("id", id);
@@ -121,7 +137,7 @@ public class OrderModel {
 		
 		request.setAttribute("totalPrice", totalPrice);	// 총 상품 가격 int
 		request.setAttribute("totalPrice_str", totalPrice_str);	// 총 상품 가격 String+포맷팅
-		request.setAttribute("goods_price", price);	// 숫자만 남겨놓은 개별 상품 가격 String
+		request.setAttribute("goods_price", price_num);	// 개별 상품 가격 int
 		
 		
 		request.setAttribute("stock_no", stock_no);

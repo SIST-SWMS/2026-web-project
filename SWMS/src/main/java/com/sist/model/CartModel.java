@@ -1,6 +1,7 @@
 package com.sist.model;
 
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,9 +42,25 @@ public class CartModel {
 			
 			// 할인율 계산
 			int discount = list.get(i).getGvo().getGoods_discount();
-			int afterPrice = priceNum - (priceNum * discount/100);
-			list.get(i).getGvo().setAfter_iPrice(afterPrice);
-			//TODO : ##,### 포맷팅 해서 after_sPrice 변수에 넣어두기
+			if(discount==0) // 할인 하지 않는 품목
+			{
+				list.get(i).getGvo().setAfter_iPrice(priceNum);
+				
+				DecimalFormat df = new DecimalFormat("#,###");
+				String afterPrice_str = df.format(priceNum);
+				list.get(i).getGvo().setAfter_sPrice(afterPrice_str);
+			}
+			else // 할인하는 품목
+			{
+				int afterPrice = priceNum - (priceNum * discount/100);
+				list.get(i).getGvo().setAfter_iPrice(afterPrice);
+				
+				DecimalFormat df = new DecimalFormat("#,###");
+				String afterPrice_str = df.format(afterPrice);
+				list.get(i).getGvo().setAfter_sPrice(afterPrice_str);
+				
+			}
+			
 		}
 		
 		try 

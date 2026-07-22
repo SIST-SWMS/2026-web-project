@@ -165,7 +165,7 @@ $(function(){
                     <small class="text-body-secondary">${vo.sizes } / 수량 ${vo.quantity }</small>
                   </div>
                 </div>
-                <span>${vo.price_str }</span>
+                <span>${vo.gvo.after_sPrice }원</span>
                 <%-- <span>${(vo.sizes*quantity) }</span> --%>
               <input type="hidden" id="goods-no-${s.index }" value="${vo.goods_no }">
               <input type="hidden" id="sizes-${s.index }" value="${vo.sizes }">
