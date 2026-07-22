@@ -14,10 +14,33 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MemberModel {
 
+	// 화면 이동용
 	@RequestMapping("member/join.do")
 	public String join(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("main_jsp", "../member/join.jsp");
 		return "../main/main.jsp";
+	}
+	
+	// 회원가입
+	@RequestMapping("member/join_ok.do")
+	public String join_ok(HttpServletRequest request,
+	        HttpServletResponse response)
+	{
+
+	    MemberVO vo = new MemberVO();
+
+	    vo.setId(request.getParameter("id"));
+	    vo.setPwd(request.getParameter("pwd"));
+	    vo.setName(request.getParameter("name"));
+	    vo.setNickname(request.getParameter("nickname"));
+	    vo.setPhone(request.getParameter("phone"));
+	    vo.setZipcode(request.getParameter("zipcode"));
+	    vo.setAddress(request.getParameter("address"));
+	    vo.setAddress_detail(request.getParameter("address_detail"));
+
+	    MemberDAO.memberInsert(vo);
+
+	    return "redirect:../member/login.do";
 	}
 
 	@RequestMapping("member/login.do")

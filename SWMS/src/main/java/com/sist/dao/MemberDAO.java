@@ -106,4 +106,13 @@ public class MemberDAO {
 		return dbpwd;
 	}
 	
+	// 회원가입하기
+	public static void memberInsert(MemberVO vo)
+	{
+	    SqlSession session = ssf.openSession(true);
+
+	    session.insert("memberInsert", vo);
+
+	    session.close();
+	}
 }

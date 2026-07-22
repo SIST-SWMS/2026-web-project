@@ -29,4 +29,30 @@
 		SELECT pwd FROM member
 		WHERE id = #{id}
 	</select>
+
+   <!--  회원가입하기 -->
+	<insert id="memberInsert" parameterType="com.sist.vo.MemberVO">
+
+		INSERT INTO member(
+		id,
+		pwd,
+		name,
+		nickname,
+		phone,
+		zipcode,
+		address,
+		address_detail
+		)
+		VALUES(
+		#{id},
+		#{pwd},
+		#{name},
+		#{nickname},
+		#{phone},
+		#{zipcode},
+		#{address},
+		#{address_detail}
+		)
+
+	</insert>
 </mapper>
