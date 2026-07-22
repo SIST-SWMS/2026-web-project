@@ -1,13 +1,10 @@
 package com.sist.model;
 
-import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
-import com.sist.dao.OrderDAO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,16 +16,13 @@ import com.sist.vo.*;
 public class OrderModel {
 	
 	// 장바구니에서 여러개 물품 결제하기 눌렀을때 주문서 작성 화면으로 넘어감
-	@RequestMapping("order/before_order.do")
+	@RequestMapping("order/orderList.do")
 	public String before_order(HttpServletRequest request, HttpServletResponse response)
 	{
 		// 장바구니에서 여러개 물품 결제하기
 		String cart_nos = request.getParameter("cart_nos");
 		String stock_nos = request.getParameter("stock_nos");
 		String quantities = request.getParameter("quantities");
-		System.out.println("카트번호모음: "+cart_nos);
-		System.out.println("재고번호모음: "+stock_nos);
-		System.out.println("갯수모음: "+quantities);
 		
 		HttpSession session = request.getSession();
 		String id = session.getAttribute("id").toString();
@@ -82,6 +76,8 @@ public class OrderModel {
 		request.setAttribute("goods_price", plist);	// 숫자만 남겨놓은 개별 상품 가격 String
 		
 		request.setAttribute("stock_no", snList);
+		request.setAttribute("list_size", cart_no.length);
+		request.setAttribute("cnList", cnList);
 		
 		request.setAttribute("main_jsp", "../order/checkout.jsp");
 		return "../main/main.jsp";
@@ -98,8 +94,6 @@ public class OrderModel {
 		String id = session.getAttribute("id").toString();
 		MemberVO mvo = MemberDAO.memberDetailData(id);
 		
-		//System.out.println("stock_no: "+stock_no);
-		
 		Map map = new HashMap();
 		map.put("stock_no", Integer.parseInt(stock_no));
 		map.put("id", id);
@@ -112,9 +106,12 @@ public class OrderModel {
 		String price = vo.getPrice_str().replaceAll("[^0-9]", "");
 		int quantity_num = Integer.parseInt(quantity);
 		int totalPrice = quantity_num * Integer.parseInt(price);
+		vo.setPrice(Integer.parseInt(price));
 		
 		DecimalFormat df = new DecimalFormat("#,###");
 		String totalPrice_str = df.format(totalPrice);
+		
+		vo.setStock_no(Integer.parseInt(stock_no));
 		
 		request.setAttribute("mvo", mvo);
 		request.setAttribute("id", id);
@@ -128,6 +125,7 @@ public class OrderModel {
 		
 		
 		request.setAttribute("stock_no", stock_no);
+		request.setAttribute("list_size", 1);
 		
 		
 		request.setAttribute("main_jsp", "../order/checkout.jsp");
@@ -151,11 +149,17 @@ public class OrderModel {
 		String total_price = request.getParameter("total_price");
 		
 		// 구매 상품 정보 받기
-		String goods_no = request.getParameter("goods_no");
-		String sizes = request.getParameter("sizes");
-		String stock_no = request.getParameter("stock_no");
-		String quantity = request.getParameter("quantity");
-		String goods_price = request.getParameter("goods_price");
+		String ls = request.getParameter("list_size");
+		int list_size = ls.isEmpty() ? 1 : Integer.parseInt(ls);
+		String[] goods_no = request.getParameter("goods_no").split(",");
+		String[] sizes = request.getParameter("sizes").split(",");
+		String[] stock_no = request.getParameter("stock_no").split(",");
+		String[] quantity = request.getParameter("quantity").split(",");
+		String[] goods_price = request.getParameter("goods_price").split(",");
+		
+		String str = request.getParameter("cnList");
+		String[] cart_no = {};
+		
 		
 		// 넘어오는 데이터 확인용
 		System.out.println(delivery_name);
@@ -166,11 +170,11 @@ public class OrderModel {
 		System.out.println(delivery_msg);
 		System.out.println(total_price);
 		
-		System.out.println(stock_no);
-		System.out.println(quantity);
-		System.out.println(goods_no);
-		System.out.println(sizes);
-		System.out.println(goods_price);
+		System.out.println(stock_no[0]);
+		System.out.println(quantity[0]);
+		System.out.println(goods_no[0]);
+		System.out.println(sizes[0]);
+		System.out.println(goods_price[0]);
 		
 		// 주문 번호 먼저 받아두기 (계속 사용해야하므로)
 		int order_no = OrderDAO.getOrderNo();
@@ -189,13 +193,29 @@ public class OrderModel {
 		
 		// 받아둔 주문번호로 주문 상세 생성하기
 		OrderDetailVO odvo = new OrderDetailVO();
-		odvo.setOrder_no(order_no);
-		odvo.setGoods_no(Integer.parseInt(goods_no));
-		odvo.setSizes(Integer.parseInt(sizes));
-		odvo.setQuantity(Integer.parseInt(quantity));
-		odvo.setPrice(Integer.parseInt(goods_price));
-		odvo.setStatus("결제완료"); // 정확히 뭐라고 넣어놔야하는지 확인
-		OrderDAO.insertOrderDetailData(odvo);
+		for(int i = 0; i < list_size; i++)
+		{
+			odvo.setOrder_no(order_no);
+			odvo.setGoods_no(Integer.parseInt(goods_no[i]));
+			odvo.setSizes(Integer.parseInt(sizes[i]));
+			odvo.setQuantity(Integer.parseInt(quantity[i]));
+			odvo.setPrice(Integer.parseInt(goods_price[i]));
+			odvo.setStatus("결제완료"); // 정확히 뭐라고 넣어놔야하는지 확인
+			OrderDAO.insertOrderDetailData(odvo);
+		}
+		
+		// cart_no가 들어왔을 경우 -> 여러 상품 주문했을 경우
+		// 결제 완료 후 구매한 상품 장바구니에서 삭제
+		if(!str.isEmpty())
+		{
+			cart_no = str.substring(1, str.length()-1).split(","); // [44,45,46] 같은 형식으로 들어와서 첫문자와 마지막 문자 제거 후 split
+		
+			for(int i = 0; i < cart_no.length; i++)
+			{
+				CartDAO.cartDeleteData(Integer.parseInt(cart_no[i].trim()));
+				System.out.println("삭제된 카트번호: "+ cart_no[i]);
+			}
+		}
 	}
 	
 	// 주문이 완료되었습니다

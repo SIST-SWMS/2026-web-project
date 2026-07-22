@@ -38,6 +38,12 @@ public class CartModel {
 			priceNum = Integer.parseInt(priceStr);					
 			list.get(i).getGvo().setPrice(priceNum);
 			//System.out.println(priceNum);
+			
+			// 할인율 계산
+			int discount = list.get(i).getGvo().getGoods_discount();
+			int afterPrice = priceNum - (priceNum * discount/100);
+			list.get(i).getGvo().setAfter_iPrice(afterPrice);
+			//TODO : ##,### 포맷팅 해서 after_sPrice 변수에 넣어두기
 		}
 		
 		try 

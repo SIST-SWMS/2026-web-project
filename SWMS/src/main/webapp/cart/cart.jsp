@@ -80,7 +80,7 @@
 								<div class="mt-2">
 									<!-- <span class="text-danger fw-bold">xx%</span> --> <span
 										class="fw-bold fs-5">{{vo.gvo.goods_price}}</span> <%-- 할인 후 가격 --%>
-									<!-- <del class="text-body-secondary ms-1">xx,xxx원</del> --> <%-- 할인 전 가격 --%>
+									<!-- <del class="text-body-secondary ms-1">{{vo.gvo.goods_price}}</del> --> <%-- 할인 전 가격 --%>
 								</div>
 	
 								<div class="mt-3" style="max-width: 300px;">
@@ -321,7 +321,7 @@
 				
 				let form = document.createElement('form')
 				form.method = 'POST'
-				form.action = '../order/before_order.do'
+				form.action = '../order/orderList.do'
 				
 				let input = document.createElement('input')
 				input.type = 'hidden'

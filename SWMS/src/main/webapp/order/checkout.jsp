@@ -32,10 +32,29 @@ $(function(){
 			return
 		}
 		
-		//orderList()
+		let list_size = $('#list-size').val()
+		let stock_no_list = []
+		let goods_no_list = []
+		let sizes_list = []
+		let quantity_list = []
+		let goods_price_list = []
 		
-		// 결제하기 누르면 해야할 일 처리
-		// 주문서에 있는 이름, 연락처, 주소, 배송메모, 주문 내역(이름, 가격, 사이즈)들을 모아서 주문하기 내역에 insert
+		console.log('list_size: '+list_size)
+		for(let i=0; i<list_size; i++)
+		{
+			stock_no_list.push($('#stock-no-'+i).val())
+			goods_no_list.push($('#goods-no-'+i).val())
+			sizes_list.push($('#sizes-'+i).val())
+			quantity_list.push($('#quantity-'+i).val())
+			goods_price_list.push($('#goods-price-'+i).val())
+		}
+		
+ 		console.log(stock_no_list)
+		console.log(goods_no_list)
+		console.log(sizes_list)
+		console.log(quantity_list)
+		console.log(goods_price_list)
+		
 		$.ajax({
 			type:'post',
 			url:'../order/order_ok.do',
@@ -47,11 +66,13 @@ $(function(){
 				addr_detail:$('#addr2').val(),
 				msg:$('#msg').val(),
 				total_price:${totalPrice},
-				stock_no:$('#stock-no').val(),
-				goods_no:$('#goods-no').val(),
-				sizes:$('#sizes').val(),
-				quantity:$('#quantity').val(),
-				goods_price:$('#goods-price').val()
+				stock_no:stock_no_list.join(),
+				goods_no:goods_no_list.join(),
+				sizes:sizes_list.join(),
+				quantity:quantity_list.join(),
+				goods_price:goods_price_list.join(),
+				list_size:$('#list-size').val(),
+				cnList:$('#cnList').val()
 			},
 			success:function(result)
 			{
@@ -106,7 +127,8 @@ $(function(){
             </div>
           </div>
 
-          <div class="border rounded-4 p-4">
+			<%-- 결제 수단 선택 --%>
+<!--           <div class="border rounded-4 p-4">
             <h5 class="fw-bold mb-3">결제 수단</h5>
             <div class="form-check mb-2">
               <input class="form-check-input" type="radio" name="pay" id="payCard" checked>
@@ -124,7 +146,7 @@ $(function(){
               <input class="form-check-input" type="radio" name="pay" id="payToss">
               <label class="form-check-label" for="payToss">토스페이</label>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!-- 주문 요약 -->
@@ -134,7 +156,7 @@ $(function(){
 
             <ul class="list-group list-group-flush mb-3">
             
-            <c:forEach var="vo" items="${list }">
+            <c:forEach var="vo" items="${list }" varStatus="s">
               <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">
                 <div class="d-flex gap-2 align-items-center">
                   <img src="${vo.gvo.poster_url }" width="48" height="48" style="object-fit:contain;" alt="item">
@@ -145,18 +167,13 @@ $(function(){
                 </div>
                 <span>${vo.price_str }</span>
                 <%-- <span>${(vo.sizes*quantity) }</span> --%>
-              <input type="hidden" id="goods-no" value="${vo.goods_no }">
-              <input type="hidden" id="sizes" value="${vo.sizes }">
-              <input type="hidden" id="quantity" value="${vo.quantity }">
-              <input type="hidden" id="stock-no" value="${vo.stock_no }">
-              <input type="hidden" id="goods-price" value="${vo.price }">
-              
-              <!-- 값 확인 용 -->
-              <div>goods_no : ${vo.goods_no }</div>
-              <div>sizes : ${vo.sizes }</div>
-              <div>quantity : ${vo.quantity }</div>
-              <div>stock_no : ${vo.stock_no }</div>
-              <div>goods_price : ${vo.price }</div>
+              <input type="hidden" id="goods-no-${s.index }" value="${vo.goods_no }">
+              <input type="hidden" id="sizes-${s.index }" value="${vo.sizes }">
+              <input type="hidden" id="quantity-${s.index }" value="${vo.quantity }">
+              <input type="hidden" id="stock-no-${s.index }" value="${vo.stock_no }">
+              <input type="hidden" id="goods-price-${s.index }" value="${vo.price }">
+              <input type="hidden" id="list-size" value="${list_size }">
+              <input type="hidden" id="cnList" value="${cnList }">
               </li>
               
               </c:forEach>
