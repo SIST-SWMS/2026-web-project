@@ -118,6 +118,6 @@ public class MypageModel {
 	    request.setAttribute("mypage_content", "../mypage/recent_order.jsp");
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 		return "../main/main.jsp";
-	}
+	} 
 	
 }

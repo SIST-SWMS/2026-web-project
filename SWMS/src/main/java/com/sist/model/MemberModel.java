@@ -100,6 +100,6 @@ public class MemberModel {
 		}
 
 		
-	}
+	} 
 
 }
