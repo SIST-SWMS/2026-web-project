@@ -105,21 +105,47 @@ $(function() {
 				}
 			});
 		});
+		
 		$('#buyBtn').on('click', function() {
-		    let gno=$(this).attr('data-no'); 
-		    let selectedSizeBtn=$('.size-btn.active'); 
-		    
-		    if(selectedSizeBtn.length===0) {
-		        alert("상품 사이즈를 먼저 선택해주세요.");
-		        return;
-		    }
-		    
-		    let size=selectedSizeBtn.text().trim(); 
-		    let qty=$('#qtyInput').val();
+			
+			let gno = '${vo.goods_no}';
+			console.log("다이렉트 상품번호: ", gno);
+			
+			let selectedSizeBtn = $('.size-btn.active');
+			
+			if(selectedSizeBtn.length === 0) {
+				alert("상품 사이즈를 먼저 선택해주세요.");
+				return;
+			}
+			
+			let size = selectedSizeBtn.text().trim();
+			let qty = $('#qtyInput').val();
 
-		    location.href="checkout.do?goods_no="+gno+"&sizes="+size+"&quantity="+qty; 
-		    /* http://localhost/SWMS/order/order.do?stock_no=41&quantity=1 */
+			$.ajax({
+				type: 'post',
+				url: '../goods/getStockNo.do',
+				data: {
+					goods_no: gno,
+					goods_size: size
+				},
+				success: function(res) {
+					let stock_no = res.trim();
+					console.log("서버에서 받은 재고번호: ", stock_no);
+					
+					if(stock_no === '' || stock_no === '0') {
+						alert("죄송합니다. 해당 사이즈의 재고 정보가 존재하지 않습니다.");
+						return;
+					}
+					
+					location.href = "../order/order.do?stock_no=" + stock_no + "&quantity=" + qty;
+				},
+				error: function(err) {
+					console.log(err);
+					alert("서버 통신 중 에러가 발생했습니다.");
+				}
+			});
 		});
+		/* http://localhost/SWMS/order/order.do?stock_no=41&quantity=1 */
 	});
 </script>
 </head>

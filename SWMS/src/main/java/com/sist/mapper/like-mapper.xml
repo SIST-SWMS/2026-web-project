@@ -23,11 +23,11 @@
 		FROM goods_like
 		WHERE goods_no=#{goods_no} AND id=#{id}
 	</select>
-	<!-- <update id="goodsLikeUpdate" parameterType="int">
+	 <update id="goodsLikeUpdate" parameterType="int">
 		UPDATE goods SET
 		like_count=(SELECT COUNT(*)
 					FROM goods_like
 					WHERE goods_no=#{goods_no})
 		WHERE goods_no=#{goods_no}
-	</update> -->
+	</update> 
 </mapper>

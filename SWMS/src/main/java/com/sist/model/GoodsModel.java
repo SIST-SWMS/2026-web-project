@@ -346,4 +346,36 @@ public class GoodsModel {
         request.setAttribute("main_jsp", "../main/home.jsp");
         return "../main/main.jsp";
     }
+    
+    @RequestMapping("goods/getStockNo.do")
+    public void goods_getStockNo(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String goods_no = request.getParameter("goods_no");
+            String goods_size = request.getParameter("goods_size");
+            
+            PrintWriter out = response.getWriter();
+            
+            if (goods_no == null || goods_no.trim().equals("")) {
+                System.out.println("에러: goods_no 값이 비어있습니다!");
+                out.print("0");
+                return;
+            }
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("goods_no", Integer.parseInt(goods_no)); 
+            map.put("goods_size", goods_size);
+            
+            // DB에서 재고 번호 조회
+            StockVO svo = GoodsDAO.stockQuantityCheck(map);
+            
+            if (svo != null) {
+                out.print(svo.getNo()); // 재고 번호 반환
+            } else {
+                out.print("0"); // 재고 없음 반환
+            }
+            
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

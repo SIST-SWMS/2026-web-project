@@ -22,7 +22,6 @@
 </style>
 </head>
 <body>
-	<%-- 우측 콘텐츠 기본값 지정: Controller에서 mypage_content 를 바꿔주면 우측 화면만 교체됨 --%>
 	<c:if test="${empty goods_content}">
 		<c:set var="goods_content" value="../goods/goods_main.jsp" />
 	</c:if>

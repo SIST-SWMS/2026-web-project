@@ -98,35 +98,35 @@
 	<!-- 장바구니 이동 -->
 	<!-- 1. 재고 있는지 확인 -->
 	<select id="stockQuantityCheck" resultType="StockVO" parameterType="map">    <!-- 재고번호, 수량 -->
-	SELECT no, quantity, goods_size 
-	FROM stock     
-	WHERE goods_no = #{goods_no} 
-	AND goods_size = #{goods_size}
+		SELECT no, quantity, goods_size 
+		FROM stock     
+		WHERE goods_no = #{goods_no} 
+		AND goods_size = #{goods_size}
 	</select>
 
 	<!-- 2. 장바구니에 똑같은 상품+사이즈가 있는지 확인  -->
 	<select id="cartCount" resultType="int" parameterType="map">  
-	SELECT COUNT(*)   
-	FROM cart     
-	WHERE id = #{id} 
-	AND stock_no = #{stock_no} 
-	AND sizes = #{sizes}
+		SELECT COUNT(*)   
+		FROM cart     
+		WHERE id = #{id} 
+		AND stock_no = #{stock_no} 
+		AND sizes = #{sizes}
 	</select>
 
 	<!-- 3. 장바구니에 이미 있으면 수량만 추가  -->
 	<update id="cartUpdate" parameterType="map">   
-	UPDATE cart 
-	SET quantity = quantity + #{quantity}  , 
-		created_at = SYSDATE
-	WHERE id = #{id}       
-	AND stock_no = #{stock_no}       
-	AND sizes = #{sizes}
+		UPDATE cart 
+		SET quantity = quantity + #{quantity}  , 
+			created_at = SYSDATE
+		WHERE id = #{id}       
+		AND stock_no = #{stock_no}       
+		AND sizes = #{sizes}
 	</update>
 
-	<!-- 4. 장바구니에 없으면 새로 담기 -->			<!-- 재고번호, 수량 -->
+	<!-- 4. 장바구니에 없으면 새로 담기 -->
 	<insert id="cartInsert" parameterType="map">   
-	INSERT INTO cart (cart_no, id, stock_no, sizes, quantity, created_at)    
-	VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity}, SYSDATE)
+		INSERT INTO cart (cart_no, id, stock_no, sizes, quantity, created_at)    
+		VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, #{quantity}, SYSDATE)
 	</insert>
 	
 	<!-- 상품 리뷰 / 문의하기 글목록 화면 출력 -->
