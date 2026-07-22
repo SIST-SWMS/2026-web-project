@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -232,12 +233,26 @@ $(function() {
 					      	</c:forEach>
 						<small class="text-body-secondary">리뷰 ${vo.review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
 					</div>
+					<!-- 가격  -->
+					<c:set var="removeComma" value="${fn:replace(vo.goods_price, ',', '')}" />
+					<c:set var="purePrice" value="${fn:replace(removeComma, '원', '')}" />
+					
+					
+					<c:set var="calcPrice" value="${purePrice - (purePrice * vo.goods_discount / 100)}" />
 					
 					<div class="my-3">
-						<span class="fs-3 fw-bold text-dark">₩ ${vo.goods_price }</span><!-- 할인 후 가격 -->
-						<!-- var price= 금액 - (Math.floor((금액 * 할인율) / 100));-->
-						<del class="text-body-secondary ms-2">₩ ${vo.goods_price }</del><!-- 할인 전 가격 -->
-						<span class="text-success ms-2 fw-bold">- ${vo.goods_discount} %</span><!--  할인률 -->
+					    <!-- 할인 후 가격 -->
+					    <span class="fs-3 fw-bold text-dark">
+					        ₩ <fmt:formatNumber value="${calcPrice}" pattern="#,###" />
+					    </span>
+					    
+					    <!-- 할인 전 기본 가격  -->
+					    <del class="text-body-secondary ms-2">
+					        ₩ <fmt:formatNumber value="${purePrice}" pattern="#,###" />
+					    </del>
+					    
+					    <!-- 할인률 -->
+					    <span class="text-success ms-2 fw-bold">- ${vo.goods_discount} %</span>
 					</div>
 
 					<p class="text-body-secondary">배송비 무료</p>

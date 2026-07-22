@@ -132,6 +132,90 @@ public class GoodsModel {
             request.setAttribute("likecount", likecount);
         }
         
+        if(goods_no!=null) {
+        	int gno = Integer.parseInt(goods_no);
+            GoodsVO vo = GoodsDAO.goodsDetailData(gno);
+            
+            // 촤근 본 상품 쿠키에 저장
+            Cookie[] cookies = request.getCookies();
+
+            String recent = "";
+
+            if(cookies != null)
+            {
+                for(Cookie c : cookies)
+                {
+                    if(c.getName().equals("recent_goods"))
+                    {
+                        recent = c.getValue();
+                    }
+                }
+            }
+
+
+            // 기존 목록에서 현재 상품 제거 (중복 방지)
+            String[] arr = recent.split("_");
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(gno);
+
+
+            // 최신 상품을 앞에 추가
+            for(String s : arr)
+            {
+                if(!s.equals("") && !s.equals(String.valueOf(gno)))
+                {
+                    sb.append("_").append(s);
+                }
+            }
+
+
+            // 최대 5개 제한
+            String[] result = sb.toString().split("_");
+
+            String value = "";
+
+            for(int i=0; i<result.length && i<5; i++)
+            {
+                if(i>0)
+                    value += "_";
+
+                value += result[i];
+            }
+
+
+            // 쿠키 저장
+            Cookie cookie = new Cookie("recent_goods", value);
+            cookie.setPath("/");
+            cookie.setMaxAge(60*60*24*7);
+
+            response.addCookie(cookie);
+            
+            request.setAttribute("vo", vo);
+            
+            List<ReviewVO> rList = GoodsDAO.goodsReviewList(gno);
+            request.setAttribute("rList", rList);
+            
+            List<QnaVO> qList = GoodsDAO.goodsQnaList(gno);
+            request.setAttribute("qList", qList);
+            
+            HttpSession session = request.getSession();
+            String id = (String) session.getAttribute("id");
+
+            int check = 0; // 기본은 안 누른 상태(0)
+            if(id != null) {
+                LikeVO lvo = new LikeVO();
+                lvo.setId(id);
+                lvo.setGoods_no(gno);
+                check = LikeDAO.likeCheck(lvo);
+            }
+            int likecount = LikeDAO.likeCount(gno);
+
+            request.setAttribute("check", check);
+            request.setAttribute("likecount", likecount);
+        }
+        
         request.setAttribute("main_jsp", "../goods/detail.jsp");
         return "../main/main.jsp";
     }

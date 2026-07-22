@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -167,7 +169,24 @@
 							<span class="d-block text-truncate pb-1" title="${vo.goods_name}">${vo.goods_name}</span>
 			                
 			                <div class="d-flex justify-content-between align-items-center mt-2">
-			                    <p class="mb-0"> <span class="text-dark fw-bold">${vo.goods_price}</span></p>
+			                   <!-- 가격 -->
+			                    <c:set var="removeComma" value="${fn:replace(vo.goods_price, ',', '')}" />
+								<c:set var="purePrice" value="${fn:replace(removeComma, '원', '')}" />
+								
+								<%-- 할인된 가격  --%>
+								<c:set var="calcPrice" value="${purePrice - (purePrice * vo.goods_discount / 100)}" />
+								
+								<p class="mb-0"> 
+								    <%-- 할인 후 가격  --%>
+								    <span class="text-dark fw-bold"><fmt:formatNumber value="${calcPrice}" pattern="#,###" />원</span>
+								    
+								    <%-- 할인 전 가격  --%>
+								    <del class="text-body-secondary ms-1" style="font-size: 0.85em;"><fmt:formatNumber value="${purePrice}" pattern="#,###" />원</del>
+								    
+								    <%-- 할인율 --%>
+								    <span class="text-danger ms-1 fw-bold">-${vo.goods_discount}%</span>
+								</p>
+			                    
 			                    <span class="d-flex"> 
 			                        <svg width="18" height="18" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
 			                        <svg width="18" height="18" class="text-warning"><use xlink:href="#star-solid"></use></svg> 

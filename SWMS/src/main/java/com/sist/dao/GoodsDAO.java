@@ -191,4 +191,11 @@ public class GoodsDAO {
 		session.close();
 		return list;
 	}
+	// 상품번호로 상품 1개 조회 쿠키 추가
+	public static GoodsVO goodsCookieData(int goods_no){
+		 SqlSession session = ssf.openSession();
+		 GoodsVO vo = session.selectOne("goodsCookieData", goods_no);
+		 session.close();
+		 return vo;
+	}
 }

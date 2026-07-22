@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -192,7 +194,23 @@ $(function() {
                 
                 <div class="product-brand">${vo.brand_name}</div>
                 <div class="product-name">${vo.goods_name}</div>
-                <div class="product-price">${vo.goods_price}</div>
+              	<!-- 가격 -->
+                <c:set var="removeComma" value="${fn:replace(vo.goods_price, ',', '')}" />
+				<c:set var="purePrice" value="${fn:replace(removeComma, '원', '')}" />
+				
+				<c:set var="calcPrice" value="${purePrice - (purePrice * vo.goods_discount / 100)}" />
+				
+				<div class="product-price">
+				    <%-- 할인 후 가격 --%>
+				    <span class="text-dark fw-bold"><fmt:formatNumber value="${calcPrice}" pattern="#,###" />원</span>
+				    
+				    <%--  할인 전 가격 --%>
+				    <del class="text-body-secondary ms-1" style="font-size: 0.85em;"><fmt:formatNumber value="${purePrice}" pattern="#,###" />원</del>
+				    
+				    <%-- 할인율 --%>
+				    <span class="text-danger ms-1 fw-bold">-${vo.goods_discount}%</span>
+				</div>
+                
                 <div class="product-meta">
                     <svg width="12" height="12" viewBox="0 0 24 24">
                     	<use xlink:href="#heart"></use>
