@@ -49,10 +49,11 @@
 						<a href="../mypage/orderList.do">주문 내역</a> <a
 							href="../mypage/claimList.do">취소/교환/반품 내역</a> <a
 							href="../mypage/reviewList.do">Review 작성</a> <a
-							href="../mypage/qnaList.do">1:1 문의</a>
+							href="../mypage/qnaList.do">1:1 문의</a> <a
+							href="../mypage/recent.do">최근 본 상품</a>
 
 						<div class="mypage-menu-title">나의 계정정보</div>
-						<a href="../mypage/member_detail.do">회원정보수정</a>
+						<a href="../member/detail.do">회원정보수정</a>
 					</nav>
 				</div>
 
