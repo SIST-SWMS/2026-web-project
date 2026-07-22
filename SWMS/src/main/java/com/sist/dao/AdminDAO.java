@@ -9,9 +9,11 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import com.sist.commons.CreateSqlSessionFactory;
 import com.sist.vo.BrandVO;
 import com.sist.vo.CategoryVO;
+import com.sist.vo.DashVO;
 import com.sist.vo.GoodsVO;
 import com.sist.vo.HistoryVO;
 import com.sist.vo.OrderDetailVO;
+import com.sist.vo.QnaVO;
 import com.sist.vo.StockVO;
 
 public class AdminDAO {
@@ -258,5 +260,54 @@ public class AdminDAO {
 		session.commit();
 		session.close();
 
+	}
+
+	public static List<DashVO> salesList() {
+		SqlSession session = ssf.openSession();
+		List<DashVO> list = session.selectList("salesList");
+		session.close();
+		return list;
+	}
+
+	public static List<OrderDetailVO> dashOrderList() {
+		SqlSession session = ssf.openSession();
+		List<OrderDetailVO> list = session.selectList("dashOrderList");
+		session.close();
+		return list;
+	}
+
+	public static List<QnaVO> dashQnaList() {
+		SqlSession session = ssf.openSession();
+		List<QnaVO> list = session.selectList("dashQnaList");
+		session.close();
+		return list;
+	}
+	
+	public static int dashCountOrder() {
+		SqlSession session = ssf.openSession();
+		int count = session.selectOne("dashCountOrder");
+		session.close();
+		return count;
+	}
+	
+	public static int dashTotalPrice() {
+		SqlSession session = ssf.openSession();
+		int count = session.selectOne("dashTotalPrice");
+		session.close();
+		return count;
+	}
+	
+	public static int dashCountStockLess() {
+		SqlSession session = ssf.openSession();
+		int count = session.selectOne("dashCountStockLess");
+		session.close();
+		return count;
+	}
+	
+	public static int dashCountNotDelivery() {
+		SqlSession session = ssf.openSession();
+		int count = session.selectOne("dashCountNotDelivery");
+		session.close();
+		return count;
 	}
 }

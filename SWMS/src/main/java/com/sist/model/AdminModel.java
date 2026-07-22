@@ -1,8 +1,6 @@
 package com.sist.model;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +13,11 @@ import com.sist.controller.RequestMapping;
 import com.sist.dao.AdminDAO;
 import com.sist.vo.BrandVO;
 import com.sist.vo.CategoryVO;
+import com.sist.vo.DashVO;
 import com.sist.vo.GoodsVO;
 import com.sist.vo.HistoryVO;
 import com.sist.vo.OrderDetailVO;
+import com.sist.vo.QnaVO;
 import com.sist.vo.StockVO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +32,33 @@ public class AdminModel {
 	@RequestMapping("admin/admin.do")
 	public String admin(HttpServletRequest request, HttpServletResponse response) {
 		
+		// 대시보드 차트
+		List<DashVO> salesList = AdminDAO.salesList();
+		request.setAttribute("salesList", salesList);
+		
+		// 오늘 주문건수
+		int order = AdminDAO.dashCountOrder();
+		request.setAttribute("order", order);
+		
+		// 이번 달 매출액
+		int price  = AdminDAO.dashTotalPrice();
+		request.setAttribute("price", price);
+		
+		// 재고 부족 상품 (10개 이하)
+		int stock = AdminDAO.dashCountStockLess();
+		request.setAttribute("stock", stock);
+		
+		// 미처리 출고 건수
+		int delivery = AdminDAO.dashCountNotDelivery();
+		request.setAttribute("delivery", delivery);
+		
+		// 주문 상품 목록	
+		List<OrderDetailVO> oList = AdminDAO.dashOrderList();
+		request.setAttribute("oList", oList);
+		
+		// qna 미답변 목록
+		List<QnaVO> qList = AdminDAO.dashQnaList();
+		request.setAttribute("qList", qList);
 		
 		request.setAttribute("admin_content", "../admin/dashboard.jsp");
 		request.setAttribute("main_jsp", "../admin/admin.jsp");
