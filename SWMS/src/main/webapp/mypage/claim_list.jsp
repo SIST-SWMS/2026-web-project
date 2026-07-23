@@ -62,7 +62,7 @@
 								<span class="badge bg-secondary">-</span>
 							</c:otherwise>
 
-						</c:choose>
+			 			</c:choose>
 
 					</td>
 

@@ -8,7 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import com.sist.commons.CreateSqlSessionFactory;
 import com.sist.vo.OrderDetailVO;
 
-public class MyPageDAO {
+public class MyPageDAO { 
 
 	private static SqlSessionFactory ssf;
 	static {

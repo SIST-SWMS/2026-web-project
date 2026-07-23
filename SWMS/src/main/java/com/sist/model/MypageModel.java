@@ -89,7 +89,7 @@ public class MypageModel {
 	}
 
 	// 취소/교환/반품
-	@RequestMapping("mypage/claimList.do")
+	@RequestMapping("mypage/claimList.do") 
 	public String claimList(HttpServletRequest request, HttpServletResponse response) {
 
 	    HttpSession session = request.getSession();

@@ -61,7 +61,7 @@
 
 		<result property="status" column="status" />
 
-		<association property="ovo" javaType="OrdersVO">
+		<association property="ovo" javaType="OrdersVO"> 
 			<result property="order_date" column="order_date" />
 			<result property="order_no" column="order_no" />
 			<result property="total_price" column="total_price" />
