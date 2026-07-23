@@ -52,6 +52,11 @@ $(function() {
 	
 
 	    $('#likeOn').on('click', function() {
+	    	let sessionId = '${sessionScope.id}';
+	        if(sessionId === '') {
+	            alert("로그인 후 이용해주세요.");
+	            return false; 
+	        }
 	        let gno=$(this).attr('data-no');
 	        location.href = "../like/likeOn.do?goods_no="+gno;
 	    });
