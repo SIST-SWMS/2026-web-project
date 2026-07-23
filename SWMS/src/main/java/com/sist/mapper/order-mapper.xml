@@ -48,23 +48,29 @@
 		)
 	</insert>
 		
-	<resultMap type="com.sist.vo.OrderDetailVO" id="orderdetailMap1">
-		<association property="ovo" javaType="OrdersVO">
-			<result property="order_date" column="order_date" />
-			<result property="order_no" column="order_no" />
-			<result property="total_price" column="total_price" />
-			<result property="delivery_status" column="delivery_status" />
-			<result property="dbday" column="dbday" />
-		</association>
-		<association property="gvo" javaType="GoodsVO">
-			<result property="goods_name" column="goods_name" />
-		</association>
-	</resultMap>
-	<select id="myOrderDetailData" resultMap="orderdetailMap1" parameterType="string">
-	SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') as dbday,o.order_no,o.total_price,o.delivery_status,g.goods_name 
-	FROM order_detail od 
-	JOIN orders o ON od.order_no = o.order_no JOIN goods g
-	ON g.goods_no = od.goods_no 
-	WHERE id = #{id} 
-	</select>
+	<resultMap type="com.sist.vo.OrderDetailVO"
+      id="orderdetailMap1">
+      <association property="ovo" javaType="OrdersVO">
+         <result property="order_date" column="order_date" />
+         <result property="order_no" column="order_no" />
+         <result property="total_price" column="total_price" />
+         <result property="delivery_status" column="delivery_status" />
+         <result property="dbday" column="dbday" />
+      </association>
+      <association property="gvo" javaType="GoodsVO">
+         <result property="goods_name" column="goods_name" />
+         <result property="poster_url" column="poster_url" />
+      </association>
+   </resultMap>
+
+   <!-- 최근주문 상세보기 -->
+   <select id="myOrderDetailData" resultMap="orderdetailMap1"
+      parameterType="string">
+      SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') as
+      dbday,o.order_no,o.total_price,o.delivery_status,g.goods_name,g.poster_url
+      FROM order_detail od
+      JOIN orders o ON od.order_no = o.order_no JOIN goods g
+      ON g.goods_no = od.goods_no
+      WHERE id = #{id}
+   </select> 
 </mapper>
