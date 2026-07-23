@@ -13,7 +13,7 @@
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">상품 리뷰</h4>
     <c:forEach var="vo" items="${list }">
 	<div class="d-flex align-items-center gap-3 py-3 border-bottom">
-		<img src="../resources/images/${vo.goods.poster_url }" width="70" height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
+		<img src="${vo.goods.poster_url }" width="70" height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
 		<div class="flex-grow-1">
 			<div class="fw-bold"><a href="../mypage/review_view.do?no=3">${vo.goods.goods_name}</a></div>
 			<div class="text-body-secondary small"><fmt:formatDate value="${vo.ov.order_date}" pattern="yyyy.MM.dd"/> 구매 · ${vo.ov.delivery_status}</div>
