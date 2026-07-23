@@ -196,7 +196,7 @@ public class MemberModel {
 		
 		
 		
-		
+		 
 		
 		
 		return "redirect:../member/detail.do";

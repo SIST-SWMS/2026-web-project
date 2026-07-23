@@ -74,7 +74,7 @@ body {
 				<label for="pwd" class="form-label fw-bold">비밀번호</label> <input
 					type="password" id="pwd" name="pwd"
 					class="form-control form-control-lg bg-light" placeholder="비밀번호 입력">
-			</div>
+			</div> 
 
 			<div class="btn-area">
 				<input type="submit" value="확인" class="btn btn-primary">

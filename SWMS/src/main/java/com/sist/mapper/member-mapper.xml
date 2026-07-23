@@ -23,7 +23,7 @@ SELECT id,
        name,
        nickname,
        phone,
-       zipcode,
+       zipcode, 
        address,
        address_detail
 FROM member

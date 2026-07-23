@@ -118,7 +118,7 @@ public class MemberDAO {
 	   
 	    session.update("memberUpdate", vo);
 
-	    session.close();
+	    session.close(); 
 	}
 	
 	// 회원가입
