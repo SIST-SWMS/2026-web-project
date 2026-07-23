@@ -1,6 +1,5 @@
 package com.sist.dao;
 
-import java.awt.desktop.OpenFilesEvent;
 import java.util.*;
 
 import org.apache.ibatis.session.SqlSession;
@@ -61,12 +60,11 @@ public class CartDAO {
 			WHERE id=#{id} and cart_no=#{cart_id}
 		</update>
 	 */
-	public static int cartUpdqteQuantity(CartVO vo)
+	public static void cartUpdqteQuantity(CartVO vo)
 	{
 		SqlSession session = ssf.openSession(true);
-		int count = session.update("cartUpdateQuantity", vo);
+		session.update("cartUpdateQuantity", vo);
 		session.close();
-		return count;
 	}
 
 }

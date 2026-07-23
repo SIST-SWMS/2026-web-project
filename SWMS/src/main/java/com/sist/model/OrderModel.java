@@ -41,7 +41,7 @@ public class OrderModel {
 		
 		int totalPrice = 0;
 		List<String> plist = new ArrayList<String>();
-		//String price = "";
+		
 		DecimalFormat df = new DecimalFormat("#,###");
 		
 		for(int i = 0; i < cart_no.length; i++)
@@ -176,21 +176,6 @@ public class OrderModel {
 		String str = request.getParameter("cnList");
 		String[] cart_no = {};
 		
-		
-		// 넘어오는 데이터 확인용
-		System.out.println(delivery_name);
-		System.out.println(delivery_phone);
-		System.out.println(delivery_post);
-		System.out.println(delivery_addr1);
-		System.out.println(delivery_addr2);
-		System.out.println(delivery_msg);
-		System.out.println(total_price);
-		
-		System.out.println(stock_no[0]);
-		System.out.println(quantity[0]);
-		System.out.println(goods_no[0]);
-		System.out.println(sizes[0]);
-		System.out.println(goods_price[0]);
 		
 		// 주문 번호 먼저 받아두기 (계속 사용해야하므로)
 		int order_no = OrderDAO.getOrderNo();

@@ -340,22 +340,13 @@
 					return
 				}
 				
-				console.log(vo.quantity)
-				console.log(vo.cart_no)
-				console.log(newQuan)
-				console.log(cart_no)
-				
-				$.ajax({
-					type:'get',
-					url:'../order/cartUpdateQuantity.do',
-					data:{
-						newQuan:this.newQuan,
-						cart_no:this.cart_no
-					},
-					success:function(result)
-					{
-						//location.href="../cart/cart.do"
+				axios.get('../order/cartUpdateQuantity.do',{
+					params:{
+						"newQuan":newQuan,
+						"cart_no":cart_no
 					}
+				}).then(response=>{
+					this.dataRecv()
 				})
 			}
 		},
