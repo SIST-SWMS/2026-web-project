@@ -138,7 +138,7 @@ public class CartModel {
 			response.setContentType("text/plain;charset=UTF-8");
 			response.getWriter().write(stock);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		
 		if(vo.getQuantity() < 1)

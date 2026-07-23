@@ -186,17 +186,6 @@ $(function(){
               
               </c:forEach>
               
-              <!-- 반복 폼 -->
-              <!-- <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">
-                <div class="d-flex gap-2 align-items-center">
-                  <img src="../resources/images/product-thumb-2.png" width="48" height="48" style="object-fit:contain;" alt="item">
-                  <div>
-                    <div class="fw-bold small">레더 브라운 로퍼</div>
-                    <small class="text-body-secondary">270 / 수량 1</small>
-                  </div>
-                </div>
-                <span>₩112,000</span>
-              </li> -->
             </ul>
 
             <div class="d-flex justify-content-between mb-2">

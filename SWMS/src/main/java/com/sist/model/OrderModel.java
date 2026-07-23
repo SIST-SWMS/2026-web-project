@@ -50,7 +50,7 @@ public class OrderModel {
 			map.put("id", id);
 			OrderDetailVO vo = OrderDAO.orderListData(map);
 			vo.setQuantity(Integer.parseInt(quantity[i]));
-			cnList.add(cart_no[i]); // vo에 cart_no가 없어서 임의로 담아줌 (결제완료 후 장바구니 삭제 용도)
+			cnList.add(cart_no[i]); // vo에 cart_no 담아줌 (결제완료 후 장바구니 삭제 용도)
 			snList.add(quantity[i]);
 			qList.add(quantity[i]);
 			
@@ -106,7 +106,7 @@ public class OrderModel {
 		map.put("id", id);
 		
 		OrderDetailVO vo = OrderDAO.orderListData(map);
-		vo.setQuantity(Integer.parseInt(quantity)); // vo에도 갯수 담아주기
+		vo.setQuantity(Integer.parseInt(quantity)); // vo에 갯수 담아주기
 		List<OrderDetailVO> list = new ArrayList<OrderDetailVO>();
 		
 		String price = vo.getPrice_str().replaceAll("[^0-9]", "");
@@ -176,7 +176,6 @@ public class OrderModel {
 		String str = request.getParameter("cnList");
 		String[] cart_no = {};
 		
-		
 		// 주문 번호 먼저 받아두기 (계속 사용해야하므로)
 		int order_no = OrderDAO.getOrderNo();
 		// 받아둔 주문번호로 주문목록 생성하기
@@ -201,7 +200,7 @@ public class OrderModel {
 			odvo.setSizes(Integer.parseInt(sizes[i]));
 			odvo.setQuantity(Integer.parseInt(quantity[i]));
 			odvo.setPrice(Integer.parseInt(goods_price[i]));
-			odvo.setStatus("결제완료"); // 정확히 뭐라고 넣어놔야하는지 확인
+			odvo.setStatus("결제완료");
 			OrderDAO.insertOrderDetailData(odvo);
 		}
 		
@@ -237,6 +236,4 @@ public class OrderModel {
 		request.setAttribute("main_jsp", "../order/complete_order.jsp");
 		return "../main/main.jsp";
 	}
-	
-	
 }
