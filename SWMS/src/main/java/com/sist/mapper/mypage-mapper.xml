@@ -1,59 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sist.mapper.mypage-mapper">
-<resultMap id="orderListDetailMap" type="com.sist.vo.OrderDetailVO">
+	<resultMap id="orderListDetailMap" type="com.sist.vo.OrderDetailVO">
 
-    <result property="sizes" column="sizes"/>
-    <result property="quantity" column="quantity"/>
-    <result property="price" column="price"/>
-    <result property="status" column="status"/>
+		<result property="order_detail_no" column="order_detail_no" />
+		<result property="sizes" column="sizes" />
+		<result property="quantity" column="quantity" />
+		<result property="price" column="price" />
+		<result property="status" column="status" />
+		<result property="goods_no" column="goods_no" />
 
-    <association property="ovo" javaType="com.sist.vo.OrdersVO">
-        <result property="order_no" column="order_no"/>
-        <result property="dbday" column="dbday"/>
-        <result property="order_date" column="order_date"/>
-        <result property="total_price" column="total_price"/>
-        <result property="delivery_status" column="delivery_status"/>
-        <result property="delivery_name" column="delivery_name"/>
-        <result property="delivery_phone" column="delivery_phone"/>
-        <result property="delivery_zipcode" column="delivery_zipcode"/>
-        <result property="delivery_addr" column="delivery_addr"/>
-        <result property="delivery_addr_detail" column="delivery_addr_detail"/>
-        <result property="delivery_msg" column="delivery_msg"/>
-    </association>
+		<association property="ovo" javaType="com.sist.vo.OrdersVO">
+			<result property="order_no" column="order_no" />
+			<result property="dbday" column="dbday" />
+			<result property="order_date" column="order_date" />
+			<result property="total_price" column="total_price" />
+			<result property="delivery_status" column="delivery_status" />
+			<result property="delivery_name" column="delivery_name" />
+			<result property="delivery_phone" column="delivery_phone" />
+			<result property="delivery_zipcode" column="delivery_zipcode" />
+			<result property="delivery_addr" column="delivery_addr" />
+			<result property="delivery_addr_detail"
+				column="delivery_addr_detail" />
+			<result property="delivery_msg" column="delivery_msg" />
+		</association>
 
-    <association property="gvo" javaType="com.sist.vo.GoodsVO">
-        <result property="goods_name" column="goods_name"/>
-        <result property="poster_url" column="poster_url"/>
-        <result property="goods_price" column="goods_price"/>
-    </association>
+		<association property="gvo" javaType="com.sist.vo.GoodsVO">
+			<result property="goods_name" column="goods_name" />
+			<result property="poster_url" column="poster_url" />
+			<result property="goods_price" column="goods_price" />
+		</association>
 
-</resultMap>
-<!--  주문 상세보기 -->
-<select id="orderListDetailData" resultMap="orderListDetailMap" parameterType="int">
-SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') AS dbday,o.order_no,
-           o.order_date,
-           o.total_price,
-           o.delivery_status,
-           o.delivery_name, 
-           o.delivery_phone,
-           o.delivery_zipcode,
-           o.delivery_addr,
-           o.delivery_addr_detail,
-           o.delivery_msg,
-           od.sizes,
-           od.quantity,
-           od.price,
-           od.status,
-           g.goods_name,
-           g.poster_url,
-           g.goods_price
-    FROM orders o
-    JOIN order_detail od
-        ON o.order_no = od.order_no
-    JOIN goods g
-        ON od.goods_no = g.goods_no
-    WHERE o.order_no = #{order_no}
-    ORDER BY od.order_detail_no
-</select>
+	</resultMap>
+	<!-- 주문 상세보기 -->
+	<select id="orderListDetailData" resultMap="orderListDetailMap" parameterType="int">
+		SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') AS dbday,
+		o.order_no,
+		o.order_date,
+		o.total_price,
+		o.delivery_status,
+		o.delivery_name,
+		o.delivery_phone,
+		o.delivery_zipcode,
+		o.delivery_addr,
+		o.delivery_addr_detail,
+		o.delivery_msg,
+		od.sizes,
+		od.quantity,
+		od.price,
+		od.status,
+		od.order_detail_no,
+		od.goods_no,
+		g.goods_name,
+		g.poster_url,
+		g.goods_price
+		FROM orders o
+		JOIN order_detail od
+		ON o.order_no = od.order_no
+		JOIN goods g
+		ON od.goods_no = g.goods_no
+		WHERE o.order_no = #{order_no}
+		ORDER BY od.order_detail_no
+	</select>
+	
+	<update id="orderStatusUpdate" parameterType="OrderDetailVO">
+		UPDATE order_detail
+		 SET status = #{status}
+		WHERE order_detail_no = #{order_detail_no}
+	</update>
 </mapper>

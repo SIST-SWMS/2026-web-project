@@ -8,7 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import com.sist.commons.CreateSqlSessionFactory;
 import com.sist.vo.OrderDetailVO;
 
-public class MyPageDAO {
+public class MyPageDAO { 
 
 	private static SqlSessionFactory ssf;
 	static {
@@ -29,4 +29,22 @@ public class MyPageDAO {
 
 		return list;
 	}
-} 
+	
+	// 취소/교환/반품
+	public static List<OrderDetailVO> claimListData(String id)
+	{
+	    SqlSession session = ssf.openSession();
+	    List<OrderDetailVO> list =
+	    session.selectList("claimListData", id);
+	    session.close();
+	    return list;
+	}
+
+
+	public static void orderStatusUpdate(OrderDetailVO vo) {
+		SqlSession session = ssf.openSession(true);
+		session.update("orderStatusUpdate", vo);
+		session.close();
+	}
+
+}
