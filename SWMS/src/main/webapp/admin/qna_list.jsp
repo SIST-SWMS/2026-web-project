@@ -31,134 +31,142 @@
 	border-color: #000;
 }
 </style>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('#init').on('click', function() {
+			location.href = "../admin/goods_list.do"
+		})
+	})
+</script>
 </head>
 <body>
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">QNA 관리</h4>
+	<div id="app">
+		<form @submit.prevent class="border rounded-4 p-4 mb-4 bg-light">
+			<div class="row g-3 align-items-end">
 
-	<%-- ===================== 검색 영역 ===================== --%>
-	<form action="qna_list.do" method="get" class="border rounded-4 p-4 mb-4 bg-light">
-		<div class="row g-3 align-items-end">
+				<div class="col-md-3">
+					<label class="form-label small text-body-secondary">상태</label>
+					<select name="status" class="form-select" v-model="status">
+						<option value="">전체</option>
+						<option value="답변대기">답변대기</option>
+						<option value="답변완료">답변완료</option>
+					</select>
+				</div>
 
-			<div class="col-md-3">
-				<label class="form-label small text-body-secondary">상태</label>
-				<select name="status" class="form-select">
-					<option value="">전체</option>
-					<option value="WAIT">답변대기</option>
-					<option value="DONE">답변완료</option>
-				</select>
+				<div class="col-md-6">
+					<label class="form-label small text-body-secondary">작성자</label>
+					<input type="text" name="id" class="form-control" placeholder="검색어 입력" v-model="id" @keydown.enter="find()">
+				</div>
+
+				<div class="col-md-3 d-flex gap-2">
+					<button type="submit" class="btn btn-dark flex-fill" @click="find()">검색</button>
+					<a href="qna_list.do" class="btn btn-outline-secondary flex-fill" id="init">초기화</a>
+				</div>
+
 			</div>
+		</form>
 
-			<div class="col-md-6">
-				<label class="form-label small text-body-secondary">상품명 / 작성자</label>
-				<input type="text" name="keyword" class="form-control" placeholder="검색어 입력" value="${param.keyword}">
-			</div>
+		<table class="table align-middle text-center">
+			<thead>
+				<tr class="text-body-secondary">
+					<th style="width: 60px;">번호</th>
+					<th style="width: 300px;">상품명</th>
+					<th style="width: 150px;">문의유형</th>
+					<th>문의제목</th>
+					<th style="width: 100px;">작성자</th>
+					<th style="width: 110px;">등록일</th>
+					<th style="width: 100px;">상태</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="(vo,index) in list" :key="index" @click="goView(vo.qna_no)">
+					<td>{{vo.qna_no}}</td>
+					<td>{{vo.goods.goods_name}}</td>
+					<td>{{vo.type}}</td>
+					<td class="text-start">{{vo.subject}}</td>
+					<td>{{vo.id}}</td>
+					<td class="text-body-secondary">{{vo.dbday}}</td>
+					<td>
+						<span v-if="vo.status=='답변대기'" class="badge bg-danger">{{vo.status}}</span>
+						<span v-if="vo.status=='답변완료'" class="badge bg-success">{{vo.status}}</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
-			<div class="col-md-3 d-flex gap-2">
-				<button type="submit" class="btn btn-dark flex-fill">검색</button>
-				<a href="qna_list.do" class="btn btn-outline-secondary flex-fill">초기화</a>
-			</div>
-
+		<div class="d-flex justify-content-center mt-4">
+			<ul class="pagination">
+				<li v-if="startPage > 1">
+					<a @click="pageChange(startPage-1)">&laquo;</a>
+				</li>
+				<li :class="{ active: i == curpage }" v-for="(i, index) in range(startPage, endPage)" :key="index">
+					<a @click="pageChange(i)">{{i}}</a>
+				</li>
+				<li v-if="endPage < totalpage">
+					<a @click="pageChange(endPage+1)">&raquo;</a>
+				</li>
+			</ul>
 		</div>
-	</form>
-
-	<%-- ===================== 목록 테이블 ===================== --%>
-	<table class="table align-middle text-center">
-		<thead>
-			<tr class="text-body-secondary">
-				<th style="width: 60px;">번호</th>
-				<th>상품명</th>
-				<th style="width: 100px;">문의유형</th>
-				<th>문의제목</th>
-				<th style="width: 100px;">작성자</th>
-				<th style="width: 110px;">등록일</th>
-				<th style="width: 100px;">상태</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%-- 1건 = tr 하나. <c:forEach var="qna" items="${qnaList}"> 로 반복 --%>
-			<!-- <c:forEach var="qna" items="${qnaList}"> -->
-			<tr>
-				<td>128</td>
-				<td class="text-start">클래식 러너 스니커즈</td>
-				<td>사이즈</td>
-				<td class="text-start">
-					<a href="qna_view.do?id=128" class="text-dark text-decoration-none">사이즈가 어떻게 되나요?</a>
-				</td>
-				<td>kim****</td>
-				<td class="text-body-secondary">2026.07.05</td>
-				<td>
-					<span class="badge bg-danger">답변대기</span>
-				</td>
-			</tr>
-			<!-- </c:forEach> -->
-			<tr>
-				<td>127</td>
-				<td class="text-start">뉴포트 H2 샌들</td>
-				<td>배송</td>
-				<td class="text-start">
-					<a href="qna_view.do?id=127" class="text-dark text-decoration-none">배송 언제 되나요?</a>
-				</td>
-				<td>lee****</td>
-				<td class="text-body-secondary">2026.07.04</td>
-				<td>
-					<span class="badge bg-danger">답변대기</span>
-				</td>
-			</tr>
-			<tr>
-				<td>126</td>
-				<td class="text-start">레더 브라운 로퍼</td>
-				<td>재입고</td>
-				<td class="text-start">
-					<a href="qna_view.do?id=126" class="text-dark text-decoration-none">재입고 예정 있나요?</a>
-				</td>
-				<td>park***</td>
-				<td class="text-body-secondary">2026.07.03</td>
-				<td>
-					<span class="badge bg-success">답변완료</span>
-				</td>
-			</tr>
-			<tr>
-				<td>125</td>
-				<td class="text-start">삼바 OG 클라우드</td>
-				<td>상품</td>
-				<td class="text-start">
-					<a href="qna_view.do?id=125" class="text-dark text-decoration-none">정품 맞나요?</a>
-				</td>
-				<td>choi**</td>
-				<td class="text-body-secondary">2026.07.02</td>
-				<td>
-					<span class="badge bg-success">답변완료</span>
-				</td>
-			</tr>
-			<tr>
-				<td>124</td>
-				<td class="text-start">993 메이드인 USA</td>
-				<td>사이즈</td>
-				<td class="text-start">
-					<a href="qna_view.do?id=124" class="text-dark text-decoration-none">폭이 넓은 편인가요?</a>
-				</td>
-				<td>jung**</td>
-				<td class="text-body-secondary">2026.07.01</td>
-				<td>
-					<span class="badge bg-danger">답변대기</span>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-
-	<%-- ===================== 페이지네이션 ===================== --%>
-	<div class="d-flex justify-content-center mt-4">
-		<ul class="pagination">
-			<c:if test="${startPage > 1}">
-				<li><a href="qna_list.do?page=${startPage - 1}">&laquo;</a></li>
-			</c:if>
-			<c:forEach var="i" begin="${startPage}" end="${endPage}">
-				<li ${i == curPage ? "class='active'" : ""}><a href="qna_list.do?page=${i}">${i}</a></li>
-			</c:forEach>
-			<c:if test="${endPage < totalPage}">
-				<li><a href="qna_list.do?page=${endPage + 1}">&raquo;</a></li>
-			</c:if>
-		</ul>
 	</div>
+	<script>
+		let app = Vue.createApp({
+			data(){
+				return {
+					curpage:1,
+					id:'',
+					status:'',
+					totalpage:0,
+					startPage:0,
+					endPage:0,
+					list:[]
+				}
+			},
+			mounted(){
+				this.dataRecv()
+			},
+			methods:{
+				async dataRecv(){
+					await axios.get('../admin/qna_list_vue.do',{
+						params:{
+							page:this.curpage,
+							id:this.id,
+							status:this.status
+						}
+					}).then(response=>{
+	    				 console.log(response.data)
+	    				 this.list=response.data.list
+	    				 this.curpage=response.data.curpage
+	    				 this.totalpage=response.data.totalpage
+	    				 this.startPage=response.data.startPage
+	    				 this.endPage=response.data.endPage
+	    			 })
+	    		 },
+	    		 find(){
+	    			 this.curpage=1
+	    			 this.dataRecv()
+	    		 },
+	    		 range(start, end){
+					let arr = []
+					let length = end-start
+					for(i=0; i<=length; i++){
+						arr[i] = start
+						start++
+					}
+					return arr
+	    		 },
+	    		 pageChange(page){
+	    			 this.curpage = page
+	    			 this.dataRecv()
+	    		 },
+	    		 goView(no){
+	    			 location.href = "../admin/qna_view.do?no="+no;
+	    		 }
+			}
+		}).mount("#app")
+	</script>
 </body>
 </html>

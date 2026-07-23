@@ -29,12 +29,13 @@
     </association>
 
 </resultMap>
+<!--  주문 상세보기 -->
 <select id="orderListDetailData" resultMap="orderListDetailMap" parameterType="int">
 SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') AS dbday,o.order_no,
            o.order_date,
            o.total_price,
            o.delivery_status,
-           o.delivery_name,
+           o.delivery_name, 
            o.delivery_phone,
            o.delivery_zipcode,
            o.delivery_addr,

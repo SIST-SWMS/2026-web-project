@@ -20,5 +20,5 @@ public class QnaVO {
      private int qna_no,parent_no,goods_no;
      private String type,subject,content,status,id,is_secret,dbday;
      private Date created_at;
-     private GoodsVO goods;
+     private GoodsVO goods = new GoodsVO();
 }

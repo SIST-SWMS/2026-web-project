@@ -55,7 +55,7 @@
 		<input type="hidden" name="goods_no" value="${vo.goods_no}">
 		<input type="hidden" name="order_no" value="${vo.order_no}">
 		<div class="d-flex align-items-center gap-3 pb-4 border-bottom mb-4">
-			<img src="../resources/images/${vo.goods.poster_url }" width="70" height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
+			<img src="${vo.goods.poster_url }" width="70" height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
 			<div>
 				<div class="fw-bold">${vo.goods.goods_name}</div>
 				<!-- <div class="text-body-secondary small">릴리프 스티치 백팩 M_3Color/ 도난방지 RFID차단 여행가방</div> -->
