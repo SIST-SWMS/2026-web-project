@@ -9,68 +9,101 @@
 		<result property="price_str" column="goods_price" />
 		<result property="gvo.goods_discount" column="goods_discount" />
 	</resultMap>
-	<select id="orderListData" resultMap="OrderDetailMap" parameterType="hashmap">
-		SELECT g.goods_name, s.goods_size, g.goods_price, g.poster_url, g.goods_no, g.goods_discount
+	<select id="orderListData" resultMap="OrderDetailMap"
+		parameterType="hashmap">
+		SELECT g.goods_name, s.goods_size, g.goods_price,
+		g.poster_url, g.goods_no, g.goods_discount
 		FROM stock s
-		JOIN goods g ON s.goods_no=g.goods_no
+		JOIN goods g ON
+		s.goods_no=g.goods_no
 		WHERE s.no=#{stock_no}
 	</select>
-	
-	<select id="getOrderNo" resultType="int">
-		SELECT order_no_seq.nextval from dual
-	</select>
-	
-	<insert id="insertOrderData" parameterType="OrdersVO">
-		INSERT INTO orders (order_no,id,delivery_name,delivery_phone,delivery_zipcode,delivery_addr,delivery_addr_detail,delivery_msg,total_price)
-		VALUES (
-			#{order_no},
-			#{id},
-			#{delivery_name},
-			#{delivery_phone},
-			#{delivery_zipcode},
-			#{delivery_addr},
-			#{delivery_addr_detail},
-			#{delivery_msg},
-			#{total_price}
-		)
-	</insert>
-	
-	<insert id="insertOrderDetailData" parameterType="OrderDetailVO">
-		INSERT INTO order_detail (order_detail_no,order_no,goods_no,sizes,quantity,price,status)
-		VALUES (
-			order_detail_no_seq.NEXTVAL,
-			#{order_no},
-			#{goods_no},
-			#{sizes},
-			#{quantity},
-			#{price},
-			#{status}
-		)
-	</insert>
-		
-	<resultMap type="com.sist.vo.OrderDetailVO"
-      id="orderdetailMap1">
-      <association property="ovo" javaType="OrdersVO">
-         <result property="order_date" column="order_date" />
-         <result property="order_no" column="order_no" />
-         <result property="total_price" column="total_price" />
-         <result property="delivery_status" column="delivery_status" />
-         <result property="dbday" column="dbday" />
-      </association>
-      <association property="gvo" javaType="GoodsVO">
-         <result property="goods_name" column="goods_name" />
-         <result property="poster_url" column="poster_url" />
-      </association>
-   </resultMap>
 
-   <!-- 최근주문 상세보기 -->
-   <select id="myOrderDetailData" resultMap="orderdetailMap1"
-      parameterType="string">
-      SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') as
-      dbday,o.order_no,o.total_price,o.delivery_status,g.goods_name,g.poster_url
-      FROM order_detail od
-      JOIN orders o ON od.order_no = o.order_no JOIN goods g
-      ON g.goods_no = od.goods_no
-      WHERE id = #{id}
-   </select> 
+	<select id="getOrderNo" resultType="int">
+		SELECT order_no_seq.nextval
+		from dual
+	</select>
+
+	<insert id="insertOrderData" parameterType="OrdersVO">
+		INSERT INTO orders
+		(order_no,id,delivery_name,delivery_phone,delivery_zipcode,delivery_addr,delivery_addr_detail,delivery_msg,total_price)
+		VALUES (
+		#{order_no},
+		#{id},
+		#{delivery_name},
+		#{delivery_phone},
+		#{delivery_zipcode},
+		#{delivery_addr},
+		#{delivery_addr_detail},
+		#{delivery_msg},
+		#{total_price}
+		)
+	</insert>
+
+	<insert id="insertOrderDetailData" parameterType="OrderDetailVO">
+		INSERT INTO
+		order_detail
+		(order_detail_no,order_no,goods_no,sizes,quantity,price,status)
+		VALUES
+		(
+		order_detail_no_seq.NEXTVAL,
+		#{order_no},
+		#{goods_no},
+		#{sizes},
+		#{quantity},
+		#{price},
+		#{status}
+		)
+	</insert>
+
+	<resultMap type="com.sist.vo.OrderDetailVO"
+		id="orderdetailMap1">
+
+		<result property="status" column="status" />
+
+		<association property="ovo" javaType="OrdersVO">
+			<result property="order_date" column="order_date" />
+			<result property="order_no" column="order_no" />
+			<result property="total_price" column="total_price" />
+			<result property="delivery_status" column="delivery_status" />
+			<result property="dbday" column="dbday" />
+		</association>
+
+		<association property="gvo" javaType="GoodsVO">
+			<result property="goods_name" column="goods_name" />
+			<result property="poster_url" column="poster_url" />
+		</association>
+
+	</resultMap>
+
+	<!-- 최근주문 상세보기 -->
+	<select id="myOrderDetailData" resultMap="orderdetailMap1"
+		parameterType="string">
+		SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') as
+		dbday,o.order_no,o.total_price,o.delivery_status,g.goods_name,g.poster_url
+		FROM order_detail od
+		JOIN orders o ON od.order_no = o.order_no JOIN
+		goods g
+		ON g.goods_no = od.goods_no
+		WHERE id = #{id}
+	</select>
+
+	<!-- 취소/교환/반품 -->
+	<select id="claimListData" resultMap="orderdetailMap1"
+		parameterType="string">
+
+		SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') AS dbday,
+		o.order_no,
+		o.total_price,
+		od.status,
+		g.goods_name,
+		g.poster_url
+		FROM order_detail od
+		JOIN orders o ON od.order_no = o.order_no
+		JOIN goods g ON od.goods_no = g.goods_no
+		WHERE o.id = #{id}
+		AND od.status IN ('주문취소','교환접수','교환완료','반품완료','환불완료')
+		ORDER BY o.order_date DESC
+
+	</select>
 </mapper>

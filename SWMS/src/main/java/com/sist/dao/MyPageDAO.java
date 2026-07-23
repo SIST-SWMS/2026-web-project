@@ -29,4 +29,15 @@ public class MyPageDAO {
 
 		return list;
 	}
+	
+	// 취소/교환/반품
+	public static List<OrderDetailVO> claimListData(String id)
+	{
+	    SqlSession session = ssf.openSession();
+	    List<OrderDetailVO> list =
+	    session.selectList("claimListData", id);
+	    session.close();
+	    return list;
+	}
+
 } 
