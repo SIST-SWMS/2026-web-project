@@ -25,10 +25,25 @@ $(function(){
 	
 	$('#success-order').on('click', function(){
 		let isCheck = $('#agree').prop('checked')
-		//console.log(isCheck)
+		
 		if(isCheck===false)
 		{
 			alert("결제 동의를 체크해주세요")
+			return
+		}
+		if($('#name').val().trim()==="")
+		{
+			alert("배송지 정보 - 이름을 입력해주세요")
+			return
+		}
+		if($('#phone').val().trim()==="")
+		{
+			alert("배송지 정보 - 연락처를 입력해주세요")
+			return
+		}
+		if($('#post').val().trim()==="" || $('#addr1').val().trim()==="")
+		{
+			alert("배송지 정보 - 우편번호 찾기로 주소를 입력해주세요")
 			return
 		}
 		
@@ -100,19 +115,19 @@ $(function(){
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label">받는 사람</label>
-                <input type="text" class="form-control bg-light" id="name" name="name" placeholder="홍길동" value="${mvo.name }">
+                <input type="text" class="form-control bg-light" id="name" name="name" placeholder="홍길동" value="${mvo.name }" required>
               </div>
               <div class="col-md-6">
                 <label class="form-label">연락처</label>
-                <input type="tel" class="form-control bg-light" id="phone" name="phone" placeholder="010-0000-0000" value="${mvo.phone }">
+                <input type="tel" class="form-control bg-light" id="phone" name="phone" placeholder="010-0000-0000" value="${mvo.phone }" required>
               </div>
               <div class="col-12">
                 <label class="form-label">주소</label>
                 <div class="input-group mb-2">
-                  <input type="text" class="form-control bg-light" id="post" name="post" placeholder="우편번호" readonly value="${mvo.zipcode }">
+                  <input type="text" class="form-control bg-light" id="post" name="post" placeholder="우편번호" readonly value="${mvo.zipcode }" required>
                   <button class="btn btn-outline-dark" type="button" id="postBtn">우편번호 찾기</button>
                 </div>
-                <input type="text" class="form-control bg-light mb-2" id="addr1" name="addr1" placeholder="기본 주소" readonly value="${mvo.address }">
+                <input type="text" class="form-control bg-light mb-2" id="addr1" name="addr1" placeholder="기본 주소" readonly value="${mvo.address }" required>
                 <input type="text" class="form-control bg-light" id="addr2" name="addr2" placeholder="상세 주소" value="${mvo.address_detail }">
               </div>
               <div class="col-12">
@@ -166,7 +181,6 @@ $(function(){
                   </div>
                 </div>
                 <span>${vo.gvo.after_sPrice }원</span>
-                <%-- <span>${(vo.sizes*quantity) }</span> --%>
               <input type="hidden" id="goods-no-${s.index }" value="${vo.goods_no }">
               <input type="hidden" id="sizes-${s.index }" value="${vo.sizes }">
               <input type="hidden" id="quantity-${s.index }" value="${vo.quantity }">
@@ -177,7 +191,6 @@ $(function(){
               </li>
               
               </c:forEach>
-              
               
               <!-- 반복 폼 -->
               <!-- <li class="list-group-item bg-transparent px-0 d-flex justify-content-between align-items-center">

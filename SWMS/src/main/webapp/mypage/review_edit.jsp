@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,6 +43,18 @@
 				}
 			});
 		});
+		
+		$('#reviewImageInput').on('change', function(e) {
+		    var file = e.target.files[0];
+		    if (!file) return;
+
+		    var reader = new FileReader();
+		    reader.onload = function(event) {
+		        $('#previewImg').attr('src', event.target.result).show();
+		        $('#uploadPlus').hide();
+		    };
+		    reader.readAsDataURL(file);
+		});
 	});
 </script>
 </head>
@@ -49,11 +62,11 @@
 
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">리뷰
 		수정</h4>
-    <form action="../mypage/review_edit_ok.do" method="post">
+    <form action="../mypage/review_edit_ok.do" method="post" enctype="multipart/form-data">
     <input type="hidden" name="review_no" value="${vo.review_no}">
 	<%-- 상품 정보 --%>
 	<div class="d-flex align-items-center gap-3 pb-4 border-bottom mb-4">
-		<img src="../resources/images/${vo.goods.poster_url }" width="70"
+		<img src="${vo.goods.poster_url }" width="70"
 			height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
 		<div>
 			<div class="fw-bold">${vo.goods.goods_name}</div>
@@ -82,14 +95,19 @@
 		<div class="fw-bold mb-2">상품 사진 또는 착용 사진을 올려주세요.</div>
 		<div class="d-flex gap-2 align-items-center">
 			<%-- 기존 사진 미리보기 (있을 때만) --%>
-			<c:if test="${not empty review.image}">
-				<img src="../resources/images/${review.image}"
-					style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px;"
-					alt="기존 사진">
-			</c:if>
-			<label class="photo-upload"> + <input type="file"
-				name="reviewImage" accept="image/*" hidden>
-			</label>
+			<c:choose>
+				<c:when test="${fn:startsWith(vo.image,'http')}">
+					<img src="${vo.image_url}" class="w-100 rounded-3 mb-3" style="object-fit: cover; background: #f5f5f5;" alt="상품 상세 이미지">
+				</c:when>
+				<c:otherwise>
+					<img src="/SWMS/uploads/${vo.image}" class="w-100 rounded-3 mb-3" style="object-fit: cover; background: #f5f5f5;" alt="상품 상세 이미지">
+				</c:otherwise>
+			</c:choose>
+		<label class="photo-upload" id="photoUploadBox">
+	        <span id="uploadPlus">+</span>
+	        <img id="previewImg" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:8px;">
+	        <input type="file" id="reviewImageInput" name="reviewImage" accept="image/*" hidden>	        
+	    </label>
 		</div>
 	</div>
 
