@@ -1,8 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html lang="ko">
-
+<html lang="UTF-8">
 <head>
 <title>3hose</title>
 <meta charset="utf-8">
@@ -14,93 +13,18 @@
 <meta name="keywords" content="">
 <meta name="description" content="">
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-	integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-	crossorigin="anonymous">
-<link rel="stylesheet" type="text/css"
-	href="../resources/css/vendor.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="../resources/css/vendor.css">
 <link rel="stylesheet" type="text/css" href="../resources/style.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap">
-<script type="text/javascript"
-	src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap">
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
 </head>
 <body>
 
-	<%-- 아이콘 모음 (icons.jsp 에서 불러옴) --%>
 	<jsp:include page="icons.jsp"></jsp:include>
-
-	<!-- <div class="preloader-wrapper">
-		<div class="preloader"></div>
-	</div> -->
-
-	<div class="offcanvas offcanvas-end" data-bs-scroll="true"
-		tabindex="-1" id="offcanvasCart">
-		<div class="offcanvas-header justify-content-center">
-			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-				aria-label="Close"></button>
-		</div>
-		<div class="offcanvas-body">
-			<div class="order-md-last">
-				<h4 class="d-flex justify-content-between align-items-center mb-3">
-					<span class="text-primary">Your cart</span> <span
-						class="badge bg-primary rounded-pill">3</span>
-				</h4>
-				<ul class="list-group mb-3">
-					<li class="list-group-item d-flex justify-content-between lh-sm">
-						<div>
-							<h6 class="my-0">Product One</h6>
-							<small class="text-body-secondary">Brief description</small>
-						</div> <span class="text-body-secondary">$120</span>
-					</li>
-					<li class="list-group-item d-flex justify-content-between lh-sm">
-						<div>
-							<h6 class="my-0">Product Two</h6>
-							<small class="text-body-secondary">Brief description</small>
-						</div> <span class="text-body-secondary">$80</span>
-					</li>
-					<li class="list-group-item d-flex justify-content-between lh-sm">
-						<div>
-							<h6 class="my-0">Product Three</h6>
-							<small class="text-body-secondary">Brief description</small>
-						</div> <span class="text-body-secondary">$50</span>
-					</li>
-					<li class="list-group-item d-flex justify-content-between"><span>Total
-							(USD)</span> <strong>$300</strong></li>
-				</ul>
-
-				<a href="../order/order.do" class="w-100 btn btn-primary btn-lg">Continue
-					to checkout</a>
-			</div>
-		</div>
-	</div>
-
-	<div class="offcanvas offcanvas-end" data-bs-scroll="true"
-		tabindex="-1" id="offcanvasSearch">
-		<div class="offcanvas-header justify-content-center">
-			<button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-				aria-label="Close"></button>
-		</div>
-		<div class="offcanvas-body">
-			<div class="order-md-last">
-				<h4 class="d-flex justify-content-between align-items-center mb-3">
-					<span class="text-primary">Search</span>
-				</h4>
-				<form role="search" action="index.html" method="get"
-					class="d-flex mt-3 gap-0">
-					<input class="form-control rounded-start rounded-0 bg-light"
-						type="email" placeholder="What are you looking for?"
-						aria-label="What are you looking for?">
-					<button class="btn btn-dark rounded-end rounded-0" type="submit">Search</button>
-				</form>
-			</div>
-		</div>
-	</div>
 
 	<header>
 		<div class="container-fluid">
@@ -108,20 +32,16 @@
 
 				<div class="col-sm-4 col-lg-3 text-center text-sm-start">
 					<div class="main-logo">
-						<a href="../main/main.do"> <img
-							src="../resources/images/logo.png" alt="logo" class="img-fluid">
+						<a href="../main/main.do">
+							<img src="../resources/images/logo.png" alt="logo" class="img-fluid">
 						</a>
 					</div>
 				</div>
 
-				<div
-					class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
-					<form id="search-form"
-						class="search-bar row bg-light p-2 my-2 rounded-4"
-						action="../goods/find.do" method="get">
+				<div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
+					<form id="search-form" class="search-bar row bg-light p-2 my-2 rounded-4" action="../goods/find.do" method="get">
 
 						<div class="col-md-4 d-none d-md-block">
-							<!--  name="cno" 추가, 각 항목에 vlaue 부착 -->
 							<select name="cno" class="form-select border-0 bg-transparent">
 								<option value="0">All Categories</option>
 								<option value="1">스포츠화</option>
@@ -133,71 +53,62 @@
 						</div>
 
 						<div class="col-11 col-md-7">
-							<input type="text" name="fd"
-								class="form-control border-0 bg-transparent text-center"
-								placeholder="검색어를 입력하세요" required>
+							<input type="text" name="fd" class="form-control border-0 bg-transparent text-center" placeholder="검색어를 입력하세요" required>
 						</div>
 
 						<div class="col-1">
-							<button type="submit"
-								class="border-0 bg-transparent text-dark p-0">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-									viewBox="0 0 24 24">
-				                    <path fill="currentColor"
-										d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
+							<button type="submit" class="border-0 bg-transparent text-dark p-0">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				                    <path fill="currentColor" d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z" />
 				                </svg>
 							</button>
 						</div>
 
 					</form>
 				</div>
-
-
-				<div
-					class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
-					<ul
-						class="d-flex justify-content-end align-items-center list-unstyled m-0 gap-3">
+				<div class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
+					<ul class="d-flex justify-content-end align-items-center list-unstyled m-0 gap-3">
 						<c:if test="${sessionScope.id != null }">
-							<li><a href="../mypage/likeList.do"
-								class="d-flex align-items-center gap-1 text-dark text-decoration-none">
+							<li><a href="../mypage/likeList.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 									<svg width="18" height="18" viewBox="0 0 24 24">
-        <use xlink:href="#heart"></use>
-    </svg> <small>LIKE</small>
-							</a></li>
-							<li><a href="../cart/cart.do"
-								class="d-flex align-items-center gap-1 text-dark text-decoration-none">
+								        <use xlink:href="#heart"></use>
+								    </svg>
+									<small>LIKE</small>
+								</a></li>
+							<li><a href="../cart/cart.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 									<svg width="18" height="18" viewBox="0 0 24 24">
 										<use xlink:href="#cart"></use>
-									</svg> <small>BAG</small>
-							</a></li>
-							<li><a href="../mypage/mypage.do"
-								class="d-flex align-items-center gap-1 text-dark text-decoration-none">
+									</svg>
+									<small>BAG</small>
+								</a></li>
+							<li><a href="../mypage/mypage.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 									<svg width="18" height="18" viewBox="0 0 24 24">
 										<use xlink:href="#user"></use>
-									</svg> <small>MY</small>
-							</a></li>
+									</svg>
+									<small>MY</small>
+								</a></li>
 							<c:if test="${sessionScope.auth == 'adm' }">
-								<li><a href="../admin/admin.do"
-									class="d-flex align-items-center gap-1 text-dark text-decoration-none">
+								<li><a href="../admin/admin.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 										<svg width="18" height="18" viewBox="0 0 24 24">
 										<use xlink:href="#user"></use>
-									</svg> <small>ADM</small>
-								</a></li>
+									</svg>
+										<small>ADM</small>
+									</a></li>
 							</c:if>
-							<li><a href="../member/logout.do"
-								class="d-flex align-items-center gap-1 text-dark text-decoration-none">
+							<li><a href="../member/logout.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 									<svg width="18" height="18" viewBox="0 0 24 24">
 										<use xlink:href="#lock"></use>
-									</svg> <small>LOGOUT</small>
-							</a></li>
+									</svg>
+									<small>LOGOUT</small>
+								</a></li>
 						</c:if>
 						<c:if test="${sessionScope.id == null }">
-							<li><a href="../member/login.do"
-								class="d-flex align-items-center gap-1 text-dark text-decoration-none">
+							<li><a href="../member/login.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 									<svg width="18" height="18" viewBox="0 0 24 24">
 										<use xlink:href="#lock"></use>
-									</svg> <small>LOGIN</small>
-							</a></li>
+									</svg>
+									<small>LOGIN</small>
+								</a></li>
 						</c:if>
 					</ul>
 
@@ -207,51 +118,27 @@
 		</div>
 		<div class="container-fluid">
 			<div class="row py-3">
-				<div
-					class="d-flex  justify-content-center justify-content-sm-between align-items-center">
+				<div class="d-flex  justify-content-center justify-content-sm-between align-items-center">
 					<nav class="main-menu d-flex navbar navbar-expand-lg">
 
-						<button class="navbar-toggler" type="button"
-							data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-							aria-controls="offcanvasNavbar">
+						<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
 							<span class="navbar-toggler-icon"></span>
 						</button>
 
-						<div class="offcanvas offcanvas-end" tabindex="-1"
-							id="offcanvasNavbar">
+						<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
 
 							<div class="offcanvas-header justify-content-center">
-								<button type="button" class="btn-close"
-									data-bs-dismiss="offcanvas" aria-label="Close"></button>
+								<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 							</div>
 
 							<div class="offcanvas-body">
 
-								<ul
-									class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-5 mb-0 text-black text-uppercase fw-bold">
-									<li class="nav-item active"><a
-										href="../goods/list.do?cno=1" class="nav-link">스포츠화</a></li>
-									<li class="nav-item active"><a
-										href="../goods/list.do?cno=2" class="nav-link">샌들/슬리퍼</a></li>
-									<li class="nav-item active"><a
-										href="../goods/list.do?cno=3" class="nav-link">라이프스타일</a></li>
-									<li class="nav-item active"><a
-										href="../goods/list.do?cno=4" class="nav-link">구두</a></li>
-									<li class="nav-item active"><a
-										href="../goods/list.do?cno=5" class="nav-link">부츠</a></li>
-									<li class="nav-item dropdown"><a
-										class="nav-link dropdown-toggle" role="button" id="pages"
-										data-bs-toggle="dropdown" aria-expanded="false">Example</a>
-										<ul class="dropdown-menu bg-black text-white"
-											aria-labelledby="pages">
-											<li><a href="../temp/guide.jsp"
-												class="dropdown-item text-white">Guide <span
-													class="badge bg-warning text-dark ms-2">PRO</span>
-											</a></li>
-											<li><a href="#" class="dropdown-item text-white">About
-													Us 2 <span class="badge bg-warning text-dark ms-2">PRO</span>
-											</a></li>
-										</ul></li>
+								<ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-5 mb-0 text-black text-uppercase fw-bold">
+									<li class="nav-item active"><a href="../goods/list.do?cno=1" class="nav-link">스포츠화</a></li>
+									<li class="nav-item active"><a href="../goods/list.do?cno=2" class="nav-link">샌들/슬리퍼</a></li>
+									<li class="nav-item active"><a href="../goods/list.do?cno=3" class="nav-link">라이프스타일</a></li>
+									<li class="nav-item active"><a href="../goods/list.do?cno=4" class="nav-link">구두</a></li>
+									<li class="nav-item active"><a href="../goods/list.do?cno=5" class="nav-link">부츠</a></li>
 								</ul>
 							</div>
 						</div>
