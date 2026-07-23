@@ -115,12 +115,14 @@
 							</li>
 						</c:if>
 						<c:if test="${sessionScope.id == null }">
-							<li><a href="../member/login.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
+							<li>
+								<a href="../member/login.do" class="d-flex align-items-center gap-1 text-dark text-decoration-none">
 									<svg width="18" height="18" viewBox="0 0 24 24">
 										<use xlink:href="#lock"></use>
 									</svg>
 									<small>LOGIN</small>
-								</a></li>
+								</a>
+							</li>
 						</c:if>
 					</ul>
 
