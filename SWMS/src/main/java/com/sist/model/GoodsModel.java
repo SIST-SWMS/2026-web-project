@@ -39,6 +39,10 @@ public class GoodsModel {
         map.put("category_no", Integer.parseInt(cno));  
         map.put("start", start);   
         map.put("sort", "default");         
+        
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+        map.put("id", id == null ? "" : id);
 
         List<GoodsVO> list = GoodsDAO.goodsListData(map);   
 		
@@ -82,6 +86,10 @@ public class GoodsModel {
         map.put("category_no", Integer.parseInt(cno));  
         map.put("start", start);   
         map.put("sort", sort);         
+        
+        HttpSession session = request.getSession();
+        String id = (String) session.getAttribute("id");
+        map.put("id", id == null ? "" : id);
 
         List<GoodsVO> list = GoodsDAO.goodsListData(map);    
         int totalpage=GoodsDAO.goodsTotalPage(Integer.parseInt(cno));        
