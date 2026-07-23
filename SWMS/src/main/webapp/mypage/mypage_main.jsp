@@ -32,7 +32,7 @@
             <div class="col-md-2 text-center">
 
                 <a href="../mypage/orderListDetail.do?order_no=${vo.ovo.order_no}">
-                    <img src="/uploads/${vo.gvo.poster_url}"
+                    <img src="${vo.gvo.poster_url}"
                          width="90"
                          height="90"
                          style="object-fit:cover;border-radius:8px;">

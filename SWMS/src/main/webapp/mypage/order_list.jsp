@@ -39,7 +39,7 @@
 					<div class="d-flex align-items-center gap-3">
 
 						<a href="../mypage/orderListDetail.do?order_no=${vo.ovo.order_no}">
-							<img src="/uploads/${vo.gvo.poster_url}"
+							<img src="${vo.gvo.poster_url}"
 								 width="70"
 								 height="70"
 								 style="object-fit:cover;border-radius:6px;">
