@@ -69,7 +69,7 @@ body {
 	<div class="pwd-box">
 		<div class="pwd-title">비밀번호 확인</div>
 
-		<form>
+		<form method="post" action="../member/pwdCheck.do">
 			<div class="mb-4">
 				<label for="pwd" class="form-label fw-bold">비밀번호</label> <input
 					type="password" id="pwd" name="pwd"

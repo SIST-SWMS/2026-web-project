@@ -19,78 +19,68 @@ public class MemberModel {
 		request.setAttribute("main_jsp", "../member/join.jsp");
 		return "../main/main.jsp";
 	}
-	
-	
+
 	// 회원가입- 회원추가
 	@RequestMapping("member/join_ok.do")
-	public void member_join_ok(HttpServletRequest request,
-	        HttpServletResponse response)
-	{
-	    MemberVO vo = new MemberVO();
+	public void member_join_ok(HttpServletRequest request, HttpServletResponse response) {
+		MemberVO vo = new MemberVO();
 
-	    vo.setId(request.getParameter("id"));
-	    vo.setPwd(request.getParameter("pwd"));
-	    vo.setName(request.getParameter("name"));
-	    vo.setNickname(request.getParameter("nickname"));
-	    vo.setPhone(request.getParameter("phone"));
-	    vo.setZipcode(request.getParameter("zipcode"));
-	    vo.setAddress(request.getParameter("address"));
-	    vo.setAddress_detail(request.getParameter("address_detail"));
+		vo.setId(request.getParameter("id"));
+		vo.setPwd(request.getParameter("pwd"));
+		vo.setName(request.getParameter("name"));
+		vo.setNickname(request.getParameter("nickname"));
+		vo.setPhone(request.getParameter("phone"));
+		vo.setZipcode(request.getParameter("zipcode"));
+		vo.setAddress(request.getParameter("address"));
+		vo.setAddress_detail(request.getParameter("address_detail"));
 
-	    MemberDAO.memberInsert(vo);
+		MemberDAO.memberInsert(vo);
 
-	    try
-	    {
-	        response.setContentType("text/html;charset=UTF-8");
-	        PrintWriter out=response.getWriter();
+		try {
+			response.setContentType("text/html;charset=UTF-8");
+			PrintWriter out = response.getWriter();
 
-	        out.println("<script>");
-	        out.println("alert('회원가입이 완료되었습니다. 로그인해주세요.');");
-	        out.println("location.href='../member/login.do';");
-	        out.println("</script>");
-	    }
-	    catch(Exception ex)
-	    {
-	        ex.printStackTrace();
-	    }
+			out.println("<script>");
+			out.println("alert('회원가입이 완료되었습니다. 로그인해주세요.');");
+			out.println("location.href='../member/login.do';");
+			out.println("</script>");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	// 아이디 중복체크
 	@RequestMapping("member/idcheck.do")
-	public String member_idcheck(HttpServletRequest request,
-	        HttpServletResponse response)
-	{
-	    String id=request.getParameter("id");
+	public String member_idcheck(HttpServletRequest request, HttpServletResponse response) {
+		String id = request.getParameter("id");
 
-	    if(id==null)
-	        id="";
+		if (id == null)
+			id = "";
 
-	    int count=MemberDAO.idCount(id);
+		int count = MemberDAO.idCount(id);
 
-	    request.setAttribute("id", id);
-	    request.setAttribute("count", count);
+		request.setAttribute("id", id);
+		request.setAttribute("count", count);
 
-	    return "../member/idcheck.jsp";
+		return "../member/idcheck.jsp";
 	}
-	
+
 	// 닉네임 중복체크
 	@RequestMapping("member/nickcheck.do")
-	public String member_nickcheck(HttpServletRequest request,
-	        HttpServletResponse response)
-	{
-	    String nickname=request.getParameter("nickname");
+	public String member_nickcheck(HttpServletRequest request, HttpServletResponse response) {
+		String nickname = request.getParameter("nickname");
 
-	    if(nickname==null)
-	        nickname="";
+		if (nickname == null)
+			nickname = "";
 
-	    int count=MemberDAO.nickCount(nickname);
+		int count = MemberDAO.nickCount(nickname);
 
-	    request.setAttribute("nickname", nickname);
-	    request.setAttribute("count", count);
+		request.setAttribute("nickname", nickname);
+		request.setAttribute("count", count);
 
-	    return "../member/nickcheck.jsp";
+		return "../member/nickcheck.jsp";
 	}
-	
+
 	@RequestMapping("member/login.do")
 	public String login(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("main_jsp", "../member/login.jsp");
@@ -132,27 +122,21 @@ public class MemberModel {
 	@RequestMapping("member/detail.do")
 	public String member_detail(HttpServletRequest request, HttpServletResponse response) {
 
-	    HttpSession session = request.getSession();
+		HttpSession session = request.getSession();
 
-	    String id = (String)session.getAttribute("id");
+		String id = (String) session.getAttribute("id");
 
+		MemberVO vo = MemberDAO.memberDetailData(id);
 
-	    MemberVO vo = MemberDAO.memberDetailData(id);
+		request.setAttribute("vo", vo);
 
+		request.setAttribute("mypage_content", "../mypage/member_detail.jsp");
 
-	    request.setAttribute("member", vo);
+		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 
-
-	    request.setAttribute("mypage_content",
-	            "../mypage/member_detail.jsp");
-
-	    request.setAttribute("main_jsp",
-	            "../mypage/mypage.jsp");
-
-	    return "../main/main.jsp";
+		return "../main/main.jsp";
 	}
 
-	// 수정버튼 메서드 만들기
 	// 비밀번호 입력화면 이동 -> jsp를 하나 새로 만들어야해 기존의 기능들과는 또다른 기능이라서
 	@RequestMapping("member/editMember.do")
 	public String member_editMember(HttpServletRequest request, HttpServletResponse response) {
@@ -162,73 +146,60 @@ public class MemberModel {
 
 	// 비밀번호가 맞냐/틀리냐
 	@RequestMapping("member/pwdCheck.do")
-	public String member_pwdCheck(HttpServletRequest request,
-	        HttpServletResponse response)
-	{
-	    System.out.println("pwdCheck 들어옴");
+	public String member_pwdCheck(HttpServletRequest request, HttpServletResponse response) {
 
-	    String pwd1 = request.getParameter("pwd");
+		String pwd1 = request.getParameter("pwd");
 
-	    HttpSession session = request.getSession();
-	    String id = (String)session.getAttribute("id");
+		HttpSession session = request.getSession();
+		String id = (String) session.getAttribute("id");
 
-	    System.out.println("입력 비번 : " + pwd1);
-	    System.out.println("세션 id : " + id);
+		String pwd2 = MemberDAO.memberFindPassword(id);
 
+		if (pwd1.equals(pwd2)) {
 
-	    String pwd2 = MemberDAO.memberFindPassword(id);
+			MemberVO member = MemberDAO.memberDetailData(id);
 
-	    System.out.println("DB 비번 : " + pwd2);
+			request.setAttribute("vo", member);
 
+			request.setAttribute("mypage_content", "../mypage/member_update.jsp");
 
-	    if(pwd1.equals(pwd2))
-	    {
-	        MemberVO member = MemberDAO.memberDetailData(id);
+			request.setAttribute("main_jsp", "../mypage/mypage.jsp");
 
-	        System.out.println("회원정보 : " + member);
+			return "../main/main.jsp";
 
-	        request.setAttribute("member", member);
+		} else {
+			System.out.println("비밀번호 불일치");
 
-	        request.setAttribute("mypage_content",
-	                "../mypage/member_update.jsp");
+			request.setAttribute("msg", "비밀번호가 틀렸습니다.");
 
-	        request.setAttribute("main_jsp",
-	                "../mypage/mypage.jsp");
-
-	        return "../main/main.jsp";
-	    }
-	    else
-	    {
-	        System.out.println("비밀번호 불일치");
-
-	        request.setAttribute("msg",
-	                "비밀번호가 틀렸습니다.");
-
-	        return "../mypage/pwd_check.jsp";
-	    }
+			return "../mypage/pwd_check.jsp";
+		}
 	}
+
 	@RequestMapping("member/update_ok.do")
-	public String member_update_ok(
-	        HttpServletRequest request,
-	        HttpServletResponse response)
-	{
+	public String member_update_ok(HttpServletRequest request, HttpServletResponse response) {
 
-	    MemberVO vo = new MemberVO();
+		MemberVO vo = new MemberVO();
 
-	    vo.setId(request.getParameter("id"));
-	    vo.setName(request.getParameter("name"));
-	    vo.setNickname(request.getParameter("nickname"));
-	    vo.setPwd(request.getParameter("pwd"));
-	    vo.setPhone(request.getParameter("phone"));
-	    vo.setZipcode(request.getParameter("zipcode"));
-	    vo.setAddress(request.getParameter("address"));
-	    vo.setAddress_detail(request.getParameter("address_detail"));
+		vo.setId(request.getParameter("id"));
+		vo.setName(request.getParameter("name"));
+		vo.setNickname(request.getParameter("nickname"));
+		vo.setPhone(request.getParameter("phone"));
+		vo.setZipcode(request.getParameter("zipcode"));
+		vo.setAddress(request.getParameter("address"));
+		vo.setAddress_detail(request.getParameter("address_detail"));
 
-
-	    MemberDAO.memberUpdate(vo);
-
-
-	    return "redirect:../mypage/member_detail.do";
+		
+		
+		MemberDAO.memberUpdate(vo);
+		
+		
+		
+		
+		
+		
+		
+		return "redirect:../member/detail.do";
 	}
 
 }

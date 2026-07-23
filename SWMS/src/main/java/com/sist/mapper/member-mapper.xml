@@ -14,6 +14,7 @@
 		FROM member
 		WHERE id=#{id}
 	</select>
+	
 	<select id="memberDetailData"
         resultType="MemberVO"
         parameterType="string">
@@ -30,20 +31,20 @@ WHERE id=#{id}
 
 </select>
 
-	<!-- 디비에 특정 비밀번호 조회 -->
-	<select id="memberFindPassword" resultType="string"
+<!-- 디비에 특정 비밀번호 조회 -->
+<select id="memberFindPassword" resultType="string"
 		parameterType="string">
 		SELECT pwd FROM member
 		WHERE id = #{id}
-	</select>
-	
-	<update id="memberUpdate" parameterType="MemberVO">
+</select>
+
+<!-- 회원정보 수정 -->	
+<update id="memberUpdate" parameterType="MemberVO">
 
 UPDATE member
 SET
     name=#{name},
     nickname=#{nickname},
-    pwd=#{pwd},
     phone=#{phone},
     zipcode=#{zipcode},
     address=#{address},
@@ -91,4 +92,6 @@ WHERE id=#{id}
     FROM member
     WHERE nickname=#{nickname}
 </select>
+
+
 </mapper>

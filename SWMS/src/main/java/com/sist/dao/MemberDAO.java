@@ -115,6 +115,7 @@ public class MemberDAO {
 	{
 	    SqlSession session = ssf.openSession(true);
 
+	   
 	    session.update("memberUpdate", vo);
 
 	    session.close();
