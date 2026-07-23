@@ -640,7 +640,7 @@ $(function() {
 					                    <td>
 					                        <c:choose>
 					                            <%-- 비밀글인 경우 --%>
-					                            <c:when test="${qvo.is_secret == '비밀글'}">
+					                            <c:when test="${qvo.is_secret == 'y'}">
 					                                
 					                                <%-- 작성자 본인이거나 관리자인 경우 --%>
 					                                <c:choose>
