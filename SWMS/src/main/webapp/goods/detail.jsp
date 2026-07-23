@@ -186,84 +186,84 @@ $(function() {
 				<!-- Info -->
 				<div class="col-lg-6">
 					<span class="badge bg-success mb-2">${vo.goods_discount }% 할인</span>
+					<%-- <h5 class="fw-bold">${vo.brand_name }</h5> --%>
+					<%-- small 대신 fs-6(약간 큼) 또는 fs-5(더 큼)를 사용합니다 --%>
+					<div class="text-secondary fw-semibold fs-5 mb-1">${vo.brand_name }</div>
 					<h2 class="fw-bold">${vo.goods_name }</h2>
 					<div class="d-flex align-items-center gap-2 my-2">
-						<c:forEach var="rvo" items="${rList}">
-						<c:choose>
-					       		<c:when test="${rvo.hit==1}">
-									<span class="d-inline-flex"> <svg width="20" height="20"
-										class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg>
-									</span>
-								</c:when>
-								<c:when test="${rvo.hit==2}">
-									<span class="d-inline-flex"> <svg width="20" height="20"
-										class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg>
-									</span>
-								</c:when>
-								<c:when test="${rvo.hit==3}">
-									<span class="d-inline-flex"> <svg width="20" height="20"
-										class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg>
-									</span>
-								</c:when>
-								<c:when test="${rvo.hit==4}">
-									<span class="d-inline-flex"> <svg width="20" height="20"
-										class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-outline"></use></svg>
-									</span>
-								</c:when>
-								<c:when test="${rvo.hit==5}">
-									<span class="d-inline-flex"> <svg width="20" height="20"
-										class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg> <svg width="20"
-										height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg><svg width="20"
-										 height="20" class="text-warning">
-									<use xlink:href="#star-solid"></use></svg>
-									</span>
-								</c:when>
-					      	</c:choose>
-					      	</c:forEach>
-						<small class="text-body-secondary">리뷰 ${vo.review_count }개</small> <!-- 리뷰 개수 세서 표시 -->
+					    <c:set var="topTotalHit" value="0" />
+					    <c:set var="topTotalCount" value="0" />
+					    
+					    <c:forEach var="rvo" items="${rList}">
+					        <c:set var="topTotalHit" value="${topTotalHit + rvo.hit}" />
+					        <c:set var="topTotalCount" value="${topTotalCount + 1}" />
+					    </c:forEach>
+					    
+					    <c:set var="topAvgScore" value="0" />
+					    <c:if test="${topTotalCount > 0}">
+					        <c:set var="topAvgScore" value="${topTotalHit / topTotalCount}" />
+					    </c:if>
+					    <c:choose>
+					        <c:when test="${0 < topAvgScore && topAvgScore <= 1}">
+					            <span class="d-inline-flex"> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg>
+					            </span>
+					        </c:when>
+					        <c:when test="${1 < topAvgScore && topAvgScore <= 2}">
+					            <span class="d-inline-flex"> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg>
+					            </span>
+					        </c:when>
+					        <c:when test="${2 < topAvgScore && topAvgScore <= 3}">
+					            <span class="d-inline-flex"> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg>
+					            </span>
+					        </c:when>
+					        <c:when test="${3 < topAvgScore && topAvgScore <= 4}">
+					            <span class="d-inline-flex"> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg>
+					            </span>
+					        </c:when>
+					        <c:when test="${4 < topAvgScore && topAvgScore <= 5}">
+					            <span class="d-inline-flex"> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg>
+					            </span>
+					        </c:when>
+					        <%-- 리뷰가 0개일 때 (기본 빈 별 5개 노출) --%>
+					        <c:otherwise>
+					            <span class="d-inline-flex"> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
+					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg>
+					            </span> 
+					        </c:otherwise>
+					    </c:choose>
+					    <small class="text-body-secondary mb-0 mt-2">전체 리뷰 ${vo.review_count }개</small> 
+					    
 					</div>
+					  <small class="text-body-secondary mb-0 mt-2">상품코드 ${vo.goods_code }</small>
 					<!-- 가격  -->
 					<c:set var="removeComma" value="${fn:replace(vo.goods_price, ',', '')}" />
 					<c:set var="purePrice" value="${fn:replace(removeComma, '원', '')}" />
@@ -287,18 +287,35 @@ $(function() {
 					</div>
 
 					<p class="text-body-secondary">배송비 무료</p>
-
+					
 					<!-- 사이즈 -->
 					<div class="my-4">
-						<label class="fw-bold d-block mb-2">사이즈</label><!-- 사이즈 버튼 클릭하면  -->
-						<div class="d-flex flex-wrap gap-2" id="sizeGroup">
-							<button type="button" class="btn btn-outline-dark size-btn">230</button>
-							<button type="button" class="btn btn-outline-dark size-btn">240</button>
-							<button type="button" class="btn btn-outline-dark size-btn">250</button>
-							<button type="button" class="btn btn-outline-dark size-btn active">260</button>
-							<button type="button" class="btn btn-outline-dark size-btn">270</button>
-							<button type="button" class="btn btn-outline-dark size-btn">280</button>
-						</div>
+					    <label class="fw-bold d-block mb-2">사이즈</label>
+					    
+					    <div class="d-flex flex-wrap gap-2" id="sizeGroup">
+					        <c:set var="allSizes" value="230,240,250,260,270,280" />
+					        
+					        <c:forEach var="size" items="${allSizes}">
+					            
+					            <c:set var="hasStock" value="false" />
+					            <c:forEach var="svo" items="${stockList}">
+					                <c:if test="${svo.goods_size == size && svo.quantity > 0}">
+					                    <c:set var="hasStock" value="true" />
+					                </c:if>
+					            </c:forEach>
+					            <c:choose>
+					                <c:when test="${hasStock}">
+					                    <button type="button" class="btn btn-outline-dark size-btn">${size}</button>
+					                </c:when>
+					                <c:otherwise>
+					                    <button type="button" class="btn btn-outline-secondary size-btn opacity-50" disabled style="cursor: not-allowed;">
+					                        ${size}
+					                    </button>
+					                </c:otherwise>
+					            </c:choose>
+					            
+					        </c:forEach>
+					    </div>
 					</div>
 
 					<!-- 수량 -->
@@ -397,7 +414,7 @@ $(function() {
 							    <c:set var="totalCount" value="${totalCount + 1}" />
 							</c:forEach>
 							
-							<c:set var="avgScore" value="0.0" />
+							<c:set var="avgScore" value="0" />
 							<c:if test="${totalCount > 0}">
 							    <c:set var="avgScore" value="${totalHit / totalCount}" />
 							</c:if>
@@ -411,8 +428,8 @@ $(function() {
 							    </div>
 
 								
-								<c:forEach var="rvo" items="${rList}">
-									<c:choose>
+								<%-- <c:forEach var="rvo" items="${rList}"> --%>
+								<c:choose>
 					       		<c:when test="${0 < avgScore && avgScore <= 1}">
 									<span class="d-inline-flex"> <svg width="20" height="20"
 										class="text-warning">
@@ -484,7 +501,7 @@ $(function() {
 									</span>
 								</c:when>
 					      	</c:choose>
-							</c:forEach>
+							<%-- </c:forEach> --%>
 								
 								<!-- 전체 리뷰 개수 -->
 								<p class="text-body-secondary mb-0 mt-2">전체 리뷰 ${vo.review_count }개</p>
@@ -511,7 +528,6 @@ $(function() {
 					    <div class="d-flex justify-content-between align-items-start mb-2">
 					        <div>
 					            <h6 class="fw-bold mb-1">
-					                <%-- <a href="../review/detail.do?review_no=${rvo.review_no}" class="text-dark text-decoration-none"> --%>
 					                <a href="../mypage/reviewList.do?review_no=${rvo.review_no}" class="text-dark text-decoration-none">
 					                    ${rvo.subject}
 					                </a>
@@ -629,12 +645,11 @@ $(function() {
 					                    <td>
 					                        <c:choose>
 					                            <%-- 비밀글인 경우 --%>
-					                            <c:when test="${qvo.is_secret == '비밀글'}">
+					                            <c:when test="${qvo.is_secret == 'y'}">
 					                                
 					                                <%-- 작성자 본인이거나 관리자인 경우 --%>
 					                                <c:choose>
 					                                    <c:when test="${sessionScope.id == qvo.id || sessionScope.id == 'admin'}">
-					                                        <%-- <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none"> --%>
 					                                         <a href="../mypage/qnaList.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
 					                                            <svg width="14" height="14" viewBox="0 0 24 24"><use xlink:href="#lock"></use></svg>
 					                                            ${qvo.subject}

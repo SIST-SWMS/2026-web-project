@@ -19,7 +19,23 @@
 	color: #000;
 }
 
+.category-sidebar-menu a.active {
+	color: #000;          
+	font-weight: 800;    
+}
 </style>
+
+<script>
+$(function() {
+    $('.category-menu .category-btn').on('click', function(e) {
+        e.preventDefault(); 
+        
+        $('.category-menu .category-btn').removeClass('active');
+        
+        $(this).addClass('active');
+    });
+});
+</script>
 </head>
 <body>
 	<c:if test="${empty goods_content}">
@@ -31,7 +47,7 @@
 			<div class="row">
 
 				<div class="col-lg-2">
-					<h4 class="fw-bold border-bottom border-dark border-2 pb-3 mb-3">남성슈즈</h4>
+					<h4 class="fw-bold border-bottom border-dark border-2 pb-3 mb-3">신발 카테고리</h4>
 					
 					<nav class="category-sidebar-menu category-menu">
 						<a href="#" class="category-btn active" data-cno="0">ALL</a> 
@@ -42,7 +58,7 @@
 						<a href="#" class="category-btn" data-cno="5">부츠</a> 
 					</nav>
 					
-					<h5 class="fw-bold border-top border-dark border-2 pt-3 mt-4">필터</h5>
+					<h5 class="fw-bold border-top border-dark border-2 pt-3 mt-4"></h5>
 				</div>
                 
 				<div class="col-lg-10">
