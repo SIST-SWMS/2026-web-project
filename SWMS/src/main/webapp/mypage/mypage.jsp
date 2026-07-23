@@ -31,7 +31,6 @@
 </style>
 </head>
 <body>
-	<%-- 우측 콘텐츠 기본값 지정: Controller에서 mypage_content 를 바꿔주면 우측 화면만 교체됨 --%>
 	<c:if test="${empty mypage_content}">
 		<c:set var="mypage_content" value="../mypage/mypage_main.jsp" />
 	</c:if>
@@ -40,9 +39,8 @@
 		<div class="container-fluid">
 			<div class="row">
 
-				<!-- ================= 좌측 사이드바 (고정) ================= -->
 				<div class="col-lg-2">
-					<div class="mypage-nickname mb-4">홍길동님</div>
+					<div class="mypage-nickname mb-4">${name }님</div>
 
 					<nav class="mypage-menu">
 						<div class="mypage-menu-title">나의 쇼핑정보</div>
@@ -57,7 +55,6 @@
 					</nav>
 				</div>
 
-				<!-- ================= 우측 콘텐츠 (교체) ================= -->
 				<div class="col-lg-10">
 					<jsp:include page="${mypage_content}"></jsp:include>
 				</div>
