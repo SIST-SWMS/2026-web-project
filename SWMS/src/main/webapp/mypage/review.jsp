@@ -43,25 +43,13 @@
 				}
 			});
 		});
-		
-		$('#reviewImageInput').on('change', function(e) {
-		    var file = e.target.files[0];
-		    if (!file) return;
-
-		    var reader = new FileReader();
-		    reader.onload = function(event) {
-		        $('#previewImg').attr('src', event.target.result).show();
-		        $('#uploadPlus').hide();
-		    };
-		    reader.readAsDataURL(file);
-		});
 	});
 </script>
 </head>
 <body>
 
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">리뷰 등록</h4>
-	<form action="../mypage/review_ok.do" method="post" enctype="multipart/form-data">
+	<form action="../mypage/review_ok.do" method="post">
 	 <c:forEach var="vo" items="${list }">
 		<!-- 상품 정보 -->
 		<input type="hidden" name="goods_no" value="${vo.goods_no}">
@@ -97,14 +85,11 @@
 		</div>
 
 		<!-- 사진 업로드 -->
-	  <div class="mb-4 pb-4 border-bottom">
-	    <div class="fw-bold mb-2">상품 사진 또는 착용 사진을 올려주세요.</div>
-	    <label class="photo-upload" id="photoUploadBox">
-	        <span id="uploadPlus">+</span>
-	        <img id="previewImg" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:8px;">
-	        <input type="file" id="reviewImageInput" name="reviewImage" accept="image/*" hidden>	        
-	    </label>
-	  </div>
+		<div class="mb-4 pb-4 border-bottom">
+			<div class="fw-bold mb-2">상품 사진 또는 착용 사진을 올려주세요.</div>
+			<label class="photo-upload"> + <input type="file" name="reviewImage" accept="image/*" hidden>
+			</label>
+		</div>
 
 		<!-- 후기 -->
 		<div class="mb-3">

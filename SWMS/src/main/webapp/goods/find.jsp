@@ -107,7 +107,7 @@
                 <div class="product-price">{{ vo.goods_price }}</div> 
                 <div class="product-meta">
                     <svg width="12" height="12" viewBox="0 0 24 24">
-                    <use xlink:href="#heart"></use></svg> {{ vo.like_check }}
+                    <use xlink:href="#heart"></use></svg> {{ vo.like_count }}
                     <svg width="12" height="12" viewBox="0 0 12 12">
                     <use xlink:href="#eye"></use></svg> {{ vo.hit }}
                 </div>

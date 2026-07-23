@@ -42,8 +42,8 @@
 	align-items: center;
 	justify-content: center;
 	box-shadow: 0 1px 4px rgba(0, 0, 0, .15);
+	cursor: pointer;
 	border: none;
-	cursor: default;
 }
 
 .product-card .thumb-box {
@@ -186,7 +186,7 @@ $(function() {
                 </a>
                 <button type="button" class="like-btn" style="border:none; background:none;">
 			    <c:choose>
-			        <c:when test="${vo.like_check > 0}">
+			        <c:when test="${vo.like_count > 0}">
 			            <svg width="18" height="18" viewBox="0 0 24 24" fill="red">
 			                <use xlink:href="#heart-fill"></use>
 			            </svg>

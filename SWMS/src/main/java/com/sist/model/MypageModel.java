@@ -42,7 +42,7 @@ public class MypageModel {
 		request.setAttribute("mypage_content", "../mypage/mypage_main.jsp");
 
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
-
+ 
 		return "../main/main.jsp";
 	}
 
@@ -247,5 +247,37 @@ public class MypageModel {
 
 		return "../main/main.jsp";
 	}
+	
+	// 취소 요청
+	@RequestMapping("mypage/order_cancel.do")
+	public void order_cancel(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		OrderDetailVO vo = new OrderDetailVO();
+		vo.setOrder_detail_no(Integer.parseInt(no));
+		vo.setStatus("취소완료");
+		MyPageDAO.orderStatusUpdate(vo);
+	}
+	
+	// 반품 요청
+	@RequestMapping("mypage/order_return.do")
+	public void order_return(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		OrderDetailVO vo = new OrderDetailVO();
+		vo.setOrder_detail_no(Integer.parseInt(no));
+		vo.setStatus("반품요청");
+		MyPageDAO.orderStatusUpdate(vo);
+	}
+	
+	// 구매확정
+	@RequestMapping("mypage/order_ok.do")
+	public void order_ok(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		OrderDetailVO vo = new OrderDetailVO();
+		vo.setOrder_detail_no(Integer.parseInt(no));
+		vo.setStatus("구매확정");
+		MyPageDAO.orderStatusUpdate(vo);
+	}
+	
+	
 
 }

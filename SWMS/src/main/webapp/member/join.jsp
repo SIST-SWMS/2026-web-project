@@ -60,6 +60,17 @@
 				e.preventDefault();
 				return;
 			}
+			
+			//비밀번호가 8자 이상? => 비밀번호는 문자열 => 문자열은 몇글자인지 길이를 알 수 있음
+			// 비밀번호에 공백  여부		
+			if($('#pwd').val().length < 8 || $('#pwd').val().includes(" "))
+				{
+				  alert("비밀번호 조건을 확인해주세요."); // 팝업창 띄우기
+				  $('#pwd').focus(); // 커서를 비밀번호 입력칸에
+				  e.preventDefault(); // 다음 단계로 넘어가는 거 방지
+				  return; // 여기서 함수 끝내라
+				}
+			
 
 			if ($('#pwd').val() != $('#pwd2').val()) {
 				alert("비밀번호가 일치하지 않습니다.");
@@ -114,7 +125,8 @@
 
 							<div class="mb-3">
 
-								<label class="form-label fw-bold">비밀번호</label> <input
+								<label class="form-label fw-bold">비밀번호</label> 
+								<input
 									type="password" class="form-control form-control-lg bg-light"
 									id="pwd" name="pwd">
 
