@@ -63,8 +63,14 @@
  
  <delete id="qnaDelete" parameterType="int">
    DELETE FROM qna
-   WHERE qna_no=#{qna_no}
+   WHERE qna_no=#{qna_no} OR parent_no=#{parent_no}
  </delete>
+ 
+ <select id="QnaAnswer" resultType="QnaVO" parameterType="int">
+  SELECT qna_no, parent_no, type, subject, content, status, id, is_secret, TO_CHAR(CREATED_AT, 'yyyy-mm-dd') AS dbday, goods_no
+		FROM qna
+		WHERE qna_no = #{parent_no} 
+ </select>
 </mapper>
 
 <!-- 

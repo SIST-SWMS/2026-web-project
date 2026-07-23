@@ -118,4 +118,20 @@ public class QnaDAO {
     	session.commit();
     	session.close();
     }
+    
+    /*
+     * <select id="QnaAnswer" resultType="QnaVO" parameterType="int">
+		  SELECT qna_no, parent_no, type, subject, content, status, id, is_secret, TO_CHAR(CREATED_AT, 'yyyy-mm-dd') AS dbday, goods_no
+				FROM qna
+				WHERE qna_no = #{parent_no} 
+		 </select>
+     * 
+     */
+    public static QnaVO QnaAnswer(int parent_no)
+    {
+    	SqlSession session=ssf.openSession();
+    	QnaVO vo=session.selectOne("QnaAnswer",parent_no);
+    	session.close();
+    	return vo;
+    }
 }

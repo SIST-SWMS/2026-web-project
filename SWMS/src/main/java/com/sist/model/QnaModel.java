@@ -64,11 +64,11 @@ public class QnaModel {
     	if (id == null) {
     		return "redirect:../member/login.do";
     	}
-
     	int qna_no = Integer.parseInt(request.getParameter("qna_no"));
     	QnaVO vo = QnaDAO.qnaDetail(qna_no);
-
+        QnaVO answer=QnaDAO.QnaAnswer(vo.getParent_no());
     	request.setAttribute("vo",vo);
+    	request.setAttribute("answer", answer);
     	request.setAttribute("mypage_content","../mypage/qna_view.jsp");
     	request.setAttribute("main_jsp","../mypage/mypage.jsp");
     	return "../main/main.jsp";
