@@ -381,14 +381,13 @@
 			g.goods_name
 		FROM qna q JOIN goods g 
 		ON q.goods_no = g.goods_no
-		<where>
-			<if test="status != null and status != ''">
-				AND q.status = #{status}
-			</if>
-			<if test="id != null and id != ''">
-				AND q.id = #{id}
-			</if>
-		</where>
+		WHERE q.type != '관리자답변'
+		<if test="status != null and status != ''">
+			AND q.status = #{status}
+		</if>
+		<if test="id != null and id != ''">
+			AND q.id = #{id}
+		</if>
 		ORDER BY q.qna_no DESC
 		OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
 	</select>
@@ -397,14 +396,13 @@
 	   SELECT CEIL(COUNT(*)/10.0)
 		FROM qna q JOIN goods g 
 		ON q.goods_no = g.goods_no
-		<where>
-			<if test="status != null and status != ''">
-				AND q.status = #{status}
-			</if>
-			<if test="id != null and id != ''">
-				AND q.id = #{id}
-			</if>
-		</where>
+		WHERE q.type != '관리자답변'
+		<if test="status != null and status != ''">
+			AND q.status = #{status}
+		</if>
+		<if test="id != null and id != ''">
+			AND q.id = #{id}
+		</if>
 	</select>
 	
 	<select id="adminQnaData" resultMap="qnaMap" parameterType="int">
@@ -426,19 +424,9 @@
 	</select>
 	
 	<select id="adminQnaParentData" resultType="QnaVO" parameterType="int">
-		SELECT 
-			q.qna_no, 
-			q.parent_no, 
-			q.type, 
-			q.subject, 
-			q.content, 
-			q.status, 
-			q.id, 
-			q.is_secret,
-			TO_CHAR(q.CREATED_AT, 'yyyy-mm-dd') AS dbday, 
-			q.goods_no
+		SELECT qna_no, parent_no, type, subject, content, status, id, is_secret, TO_CHAR(CREATED_AT, 'yyyy-mm-dd') AS dbday, goods_no
 		FROM qna
-		WHERE parent_no = #{parent_no}
+		WHERE qna_no = #{parent_no}
 	</select>
 	
 	<insert id="adminQnaAnswerInsert" parameterType="QnaVO">
@@ -452,6 +440,7 @@
 	<update id="adminQnaOriginUpdate" parameterType="QnaVO">
 		UPDATE qna
 		 SET parent_no = #{parent_no}
+		   , status = #{status}
 		WHERE qna_no = #{qna_no}
 	</update>
 	
@@ -460,5 +449,10 @@
 		 SET content = #{content}
 		WHERE qna_no = #{qna_no}
 	</update>
+	
+	<delete id="adminQnaAnswerDelete" parameterType="int">
+		DELETE FROM qna
+		WHERE qna_no = #{parent_no}
+	</delete>
 	
 </mapper>
