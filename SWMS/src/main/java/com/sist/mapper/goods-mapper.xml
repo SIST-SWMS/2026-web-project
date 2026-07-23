@@ -15,7 +15,8 @@
 	<select id="goodsListData" resultType="GoodsVO" parameterType="map">
 		SELECT goods_no, goods_code, goods_name, goods_price, goods_discount, poster_url, subposter_url, b.brand_name, hit,
 				(SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count, 
-				(SELECT COUNT(*) FROM review r WHERE r.goods_no=g.goods_no) as review_count 
+				(SELECT COUNT(*) FROM review r WHERE r.goods_no=g.goods_no) as review_count, 
+				 (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no AND gl.id=#{id}) as like_check
 		FROM goods g JOIN brand b
 		ON g.brand_no=b.brand_no
 		
