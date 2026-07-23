@@ -58,7 +58,7 @@ $(function() {
 						<a href="#" class="category-btn" data-cno="5">부츠</a> 
 					</nav>
 					
-					<h5 class="fw-bold border-top border-dark border-2 pt-3 mt-4">필터</h5>
+					<h5 class="fw-bold border-top border-dark border-2 pt-3 mt-4"></h5>
 				</div>
                 
 				<div class="col-lg-10">

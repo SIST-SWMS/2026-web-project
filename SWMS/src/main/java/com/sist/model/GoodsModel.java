@@ -124,6 +124,9 @@ public class GoodsModel {
             List<QnaVO> qList = GoodsDAO.goodsQnaList(gno);
             request.setAttribute("qList", qList);
             
+            List<StockVO> stockList = GoodsDAO.goodsStockCheckList(gno);
+            request.setAttribute("stockList", stockList);
+            
             HttpSession session = request.getSession();
             String id = (String) session.getAttribute("id");
 
@@ -386,4 +389,5 @@ public class GoodsModel {
             e.printStackTrace();
         }
     }
+    
 }

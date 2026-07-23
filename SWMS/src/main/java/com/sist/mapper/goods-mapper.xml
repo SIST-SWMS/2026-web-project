@@ -154,4 +154,12 @@
 		WHERE goods_no IN (1, 69, 174, 332, 357)
 	</select>
 	
+	<!-- 상품 사이즈 재고 목록 데이터 -->
+	<select id="goodsStockCheckList" resultType="StockVO" parameterType="int">
+		SELECT goods_size, quantity
+		FROM stock
+		WHERE goods_no = #{goods_no}
+		ORDER BY goods_size ASC
+	</select>
+	
 </mapper>

@@ -198,4 +198,21 @@ public class GoodsDAO {
 		 session.close();
 		 return vo;
 	}
+	/*
+	 * 	<!-- 상품 사이즈 재고 목록 데이터 -->
+		<select id="goodsStockList" resultType="StockVO" parameterType="int">
+			SELECT goods_size, quantity
+			FROM stock
+			WHERE goods_no = #{goods_no}
+			ORDER BY goods_size ASC
+		</select>
+	 */
+		public static List<StockVO> goodsStockCheckList(int goods_no) {
+		    SqlSession session = ssf.openSession();
+		    List<StockVO> list = session.selectList("goodsStockCheckList", goods_no);
+		    session.close();
+		    return list;
+		}
+	 
+	
 }

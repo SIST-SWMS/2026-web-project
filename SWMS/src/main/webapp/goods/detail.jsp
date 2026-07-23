@@ -282,18 +282,35 @@ $(function() {
 					</div>
 
 					<p class="text-body-secondary">배송비 무료</p>
-
+					
 					<!-- 사이즈 -->
 					<div class="my-4">
-						<label class="fw-bold d-block mb-2">사이즈</label><!-- 사이즈 버튼 클릭하면  -->
-						<div class="d-flex flex-wrap gap-2" id="sizeGroup">
-							<button type="button" class="btn btn-outline-dark size-btn">230</button>
-							<button type="button" class="btn btn-outline-dark size-btn">240</button>
-							<button type="button" class="btn btn-outline-dark size-btn">250</button>
-							<button type="button" class="btn btn-outline-dark size-btn active">260</button>
-							<button type="button" class="btn btn-outline-dark size-btn">270</button>
-							<button type="button" class="btn btn-outline-dark size-btn">280</button>
-						</div>
+					    <label class="fw-bold d-block mb-2">사이즈</label>
+					    
+					    <div class="d-flex flex-wrap gap-2" id="sizeGroup">
+					        <c:set var="allSizes" value="230,235,240,245,250,255,260,265,270,275,280" />
+					        
+					        <c:forEach var="size" items="${allSizes}">
+					            
+					            <c:set var="hasStock" value="false" />
+					            <c:forEach var="svo" items="${stockList}">
+					                <c:if test="${svo.goods_size == size && svo.quantity > 0}">
+					                    <c:set var="hasStock" value="true" />
+					                </c:if>
+					            </c:forEach>
+					            <c:choose>
+					                <c:when test="${hasStock}">
+					                    <button type="button" class="btn btn-outline-dark size-btn">${size}</button>
+					                </c:when>
+					                <c:otherwise>
+					                    <button type="button" class="btn btn-outline-secondary size-btn opacity-50" disabled style="cursor: not-allowed;">
+					                        ${size}
+					                    </button>
+					                </c:otherwise>
+					            </c:choose>
+					            
+					        </c:forEach>
+					    </div>
 					</div>
 
 					<!-- 수량 -->
@@ -392,7 +409,7 @@ $(function() {
 							    <c:set var="totalCount" value="${totalCount + 1}" />
 							</c:forEach>
 							
-							<c:set var="avgScore" value="0.0" />
+							<c:set var="avgScore" value="0" />
 							<c:if test="${totalCount > 0}">
 							    <c:set var="avgScore" value="${totalHit / totalCount}" />
 							</c:if>
