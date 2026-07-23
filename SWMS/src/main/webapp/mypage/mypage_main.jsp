@@ -18,7 +18,7 @@
         더보기 ›
     </a>
 </div>
-
+ 
 
 <c:forEach var="vo" items="${list}">
 

@@ -54,7 +54,7 @@
 
 					</div>
 				</td>
-
+ 
 				<td class="fw-bold">
 					${vo.ovo.order_no}
 				</td>
