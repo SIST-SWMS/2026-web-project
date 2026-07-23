@@ -72,7 +72,8 @@
 	</select>
 	<select id="goodsFindListData" resultType="GoodsVO" parameterType="hashmap">
 		SELECT goods_no, goods_code, goods_name, goods_price, poster_url, b.brand_name, hit,
-		       (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count
+		       (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no) as like_count,
+		       (SELECT COUNT(*) FROM goods_like gl WHERE gl.goods_no=g.goods_no AND gl.id=#{id}) as like_check
 		FROM goods g JOIN brand b
 		ON g.brand_no=b.brand_no
 		<where>

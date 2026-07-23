@@ -245,10 +245,16 @@ public class GoodsModel {
         String page=request.getParameter("page");
         String cno=request.getParameter("cno"); 
         String fd=request.getParameter("fd"); // 검색어 
-        
-        if(page==null) page = "1";
-        if(cno==null) cno = "0"; 
-        
+        HttpSession session = request.getSession();
+        String id = (String)session.getAttribute("id");
+	   
+        if(page==null) 
+        	page = "1";
+        if(cno==null) 
+        	cno = "0"; 
+        if(id == null) 
+	        id = ""; 
+	     
         int curpage = Integer.parseInt(page);
         
         // DB 전송
@@ -256,6 +262,7 @@ public class GoodsModel {
         map.put("cno", Integer.parseInt(cno)); // 숫자로 형변환!
         map.put("fd", fd);
         map.put("start", (curpage*12)-12);
+        map.put("id", id);
         
         List<GoodsVO> list=GoodsDAO.goodsFindListData(map);
         int totalpage=GoodsDAO.goodsFindTotalPage(map);

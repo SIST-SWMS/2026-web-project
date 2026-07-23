@@ -21,7 +21,7 @@
 
 </style>
 
-<%-- 상세 페이지 전용 스크립트 (썸네일 전환 / 사이즈 선택 / 수량 조절) --%>
+<%-- 상세 페이지 (썸네일 전환 / 사이즈 선택 / 수량 조절) --%>
 <script>
 $(function() {
 	document.querySelectorAll('.thumb').forEach(function(t) {
@@ -186,8 +186,6 @@ $(function() {
 				<!-- Info -->
 				<div class="col-lg-6">
 					<span class="badge bg-primary mb-2">${vo.goods_discount }% 할인</span>
-					<%-- <h5 class="fw-bold">${vo.brand_name }</h5> --%>
-					<%-- small 대신 fs-6(약간 큼) 또는 fs-5(더 큼)를 사용합니다 --%>
 					<div class="text-secondary fw-semibold fs-5 mb-1">${vo.brand_name }</div>
 					<h2 class="fw-bold">${vo.goods_name }</h2>
 					<div class="d-flex align-items-center gap-2 my-2">
@@ -249,7 +247,6 @@ $(function() {
 					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-solid"></use></svg>
 					            </span>
 					        </c:when>
-					        <%-- 리뷰가 0개일 때 (기본 빈 별 5개 노출) --%>
 					        <c:otherwise>
 					            <span class="d-inline-flex"> 
 					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
@@ -340,7 +337,7 @@ $(function() {
    							장바구니 담기 
    						</button>
    							
-						<!--바로구매 버튼으로 수정 -->
+						<!--바로구매 -->
 						<button type="button" class="btn btn-dark btn-lg px-4" id="buyBtn" data-no="${svo.stock_no}">
     						바로 구매
 						</button> 
@@ -426,8 +423,6 @@ $(function() {
 							        <fmt:formatNumber value="${avgScore}" pattern="0.0" />
 							    </div>
 
-								
-								<%-- <c:forEach var="rvo" items="${rList}"> --%>
 								<c:choose>
 					       		<c:when test="${0 < avgScore && avgScore <= 1}">
 									<span class="d-inline-flex"> <svg width="20" height="20"
@@ -500,7 +495,6 @@ $(function() {
 									</span>
 								</c:when>
 					      	</c:choose>
-							<%-- </c:forEach> --%>
 								
 								<!-- 전체 리뷰 개수 -->
 								<p class="text-body-secondary mb-0 mt-2">전체 리뷰 ${vo.review_count }개</p>
@@ -668,7 +662,6 @@ $(function() {
 					                            
 					                            <%-- 공개글인 경우 --%>
 					                            <c:otherwise>
-					                                <%-- <a href="../qna/detail.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none"> --%>
 					                                <a href="../mypage/qnaList.do?qna_no=${qvo.qna_no}" class="text-dark text-decoration-none">
 					                                    ${qvo.subject}
 					                                </a>

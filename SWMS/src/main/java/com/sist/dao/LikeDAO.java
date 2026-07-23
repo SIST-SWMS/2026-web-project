@@ -62,20 +62,5 @@ public class LikeDAO {
 		session.close();
 		return count;
 	}
-	/*
-		<update id="goodsLikeUpdate">
-			UPDATE goods_like SET
-			likecount=(SELECT COUNT(*)
-						FROM goods_like
-						WHERE goods_no=#{goods_no})
-			WHERE no=#{goods_no}
-		</update>
-	 */
-	
-	/*
-	 * public static void goodsLikeUpdate(int goods_no) { SqlSession
-	 * session=ssf.openSession(true); session.update("goodsLikeUpdate", goods_no);
-	 * session.close(); }
-	 */
 	 
 }
