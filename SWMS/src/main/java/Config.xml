@@ -50,5 +50,6 @@
 	<mapper resource="com/sist/mapper/review-mapper.xml"/>
 	<mapper resource="com/sist/mapper/qna-mapper.xml"/>
 	<mapper resource="com/sist/mapper/goodslike-mapper.xml"/>
+	<mapper resource="com/sist/mapper/mypage-mapper.xml"/>
   </mappers>
 </configuration>
