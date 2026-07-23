@@ -72,9 +72,9 @@
 								<div class="text-body-secondary small mt-1">
 									{{vo.sizes}}</div>
 								<div class="input-group qty-box mt-2" style="max-width: 130px;">
-									<button class="btn btn-outline-secondary" type="button">−</button>
+									<button class="btn btn-outline-secondary" type="button" @click="updateQuan(vo, -1)">−</button>
 									<input type="text" class="form-control" :value="vo.quantity" readonly>
-									<button class="btn btn-outline-secondary" type="button">+</button>
+									<button class="btn btn-outline-secondary" type="button" @click="updateQuan(vo, 1)">+</button>
 								</div>
 	
 								<div class="mt-2">
@@ -99,7 +99,7 @@
 						</div>
 					</div>
 					
-					<!-- 로그인하고 들어오라는 페이지 -->
+					<!-- 로그인을 해야 장바구니 이용 가능 안내 페이지 -->
 					<div v-else-if="id==null">
 						<div class="py-5 border-bottom text-center">
 							<i class="fw-bold fs-1 fa-solid fa-id-card"></i>
@@ -305,19 +305,6 @@
 						selected_quantity.push(this.list[i].quantity)
 					}
 				}
-				//console.log(selected_cart_no)
-				//console.log(selected_stock_no)
-				//console.log(selected_quantity)
-				
-				/* axios.get('../order/before_order.do',{
-					params:{
-						cart_nos:selected_cart_no.join(),
-						stock_nos:selected_stock_no.join(),
-						quantities:selected_quantity.join()
-					}
-				}).then(response=>{
-					location.href="../order/order.do"
-				}) */
 				
 				let form = document.createElement('form')
 				form.method = 'POST'
@@ -343,6 +330,33 @@
 				
 				document.body.appendChild(form)
 				form.submit()
+			},
+			updateQuan(vo, num) {
+				// 카트에서 갯수 수정
+				let newQuan = vo.quantity + num
+				let cart_no = vo.cart_no
+				
+				if(newQuan < 1) {
+					return
+				}
+				
+				console.log(vo.quantity)
+				console.log(vo.cart_no)
+				console.log(newQuan)
+				console.log(cart_no)
+				
+				$.ajax({
+					type:'get',
+					url:'../order/cartUpdateQuantity.do',
+					data:{
+						newQuan:this.newQuan,
+						cart_no:this.cart_no
+					},
+					success:function(result)
+					{
+						//location.href="../cart/cart.do"
+					}
+				})
 			}
 		},
 		computed:{
@@ -407,11 +421,7 @@
     			}
     			return true
     		}
-		},
-		watch:{
-			//
 		}
-		
 	}).mount('#cartApp')
 	</script>
 </body>

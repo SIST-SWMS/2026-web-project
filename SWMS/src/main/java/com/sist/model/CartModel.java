@@ -38,10 +38,10 @@ public class CartModel {
 			priceStr = list.get(i).getGvo().getGoods_price().replaceAll("[^0-9]", "");
 			priceNum = Integer.parseInt(priceStr);					
 			list.get(i).getGvo().setPrice(priceNum);
-			//System.out.println(priceNum);
 			
 			// 할인율 계산
 			int discount = list.get(i).getGvo().getGoods_discount();
+			
 			if(discount==0) // 할인 하지 않는 품목
 			{
 				list.get(i).getGvo().setAfter_iPrice(priceNum);
@@ -58,9 +58,7 @@ public class CartModel {
 				DecimalFormat df = new DecimalFormat("#,###");
 				String afterPrice_str = df.format(afterPrice);
 				list.get(i).getGvo().setAfter_sPrice(afterPrice_str);
-				
 			}
-			
 		}
 		
 		try 
@@ -94,17 +92,40 @@ public class CartModel {
 	{
 		String deletes = request.getParameter("deletes");	// 하나의 문자열로 받은 goods_no
 		String[] arr = deletes.split(",");
-		//List<String> nList = new ArrayList<String>();
+		
 		for(int i = 0; i < arr.length; i++)
 		{
-			//nList.add(arr[i]);	// split 한 goods_no 들을 배열에 저장
 			CartDAO.cartDeleteData(Integer.parseInt(arr[i]));
 			System.out.println(arr[i]);
 		}
-		//System.out.println(nList);
-
-		
-		//CartDAO.cartDeleteData(Integer.parseInt(goods_no));
 		return "redirect:../cart/cart.do";
+	}
+	
+	@RequestMapping("order/cartUpdateQuantity.do")
+	public void cartUpdateQuantity(HttpServletRequest request, HttpServletResponse response)
+	{
+		HttpSession session = request.getSession();
+		String id = session.getAttribute("id").toString();
+		String newQuan = request.getParameter("newQuan");
+		String cart_no = request.getParameter("cart_no");
+		
+		System.out.println("갯수 변경시 넘어가는 데이터 확인용 : id / newQuan / cart_no");
+		System.out.println(id);
+		System.out.println(newQuan);
+		System.out.println(cart_no);
+		CartVO vo = new CartVO();
+		vo.setId(id);
+		vo.setQuantity(Integer.parseInt(newQuan));
+		vo.setCart_no(Integer.parseInt(cart_no));
+		
+		int count = CartDAO.cartUpdqteQuantity(vo);
+		
+		try
+		  {
+			  response.setContentType("text/html;charset=UTF-8");
+			  PrintWriter out=response.getWriter();
+			  out.write(count);
+			  System.out.println("성공/실패: "+ count);
+		  }catch(Exception ex) {}
 	}
 }

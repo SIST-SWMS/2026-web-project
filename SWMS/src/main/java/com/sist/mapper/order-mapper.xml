@@ -72,5 +72,5 @@
       JOIN orders o ON od.order_no = o.order_no JOIN goods g
       ON g.goods_no = od.goods_no
       WHERE id = #{id}
-   </select>
+   </select> 
 </mapper>
