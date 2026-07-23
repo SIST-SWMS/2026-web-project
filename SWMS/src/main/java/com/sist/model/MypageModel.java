@@ -89,14 +89,19 @@ public class MypageModel {
 	}
 
 	// 취소/교환/반품
-	@RequestMapping("mypage/claimList.do")
+	@RequestMapping("mypage/claimList.do") 
 	public String claimList(HttpServletRequest request, HttpServletResponse response) {
 
-		request.setAttribute("mypage_content", "../mypage/claim_list.jsp");
+	    HttpSession session = request.getSession();
+	    String id = (String) session.getAttribute("id");
 
-		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
+	    List<OrderDetailVO> list = MyPageDAO.claimListData(id);
 
-		return "../main/main.jsp";
+	    request.setAttribute("list", list);
+	    request.setAttribute("mypage_content", "../mypage/claim_list.jsp");
+	    request.setAttribute("main_jsp", "../mypage/mypage.jsp");
+
+	    return "../main/main.jsp";
 	}
 
 	// 리뷰 목록
