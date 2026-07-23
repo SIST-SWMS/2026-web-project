@@ -13,7 +13,7 @@ $(function(){
 	$('#cancleBtn').on('click',function(){
 		let no = $(this).attr("data-no")
 		let order_no = $(this).attr("data-orderno")
-		
+		 
 		$.ajax({
 			type:'post',
 			url:'../mypage/order_cancel.do',

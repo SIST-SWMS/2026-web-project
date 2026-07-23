@@ -40,7 +40,6 @@ public class MyPageDAO {
 	    return list;
 	}
 
-
 	public static void orderStatusUpdate(OrderDetailVO vo) {
 		SqlSession session = ssf.openSession(true);
 		session.update("orderStatusUpdate", vo);
