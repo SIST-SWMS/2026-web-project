@@ -759,6 +759,7 @@ public class AdminModel {
 		QnaVO update = new QnaVO();
 		update.setQna_no(Integer.parseInt(qna_no));
 		update.setParent_no(new_no);
+		update.setStatus("답변완료");
 		
 		AdminDAO.adminQnaOriginUpdate(update);
 		
@@ -775,10 +776,26 @@ public class AdminModel {
 		QnaVO vo = new QnaVO();
 		vo.setQna_no(Integer.parseInt(parent_no));
 		vo.setContent(answer);
-		
 		AdminDAO.adminQnaAnswerUpdate(vo);
 		
 		return "redirect:../admin/qna_view.do?no="+qna_no;
+	}
+	
+	// 답변 삭제
+	@RequestMapping("admin/qna_answer_delete.do")
+	public void qna_answer_delete(HttpServletRequest request, HttpServletResponse response) {
+
+		String parent_no = request.getParameter("parent_no");
+		String origin_no = request.getParameter("origin_no");
+		
+		AdminDAO.adminQnaAnswerDelete(Integer.parseInt(parent_no));
+		
+		QnaVO vo = new QnaVO();
+		vo.setQna_no(Integer.parseInt(origin_no));
+		vo.setParent_no(0);
+		vo.setStatus("답변대기");
+		AdminDAO.adminQnaOriginUpdate(vo);
+		
 	}
 	
 	

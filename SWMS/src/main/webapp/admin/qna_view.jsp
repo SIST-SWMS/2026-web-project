@@ -5,8 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
-<%-- QNA 상세 조회 및 답변 관리 --%>
 <style type="text/css">
 .info-row {
 	display: flex;
@@ -25,23 +23,42 @@
 	font-weight: 500;
 }
 </style>
+<script type="text/javascript" src="http://code.jquery.com/jquery-4.0.0.min.js"></script>
 <script type="text/javascript">
-	// [수정] 클릭 → textarea 표시
-	function showEdit() {
-		document.getElementById("answerEditForm").style.display = "block";
-		document.getElementById("answerBtns").style.display = "none";
-	}
-	// 수정 취소
-	function cancelEdit() {
-		document.getElementById("answerEditForm").style.display = "none";
-		document.getElementById("answerBtns").style.display = "flex";
-	}
-	// 답변만 삭제 (문의는 유지)
-	function deleteAnswer(id) {
-		if (confirm("답변을 삭제하시겠습니까? (문의글은 유지됩니다)")) {
-			location.href = "qna_answer_delete.do?qnaId=" + id;
+$(function(){
+	$('#updateBtn').on('click',function(){
+		$('#answerEditForm').show();
+		$('#answerBtns').hide()
+	})
+	
+	$('#cancelBtn').on('click',function(){
+		$('#answerEditForm').hide()
+		$('#answerBtns').show()
+	})
+	
+	$('#deleteBtn').on('click',function(){
+		let parent_no = $(this).attr("data-no")
+		let origin_no = $(this).attr("data-origin")
+
+		if (!confirm("답변을 삭제하시겠습니까? (문의글은 유지됩니다)")) {
+			return
 		}
-	}
+		
+		$.ajax({
+			type:'post',
+			url:'../admin/qna_answer_delete.do',
+			data:{
+				"parent_no":parent_no,
+				"origin_no":origin_no
+			},
+			success:function(result)
+			{
+				location.href="../admin/qna_view.do?no="+origin_no
+			}
+		})
+	})
+	
+})
 </script>
 </head>
 <body>
@@ -109,12 +126,14 @@
 					<input type="hidden" name="parent_no" value="${pvo.qna_no}">
 					<textarea name="answer" class="form-control mb-3" rows="5">${pvo.content}</textarea>
 					<button type="submit" class="btn btn-dark px-4">저장</button>
-					<button type="button" class="btn btn-outline-secondary px-4" onclick="cancelEdit()">취소</button>
+					<button type="button" class="btn btn-outline-secondary px-4" id="cancelBtn">취소</button>
 				</form>
-
-				<div id="answerBtns" class="d-flex gap-2">
-					<button type="button" class="btn btn-outline-dark px-4" onclick="showEdit()">수정</button>
-					<button type="button" class="btn btn-outline-danger px-4" onclick="deleteAnswer('${pvo.qna_no}')">삭제</button>
+				
+				<div id="answerBtns">
+					<div class="d-flex gap-2">
+						<button type="button" class="btn btn-outline-dark px-4" id="updateBtn">수정</button>
+						<button type="button" class="btn btn-outline-danger px-4" id="deleteBtn" data-no="${pvo.qna_no}" data-origin="${vo.qna_no }">삭제</button>
+					</div>
 				</div>
 			</c:otherwise>
 

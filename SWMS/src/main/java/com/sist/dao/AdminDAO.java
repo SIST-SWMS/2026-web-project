@@ -362,4 +362,11 @@ public class AdminDAO {
 		session.commit();
 		session.close();
 	}
+
+	public static void adminQnaAnswerDelete(int parent_no) {
+		SqlSession session = ssf.openSession();
+		session.update("adminQnaAnswerDelete", parent_no);
+		session.commit();
+		session.close();
+	}
 }

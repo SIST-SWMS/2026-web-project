@@ -91,7 +91,8 @@
 					<td>{{vo.id}}</td>
 					<td class="text-body-secondary">{{vo.dbday}}</td>
 					<td>
-						<span class="badge bg-danger">{{vo.status}}</span>
+						<span v-if="vo.status=='답변대기'" class="badge bg-danger">{{vo.status}}</span>
+						<span v-if="vo.status=='답변완료'" class="badge bg-success">{{vo.status}}</span>
 					</td>
 				</tr>
 			</tbody>
