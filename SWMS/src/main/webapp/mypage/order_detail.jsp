@@ -150,28 +150,28 @@
 
 					<c:choose>
 
-						<c:when test="${order.ovo.delivery_status=='상품준비중'}">
+						<c:when test="${order.status=='상품준비중'}">
 							<span class="badge"
 								style="background:#fff3cd;color:#664d03;border:1px solid #ffecb5;font-size:12px;">
 								상품준비중
 							</span>
 						</c:when>
 
-						<c:when test="${order.ovo.delivery_status=='배송중'}">
+						<c:when test="${order.status=='배송중'}">
 							<span class="badge"
 								style="background:#cfe2ff;color:#084298;border:1px solid #b6d4fe;font-size:12px;">
 								배송중
 							</span>
 						</c:when>
 
-						<c:when test="${order.ovo.delivery_status=='배송완료'}">
+						<c:when test="${order.status=='배송완료'}">
 							<span class="badge"
 								style="background:#d1e7dd;color:#0f5132;border:1px solid #badbcc;font-size:12px;">
 								배송완료
 							</span>
 						</c:when>
 
-						<c:when test="${order.ovo.delivery_status=='주문취소'}">
+						<c:when test="${order.status=='주문취소'}">
 							<span class="badge"
 								style="background:#f8d7da;color:#842029;border:1px solid #f5c2c7;font-size:12px;">
 								주문취소
@@ -180,7 +180,7 @@
 
 						<c:otherwise>
 							<span class="badge bg-secondary">
-								${order.ovo.delivery_status}
+								${order.status}
 							</span>
 						</c:otherwise>
 

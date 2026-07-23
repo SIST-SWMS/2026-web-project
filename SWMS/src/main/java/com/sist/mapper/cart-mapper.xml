@@ -26,7 +26,7 @@
 	</delete>
 	
 	<update id="cartUpdateQuantity" parameterType="CartVO">
-		UPDATE cart SET quantity = quantity + #{newQuan}
-		WHERE id=#{id} and cart_no=#{cart_id}
+		UPDATE cart SET quantity = #{quantity}
+		WHERE id=#{id} and cart_no=#{cart_no}
 	</update>
 </mapper>
