@@ -59,7 +59,7 @@
 				    <del class="text-body-secondary ms-1" style="font-size: 0.85em;"><fmt:formatNumber value="${purePrice}" pattern="#,###" />원</del>
 				    
 				    <%-- 할인율 --%>
-				    <span class="text-danger ms-1 fw-bold">-${vo.goods_discount}%</span>
+				    <span class="text-danger ms-1 fw-bold">${vo.goods_discount}%</span>
 				</div>
             <div class="product-meta">
                 <svg width="12" height="12" viewBox="0 0 24 24">

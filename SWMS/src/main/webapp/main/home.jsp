@@ -135,7 +135,7 @@
 							<div class="col">
 								<div class="product-item">
 									<c:if test="${vo.goods_discount > 0}">
-										<span class="badge bg-success position-absolute m-3">-${vo.goods_discount}%</span>
+										<span class="badge bg-primary position-absolute m-3">${vo.goods_discount}%</span>
 									</c:if>
 
 									<figure>
@@ -168,7 +168,7 @@
 											</del>
 
 											<%-- 할인율 --%>
-											<span class="text-danger ms-1 fw-bold">-${vo.goods_discount}%</span>
+											<span class="text-danger ms-1 fw-bold">${vo.goods_discount}%</span>
 										</p>
 
 										<span class="d-flex">

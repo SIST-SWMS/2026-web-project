@@ -185,7 +185,7 @@ $(function() {
 
 				<!-- Info -->
 				<div class="col-lg-6">
-					<span class="badge bg-success mb-2">${vo.goods_discount }% 할인</span>
+					<span class="badge bg-primary mb-2">${vo.goods_discount }% 할인</span>
 					<%-- <h5 class="fw-bold">${vo.brand_name }</h5> --%>
 					<%-- small 대신 fs-6(약간 큼) 또는 fs-5(더 큼)를 사용합니다 --%>
 					<div class="text-secondary fw-semibold fs-5 mb-1">${vo.brand_name }</div>
@@ -283,7 +283,7 @@ $(function() {
 					    </del>
 					    
 					    <!-- 할인률 -->
-					    <span class="text-success ms-2 fw-bold">- ${vo.goods_discount} %</span>
+					    <span class="text-danger ms-2 fw-bold"> ${vo.goods_discount} %</span>
 					</div>
 
 					<p class="text-body-secondary">배송비 무료</p>
@@ -294,7 +294,6 @@ $(function() {
 					    
 					    <div class="d-flex flex-wrap gap-2" id="sizeGroup">
 					        <c:set var="allSizes" value="230,240,250,260,270,280" />
-					        
 					        <c:forEach var="size" items="${allSizes}">
 					            
 					            <c:set var="hasStock" value="false" />
