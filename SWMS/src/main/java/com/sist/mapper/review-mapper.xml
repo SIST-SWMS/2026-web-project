@@ -53,7 +53,8 @@
     UPDATE review
     SET subject = #{subject},
         content = #{content},
-        hit = #{hit}
+        hit = #{hit},
+        image = #{image}
     WHERE review_no = #{review_no}
 </update>
 
