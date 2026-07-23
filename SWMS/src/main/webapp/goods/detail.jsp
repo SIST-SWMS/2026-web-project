@@ -400,7 +400,7 @@ $(function() {
 
 								
 								<c:forEach var="rvo" items="${rList}">
-									<c:choose>
+								<c:choose>
 					       		<c:when test="${0 < avgScore && avgScore <= 1}">
 									<span class="d-inline-flex"> <svg width="20" height="20"
 										class="text-warning">
