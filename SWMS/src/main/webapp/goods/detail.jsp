@@ -172,9 +172,14 @@ $(function() {
 				<!-- Gallery -->
 				<div class="col-lg-6">
 					<div class="border rounded-4 p-3 bg-light text-center mb-3">
-						<img id="mainImage" src="${vo.poster_url }"
-							alt="상품 이미지" class="img-fluid"
-							style="max-height: 460px; object-fit: contain;">
+						<c:choose>
+							<c:when test="${fn:startsWith(vo.poster_url, 'http')}">
+								<img id="mainImage" src="${vo.poster_url }" alt="상품 이미지" class="img-fluid" style="max-height: 460px; object-fit: contain;">
+							</c:when>
+							<c:otherwise>
+								<img id="mainImage" src="/SWMS/uploads/${vo.poster_url}" alt="상품 이미지" class="img-fluid" style="max-height: 460px; object-fit: contain;">
+							</c:otherwise>
+						</c:choose>
 					</div> 
 				</div>
 
@@ -353,7 +358,14 @@ $(function() {
 			<div class="row mt-5">
 				<div class="col-12 text-center">
 					<h5 class="fw-bold mb-4 text-start">상품 상세 이미지</h5>
-					<img src="${vo.subposter_url}" class="img-fluid w-100" alt="상품 상세설명">
+					<c:choose>
+						<c:when test="${fn:startsWith(vo.subposter_url, 'http')}">
+							<img src="${vo.subposter_url}" class="img-fluid w-100" alt="상품 상세설명">
+						</c:when>
+						<c:otherwise>
+							<img src="/SWMS/uploads/${vo.subposter_url}" class="img-fluid w-100" alt="상품 상세설명">
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 
