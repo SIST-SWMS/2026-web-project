@@ -24,4 +24,9 @@
 	<delete id="cartDeleteData" parameterType="int">
 		DELETE FROM cart WHERE cart_no=#{cart_no}
 	</delete>
+	
+	<update id="cartUpdateQuantity" parameterType="CartVO">
+		UPDATE cart SET quantity = quantity + #{newQuan}
+		WHERE id=#{id} and cart_no=#{cart_id}
+	</update>
 </mapper>

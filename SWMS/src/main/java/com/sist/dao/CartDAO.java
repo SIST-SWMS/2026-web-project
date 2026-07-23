@@ -54,5 +54,19 @@ public class CartDAO {
 		session.delete("cartDeleteData", goods_no);
 		session.close();
 	}
+	
+	/*
+	 * 	<update id="cartUpdateQuantity" parameterType="CartVO">
+			UPDATE cart SET quantity = quantity + #{newQuan}
+			WHERE id=#{id} and cart_no=#{cart_id}
+		</update>
+	 */
+	public static int cartUpdqteQuantity(CartVO vo)
+	{
+		SqlSession session = ssf.openSession(true);
+		int count = session.update("cartUpdateQuantity", vo);
+		session.close();
+		return count;
+	}
 
 }
