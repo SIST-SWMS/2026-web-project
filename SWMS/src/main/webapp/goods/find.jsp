@@ -89,7 +89,7 @@
             <div class="product-card">
                 <a :href="'../goods/detail.do?goods_no='+vo.goods_no">
                     <div class="thumb-box">
-                        <img :src="vo.poster_url" :alt="vo.goods_name">
+                        <img :src="imageUrl(vo.poster_url)" :alt="vo.goods_name">
                     </div>
                 </a>
 
@@ -195,6 +195,12 @@ Vue.createApp({
                 arr.push(i);
             }
             return arr;
+        },
+        imageUrl(url) {
+            if (!url){
+            	return '/SWMS/images/no-image.png'
+            }
+            return url.startsWith('http') ? url : '/SWMS/uploads/' + url
         }
     }
 }).mount('#findApp');

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,7 +23,6 @@
 	flex: 1;
 	font-weight: 500;
 }
-/* 재고 0 행 강조 */
 .soldout-row {
 	background: #fff0f0;
 }
@@ -34,12 +34,17 @@
 	<div class="border rounded-4 p-4 mb-5">
 		<div class="row g-4">
 
-			<!-- 상품 이미지 -->
 			<div class="col-md-3">
-				<img src="${vo.poster_url}" class="w-100 rounded-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
+				<c:choose>
+					<c:when test="${fn:startsWith(vo.poster_url, 'http')}">
+						<img src="${vo.poster_url}" class="w-100 rounded-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
+					</c:when>
+					<c:otherwise>
+						<img src="/SWMS/uploads/${vo.poster_url}" class="w-100 rounded-3" style="aspect-ratio: 1/1; object-fit: cover; background: #f5f5f5;" alt="상품 이미지">
+					</c:otherwise>
+				</c:choose>
 			</div>
 
-			<!-- 기본 정보 -->
 			<div class="col-md-9">
 				<div class="info-row">
 					<div class="label">상품명</div>

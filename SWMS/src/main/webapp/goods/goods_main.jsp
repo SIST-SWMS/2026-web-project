@@ -174,7 +174,14 @@ $(function() {
             <div class="product-card">
                 <a href="../goods/detail.do?goods_no=${vo.goods_no}">
                     <div class="thumb-box">
-                        <img src="${vo.poster_url}" alt="${vo.goods_name}">
+                    	<c:choose>
+							<c:when test="${fn:startsWith(vo.poster_url, 'http')}">
+								<img src="${vo.poster_url }" alt="${vo.goods_name}">
+							</c:when>
+							<c:otherwise>
+								<img src="/SWMS/uploads/${vo.poster_url}" alt="${vo.goods_name}">
+							</c:otherwise>
+						</c:choose>
                     </div>
                 </a>
                 <button type="button" class="like-btn" style="border:none; background:none;">
