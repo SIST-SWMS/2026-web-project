@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,13 +42,14 @@
 	</div>
 
 	<%-- 리뷰 사진 (있을 때만) --%>
-	<c:if test="${not empty review.image}">
-		<div class="mb-3">
-			<img src="#   
-				style="width: 160px; height: 160px; object-fit: cover; border-radius: 8px;" 
-				alt="리뷰 사진">    <!--  ../resources/images/${review.image} -->
-		</div>
-	</c:if>
+						<c:choose>
+							<c:when test="${fn:startsWith(vo.image, 'http')}">
+								<img id="reviewImage" src="${vo.image }" alt="상품 이미지" class="img-fluid" style="max-height: 460px; object-fit: contain;">
+							</c:when>
+							<c:otherwise>
+								<img id="reviewImage" src="/SWMS/uploads/${vo.image}" alt="상품 이미지" class="img-fluid" style="max-height: 460px; object-fit: contain;">
+							</c:otherwise>
+						</c:choose>
 
 	<%-- 제목 + 내용 --%>
 	<%-- <span class="text-body-secondary">작성자 : ${vo.nickname}</span> --%>	
