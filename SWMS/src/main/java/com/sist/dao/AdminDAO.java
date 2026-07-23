@@ -369,4 +369,11 @@ public class AdminDAO {
 		session.commit();
 		session.close();
 	}
+
+	public static List<DashVO> bestList() {
+		SqlSession session = ssf.openSession();
+		List<DashVO> list = session.selectList("bestList");
+		session.close();
+		return list;
+	}
 }

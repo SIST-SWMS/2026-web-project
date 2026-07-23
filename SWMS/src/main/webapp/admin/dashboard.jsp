@@ -12,31 +12,32 @@
 </head>
 <body>
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">대시보드</h4>
+	
 
-	<div class="row g-3 mb-5">
+	<div class="row g-3 mb-3">
 
-		<div class="col-6 col-lg-3">
+		<div class="col-3">
 			<div class="border rounded-4 p-4 h-100">
 				<div class="text-body-secondary small mb-2">오늘 주문건수</div>
 				<div class="fs-3 fw-bold">${order}건</div>
 			</div>
 		</div>
 
-		<div class="col-6 col-lg-3">
+		<div class="col-3">
 			<div class="border rounded-4 p-4 h-100">
 				<div class="text-body-secondary small mb-2">이번 달 매출액</div>
 				<div class="fs-3 fw-bold"><fmt:formatNumber value="${price}" type="number"/>원</div>
 			</div>
 		</div>
 
-		<div class="col-6 col-lg-3">
+		<div class="col-3">
 			<div class="border rounded-4 p-4 h-100">
 				<div class="text-body-secondary small mb-2">재고 부족 상품 (10개 이하)</div>
 				<div class="fs-3 fw-bold text-warning">${stock}개</div>
 			</div>
 		</div>
 
-		<div class="col-6 col-lg-3">
+		<div class="col-3">
 			<div class="border rounded-4 p-4 h-100">
 				<div class="text-body-secondary small mb-2">미처리 출고 건수</div>
 				<div class="fs-3 fw-bold text-danger">${delivery}건</div>
@@ -45,12 +46,24 @@
 
 	</div>
 
-	<h5 class="fw-bold border-bottom pb-2 mb-3">최근 7일 판매액 추이</h5>
+	<div class="row g-3 mb-5">
 
-	<div class="border rounded-4 p-4 mb-5">
-		<canvas id="salesChart" height="80"></canvas>
+		<div class="col-lg-6">
+			<div class="border rounded-4 p-4 h-100">
+				<div class="fw-bold mb-3">많이 팔린 상품 TOP 5</div>
+				<canvas id="bestChart" height="180"></canvas>
+			</div>
+		</div>
+
+		<div class="col-lg-6">
+			<div class="border rounded-4 p-4 h-100">
+				<div class="fw-bold mb-3">판매액 추이</div>
+				<canvas id="salesChart" height="180"></canvas>
+			</div>
+		</div>
+
 	</div>
-	
+
 	<div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
 		<h5 class="fw-bold mb-0">최근 주문</h5>
 		<a href="../admin/stockout.do" class="text-body-secondary text-decoration-none small">더보기 ›</a>
@@ -139,6 +152,42 @@
 	</table>
 	
 	<script>
+		/* 신발 차트 */
+		let names = []
+		let counts = []
+	
+		<c:forEach var="b" items="${bestList}">
+			names.push('${b.goods_name}')
+			counts.push(${b.quantity})
+		</c:forEach>
+	
+		new Chart(document.getElementById('bestChart'), {
+			type : 'bar',
+			data : {
+				labels : names,
+				datasets : [ {
+					label : '판매수량',
+					data : counts,
+					backgroundColor : '#0d6efd',
+					borderRadius : 4
+				} ]
+			},
+			options : {
+				indexAxis : 'y',        
+				plugins : {
+					legend : {
+						display : false
+					}
+				},
+				scales : {
+					x : {
+						beginAtZero : true
+					}
+				}
+			}
+		})
+		
+		/* 매출액 차트 */
 		let labels = []
 		let data = []
 	

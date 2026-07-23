@@ -58,6 +58,15 @@
 		 where status = '결제완료'
 	</select>
 	
+	<select id="bestList" resultType="DashVO">
+		 SELECT g.goods_name, sum(o.quantity) as quantity
+		 FROM order_detail o, goods g
+		  WHERE o.goods_no = g.goods_no
+		  GROUP BY g.goods_name
+		 ORDER BY quantity DESC
+		 FETCH FIRST 5 ROWS ONLY
+	</select>
+	
 	<select id="adminGoodsList" resultType="GoodsVO" parameterType="map">
 		SELECT goods_no, goods_discount, goods_code, goods_name, goods_price, poster_url, subposter_url, b.brand_name, c.category_name
 		 FROM goods g, brand b, category c

@@ -32,9 +32,13 @@ public class AdminModel {
 	@RequestMapping("admin/admin.do")
 	public String admin(HttpServletRequest request, HttpServletResponse response) {
 
-		// 대시보드 차트
+		// 판매액 차트
 		List<DashVO> salesList = AdminDAO.salesList();
 		request.setAttribute("salesList", salesList);
+		
+		// 신발 차트
+		List<DashVO> bestList = AdminDAO.bestList();
+		request.setAttribute("bestList", bestList);
 
 		// 오늘 주문건수
 		int order = AdminDAO.dashCountOrder();

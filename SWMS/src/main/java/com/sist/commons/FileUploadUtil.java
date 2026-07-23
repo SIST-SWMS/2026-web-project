@@ -14,8 +14,6 @@ import jakarta.servlet.http.Part;
  */
 public class FileUploadUtil {
 
-	private static final String UPLOAD_DIR = "uploads";
-
 	public static String upload(String uploadPath, Part part) throws Exception {
 		File dir = new File(uploadPath);
 		if (!dir.exists()) {

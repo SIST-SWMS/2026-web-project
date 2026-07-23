@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class DashVO {
-	private String sale_date;
-	private int total;
+	private String sale_date, goods_name;
+	private int total, quantity;
 }
