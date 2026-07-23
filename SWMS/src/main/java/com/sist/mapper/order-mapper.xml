@@ -73,4 +73,24 @@
       ON g.goods_no = od.goods_no
       WHERE id = #{id}
    </select> 
+   
+   	<!-- 취소/교환/반품 -->
+	<select id="claimListData" resultMap="orderdetailMap1"
+		parameterType="string">
+
+		SELECT TO_CHAR(o.order_date,'yyyy-mm-dd') AS dbday,
+		o.order_no,
+		o.total_price,
+		od.status,
+		g.goods_name,
+		g.poster_url
+		FROM order_detail od
+		JOIN orders o ON od.order_no = o.order_no
+		JOIN goods g ON od.goods_no = g.goods_no
+		WHERE o.id = #{id}
+		AND od.status IN ('주문취소','교환접수','교환완료','반품완료','환불완료')
+		ORDER BY o.order_date DESC
+
+	</select>
+   
 </mapper>
