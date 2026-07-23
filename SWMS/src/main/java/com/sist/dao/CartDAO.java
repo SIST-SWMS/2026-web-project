@@ -66,5 +66,33 @@ public class CartDAO {
 		session.update("cartUpdateQuantity", vo);
 		session.close();
 	}
+	
+	/*
+	 * 	<select id="cartGetStockData" parameterType="hashmap" resultType="CartVO">
+			SELECT no as stock_no,goods_size as sizes,quantity
+			FROM stock
+			WHERE goods_no=#{goods_no} and goods_size=#{sizes}
+		</select>
+	 */
+	public static CartVO cartGetStockData(Map map)
+	{
+		SqlSession session = ssf.openSession();
+		CartVO vo = session.selectOne("cartGetStockData", map);
+		session.close();
+		return vo;
+	}
+	
+	/*
+	 * 	<update id="cartUpdateSizes" parameterType="CartVO">
+			UPDATE cart SET sizes=#{sizes} and stock_no=#{stock_no}
+			WHERE id=#{id} and cart_no=#{cart_no}
+		</update>
+	 */
+	public static void cartUpdateSizes(CartVO vo)
+	{
+		SqlSession session = ssf.openSession(true);
+		session.update("cartUpdateSizes", vo);
+		session.close();
+	}
 
 }

@@ -116,4 +116,49 @@ public class CartModel {
 		
 		CartDAO.cartUpdqteQuantity(vo);
 	}
+	
+	@RequestMapping("order/cartUpdateSizes.do")
+	public void cartUpdateSizes(HttpServletRequest request, HttpServletResponse response)
+	{
+		HttpSession session = request.getSession();
+		String id = session.getAttribute("id").toString();
+		String cart_no = request.getParameter("cart_no");
+		String newSizes = request.getParameter("newSizes");
+		String goods_no = request.getParameter("goods_no");
+		
+		System.out.println("goods_no: "+ goods_no);
+		
+		Map map = new HashMap();
+		map.put("goods_no", goods_no);
+		map.put("goods_size", newSizes);
+		CartVO vo = CartDAO.cartGetStockData(map);
+		
+		String stock = "0";
+		try {
+			response.setContentType("text/plain;charset=UTF-8");
+			response.getWriter().write(stock);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		if(vo.getQuantity() < 1)
+		{
+			System.out.println("재고 부족");
+			return;
+		}
+		
+		try {
+			stock = String.valueOf(vo.getQuantity());
+			
+			response.setContentType("text/plain;charset=UTF-8");
+			response.getWriter().write(stock);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		vo.setId(id);
+		vo.setCart_no(Integer.parseInt(cart_no));
+		
+		CartDAO.cartUpdateSizes(vo);
+	}
 }

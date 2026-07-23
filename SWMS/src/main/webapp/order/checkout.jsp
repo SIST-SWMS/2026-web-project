@@ -54,7 +54,6 @@ $(function(){
 		let quantity_list = []
 		let goods_price_list = []
 		
-		console.log('list_size: '+list_size)
 		for(let i=0; i<list_size; i++)
 		{
 			stock_no_list.push($('#stock-no-'+i).val())
@@ -63,12 +62,6 @@ $(function(){
 			quantity_list.push($('#quantity-'+i).val())
 			goods_price_list.push($('#goods-price-'+i).val())
 		}
-		
- 		console.log(stock_no_list)
-		console.log(goods_no_list)
-		console.log(sizes_list)
-		console.log(quantity_list)
-		console.log(goods_price_list)
 		
 		$.ajax({
 			type:'post',
@@ -91,7 +84,8 @@ $(function(){
 			},
 			success:function(result)
 			{
-				location.href="../order/complete_order.do"
+				let order_no = result;
+				location.href="../order/complete_order.do?order_no="+order_no
 			}
 		})
 	})

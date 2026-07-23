@@ -29,4 +29,15 @@
 		UPDATE cart SET quantity = #{quantity}
 		WHERE id=#{id} and cart_no=#{cart_no}
 	</update>
+	
+	<select id="cartGetStockData" parameterType="hashmap" resultType="CartVO">
+		SELECT no as stock_no,goods_size as sizes,quantity
+		FROM stock
+		WHERE goods_no=#{goods_no} and goods_size=#{goods_size}
+	</select>
+	
+	<update id="cartUpdateSizes" parameterType="CartVO">
+		UPDATE cart SET sizes=#{sizes}, stock_no=#{stock_no}
+		WHERE id=#{id} and cart_no=#{cart_no}
+	</update>
 </mapper>

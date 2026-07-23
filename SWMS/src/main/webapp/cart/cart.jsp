@@ -70,7 +70,17 @@
 									<a :href="'../cart/delete.do?no='+vo.cart_no" class="text-body-secondary text-decoration-none">✕</a>
 								</div>
 								<div class="text-body-secondary small mt-1">
-									{{vo.sizes}}</div>
+									{{vo.sizes}} <select
+										class="form-select" id="updateSize" name="updateSize" style="width:100px" v-model="vo.sizes" @change="chageSize(vo)">
+										<option disabled="disabled">사이즈 변경</option>
+										<option value="230">230</option>
+										<option value="240">240</option>
+										<option value="250">250</option>
+										<option value="260">260</option>
+										<option value="270">270</option>
+										<option value="280">280</option>
+									</select>
+									</div>
 								<div class="input-group qty-box mt-2" style="max-width: 130px;">
 									<button class="btn btn-outline-secondary" type="button" @click="updateQuan(vo, -1)">−</button>
 									<input type="text" class="form-control" :value="vo.quantity" readonly>
@@ -109,7 +119,7 @@
 					
 					
 
-					<!-- 상품 2 -->
+					<!-- 반복 폼 -->
 					<!-- <div class="d-flex gap-3 py-4 border-bottom">
 						<div class="form-check">
 							<input class="form-check-input" type="checkbox" checked>
@@ -133,39 +143,6 @@
 								<span class="text-danger fw-bold">15%</span> <span
 									class="fw-bold fs-5">118,000원</span>
 								<del class="text-body-secondary ms-1">139,000원</del>
-							</div>
-
-							<div class="mt-3" style="max-width: 300px;">
-								<a href="../order/order.do" class="btn btn-outline-dark w-100">바로
-									구매</a>
-							</div>
-						</div>
-					</div> -->
-
-					<!-- 상품 3 -->
-<!-- 					<div class="d-flex gap-3 py-4 border-bottom">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox" checked>
-						</div>
-						<img src="../resources/images/product-thumb-3.png" alt="상품"
-							class="cart-thumb">
-						<div class="flex-grow-1">
-							<div class="d-flex justify-content-between">
-								<div class="fw-bold">뉴포트 H2 샌들 Grey Smoke Blue</div>
-								<a href="#" class="text-body-secondary text-decoration-none">✕</a>
-							</div>
-							<div class="text-body-secondary small mt-1">[color]Grey
-								[size]270mm</div>
-							<div class="input-group qty-box mt-2" style="max-width: 130px;">
-								<button class="btn btn-outline-secondary" type="button">−</button>
-								<input type="text" class="form-control" value="1" readonly>
-								<button class="btn btn-outline-secondary" type="button">+</button>
-							</div>
-
-							<div class="mt-2">
-								<span class="text-danger fw-bold">10%</span> <span
-									class="fw-bold fs-5">152,100원</span>
-								<del class="text-body-secondary ms-1">169,000원</del>
 							</div>
 
 							<div class="mt-3" style="max-width: 300px;">
@@ -250,8 +227,6 @@
 					this.id = response.data.id
 					
 					console.log(response)
-					//console.log(this.id)
-					//console.log(this.checked)
 				})
 			},
 			toggleAll() {
@@ -336,7 +311,7 @@
 				let newQuan = vo.quantity + num
 				let cart_no = vo.cart_no
 				
-				if(newQuan < 1) {
+				if(newQuan < 1 || newQuan > 99) {
 					return
 				}
 				
@@ -346,6 +321,38 @@
 						"cart_no":cart_no
 					}
 				}).then(response=>{
+					this.dataRecv()
+				})
+			},
+			getSizesList(vo) {
+				// 재고 있는 사이즈를 찾아서 select option에 보여주기
+				// 당장은 하드코딩 되어있으니 나중에...
+				//let goods_no = vo.gvo.goods_no
+				
+			},
+			chageSize(vo) {
+				// 카트에서 사이즈 변경
+				let newSizes = vo.sizes
+				let cart_no = vo.cart_no
+				let goods_no = vo.gvo.goods_no
+				
+				axios.get('../order/cartUpdateSizes.do',{
+					params:{
+						"newSizes":newSizes,
+						"cart_no":cart_no,
+						"goods_no":goods_no
+					}
+				}).then(response=>{
+					let stock = Number(response.data.trim())
+					if(stock<1)
+					{
+						alert('해당 사이즈는 재고가 없습니다')
+					}
+					else
+					{
+						alert('사이즈가 변경되었습니다')				
+					}
+					//alert(stock)
 					this.dataRecv()
 				})
 			}

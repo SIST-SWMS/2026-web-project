@@ -217,12 +217,23 @@ public class OrderModel {
 				System.out.println("삭제된 카트번호: "+ cart_no[i]);
 			}
 		}
+		
+		try {
+            String result = String.valueOf(order_no);
+
+            response.setContentType("text/plain;charset=UTF-8");
+            response.getWriter().write(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 	
 	// 주문이 완료되었습니다
 	@RequestMapping("order/complete_order.do")
 	public String complete_order(HttpServletRequest request, HttpServletResponse response) 
 	{
+		String order_no = request.getParameter("order_no");
+		request.setAttribute("order_no", order_no);
 		request.setAttribute("main_jsp", "../order/complete_order.jsp");
 		return "../main/main.jsp";
 	}

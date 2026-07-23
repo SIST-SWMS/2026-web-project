@@ -15,11 +15,11 @@
 
 			<div class="row g-4">
 				<div class="row justify-content-center">
-					<div class="col-lg-6 text-center" style="height: 500px;">
-						<div class="py-5 border-bottom text-center">
-							<i class="fw-bold fs-1 fa-solid fa-receipt"></i>
+					<div class="col-lg-6 text-center">
+						<div class="py-5 border-bottom text-center" style="height: 500px;">
+							<i class="fw-bold fs-1 fa-solid fa-receipt"></i><div class="fw-bold fs-3 ">주문번호 : ${order_no }</div>
 							<div class="fw-bold fs-3 ">결제가 완료되었습니다</div>
-							<a href="../main/main.do" class="btn btn-outline-dark btn-sm">메인으로</a>
+							<a href="../main/main.do" class="btn btn-outline-dark">메인으로</a>
 						</div>
 					</div>
 				</div>
