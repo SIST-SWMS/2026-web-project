@@ -186,6 +186,9 @@ $(function() {
 				<!-- Info -->
 				<div class="col-lg-6">
 					<span class="badge bg-success mb-2">${vo.goods_discount }% 할인</span>
+					<%-- <h5 class="fw-bold">${vo.brand_name }</h5> --%>
+					<%-- small 대신 fs-6(약간 큼) 또는 fs-5(더 큼)를 사용합니다 --%>
+					<div class="text-secondary fw-semibold fs-5 mb-1">${vo.brand_name }</div>
 					<h2 class="fw-bold">${vo.goods_name }</h2>
 					<div class="d-flex align-items-center gap-2 my-2">
 					    <c:set var="topTotalHit" value="0" />
@@ -254,11 +257,13 @@ $(function() {
 					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
 					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg> 
 					                <svg width="20" height="20" class="text-warning"><use xlink:href="#star-outline"></use></svg>
-					            </span>
+					            </span> 
 					        </c:otherwise>
 					    </c:choose>
+					    <small class="text-body-secondary mb-0 mt-2">전체 리뷰 ${vo.review_count }개</small> 
 					    
 					</div>
+					  <small class="text-body-secondary mb-0 mt-2">상품코드 ${vo.goods_code }</small>
 					<!-- 가격  -->
 					<c:set var="removeComma" value="${fn:replace(vo.goods_price, ',', '')}" />
 					<c:set var="purePrice" value="${fn:replace(removeComma, '원', '')}" />
