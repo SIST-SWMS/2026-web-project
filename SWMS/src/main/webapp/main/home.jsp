@@ -15,34 +15,18 @@
 		<div class="slideshow slide-in arrow-absolute text-white"
 			style="height: 70vh;">
 			<div class="swiper-wrapper">
+			
+				<div class="swiper-slide jarallax swiper-slide-next" style="cursor: pointer;" onclick="location.href='../goods/list.do?cno=3'">
 
-				<div class="swiper-slide jarallax swiper-slide-next">
-
-					<img src="../resources/images/slide-2.jpg" class="jarallax-img"
-						alt="slideshow">
+					<!-- <img src="../resources/images/slide-2.jpg" class="jarallax-img"
+						alt="slideshow"> -->
+						<img src="../resources/images/DailyShose.gif" class="jarallax-img" alt="slideshow">
 					<div class="banner-content w-100">
 						<div class="container-fluid">
 							<div class="row justify-content-center text-center">
 								<div class="col-md-10 pt-5">
 									<h2
-										class="display-xl text-white ls-0 mt-5 pt-5 txt-fx slide-up">Sports
-										Collection</h2>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-				<div class="swiper-slide jarallax">
-
-					<img src="../resources/images/slide-3.jpg" class="jarallax-img"
-						alt="slideshow">
-					<div class="banner-content w-100">
-						<div class="container-fluid">
-							<div class="row justify-content-center text-center">
-								<div class="col-md-10 pt-5">
-									<h2
-										class="display-xl text-white ls-0 mt-5 pt-5 txt-fx slide-up">Casual
+										class="display-xl text-white ls-0 mt-5 pt-5 txt-fx slide-up">Daily
 										Shoes</h2>
 								</div>
 							</div>
@@ -50,11 +34,29 @@
 					</div>
 
 				</div>
+				<div class="swiper-slide jarallax swiper-slide-next" style="cursor: pointer;" onclick="location.href='../goods/list.do?cno=1'">
+					<!-- <img src="../resources/images/slide-3.jpg" class="jarallax-img"
+						alt="slideshow"> -->
+					<img src="../resources/images/sportCollection.avif" class="jarallax-img" alt="slideshow">
+					<div class="banner-content w-100">
+						<div class="container-fluid">
+							<div class="row justify-content-center text-center">
+								<div class="col-md-10 pt-5">
+									<h2
+										class="display-xl text-white ls-0 mt-5 pt-5 txt-fx slide-up"> Sports
+										Collection</h2>
+								</div>
+							</div>
+						</div>
+					</div>
 
-				<div class="swiper-slide jarallax">
+				</div>
 
-					<img src="../resources/images/slide-4.jpg" class="jarallax-img"
-						alt="slideshow">
+				<div class="swiper-slide jarallax swiper-slide-next" style="cursor: pointer;" onclick="location.href='../goods/list.do?cno=2'">
+
+					<!-- <img src="../resources/images/slide-4.jpg" class="jarallax-img"
+						alt="slideshow"> -->
+					<img src="../resources/images/ClearenceSale.avif" class="jarallax-img" alt="slideshow">
 					<div class="banner-content w-100">
 						<div class="container-fluid">
 							<div class="row justify-content-center text-center">
