@@ -8,11 +8,12 @@
 		<result property="gvo.poster_url" column="poster_url"/>
 		<result property="gvo.goods_name" column="goods_name"/>
 		<result property="gvo.goods_price" column="goods_price"/>
+		<result property="gvo.goods_discount" column="goods_discount"/>
 	</resultMap>
 	<select id="cartListData" resultMap="cartMap" parameterType="string">
 		SELECT c.cart_no,s.no,g.goods_no,
 			c.sizes,c.quantity,
-		    g.poster_url,g.goods_name,g.goods_price
+		    g.poster_url,g.goods_name,g.goods_price,g.goods_discount
 		FROM cart c
 		JOIN stock s ON c.stock_no=s.no
 		JOIN goods g ON s.goods_no=g.goods_no
@@ -23,17 +24,4 @@
 	<delete id="cartDeleteData" parameterType="int">
 		DELETE FROM cart WHERE cart_no=#{cart_no}
 	</delete>
-	
-	
-	
-<!-- 	<select id="goodsStockData1">
-		SELECT no
-		FROM stock
-		WHERE goods_no=#{goods_no} AND goods_size=#{sizes};
-	</select>
-	
-	<insert id="cartInsert1">
-		INSERT INTO cart (cart_no,id,stock_no,sizes,quantity)
-		VALUES (cart_no_seq.nextval, #{id}, #{stock_no}, #{sizes}, {#quantity})
-	</insert> -->
 </mapper>

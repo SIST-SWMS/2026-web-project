@@ -14,45 +14,81 @@
 		FROM member
 		WHERE id=#{id}
 	</select>
-	<select id="memberDetailData" resultType="MemberVO"
-		parameterType="string">
+	<select id="memberDetailData"
+        resultType="MemberVO"
+        parameterType="string">
 
-		select
-		id,pwd,name,nickname,phone,zipcode,address,address_detail
-		from member
-		where id=#{id}
-	</select>
- 
+SELECT id,
+       name,
+       nickname,
+       phone,
+       zipcode,
+       address,
+       address_detail
+FROM member
+WHERE id=#{id}
+
+</select>
+
 	<!-- 디비에 특정 비밀번호 조회 -->
 	<select id="memberFindPassword" resultType="string"
 		parameterType="string">
 		SELECT pwd FROM member
 		WHERE id = #{id}
 	</select>
+	
+	<update id="memberUpdate" parameterType="MemberVO">
 
-   <!--  회원가입하기 -->
-	<insert id="memberInsert" parameterType="com.sist.vo.MemberVO">
+UPDATE member
+SET
+    name=#{name},
+    nickname=#{nickname},
+    pwd=#{pwd},
+    phone=#{phone},
+    zipcode=#{zipcode},
+    address=#{address},
+    address_detail=#{address_detail}
 
-		INSERT INTO member(
-		id,
-		pwd,
-		name,
-		nickname,
-		phone,
-		zipcode,
-		address,
-		address_detail
-		)
-		VALUES(
-		#{id},
-		#{pwd},
-		#{name},
-		#{nickname},
-		#{phone},
-		#{zipcode},
-		#{address},
-		#{address_detail}
-		)
+WHERE id=#{id}
 
-	</insert>
+</update>
+<!--  회원가입 추가 -->
+<insert id="memberInsert" parameterType="com.sist.vo.MemberVO">
+    INSERT INTO member(
+        id,
+        pwd,
+        name,
+        nickname,
+        phone,
+        zipcode,
+        address,
+        address_detail,
+        auth,
+        created_at
+    ) VALUES(
+        #{id},
+        #{pwd},
+        #{name},
+        #{nickname},
+        #{phone},
+        #{zipcode},
+        #{address},
+        #{address_detail},
+        1,
+        SYSDATE
+    )
+</insert>
+<!--  아이디 중복체크 -->
+<select id="idCount" parameterType="string" resultType="int">
+    SELECT COUNT(*)
+    FROM member
+    WHERE id=#{id}
+</select>
+
+<!--  닉네임 중복체크 -->
+<select id="nickCount" parameterType="string" resultType="int">
+    SELECT COUNT(*)
+    FROM member
+    WHERE nickname=#{nickname}
+</select>
 </mapper>

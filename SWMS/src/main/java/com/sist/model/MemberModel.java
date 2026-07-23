@@ -14,19 +14,18 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class MemberModel {
 
-	// 화면 이동용
 	@RequestMapping("member/join.do")
 	public String join(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("main_jsp", "../member/join.jsp");
 		return "../main/main.jsp";
 	}
 	
-	// 회원가입 
+	
+	// 회원가입- 회원추가
 	@RequestMapping("member/join_ok.do")
-	public String join_ok(HttpServletRequest request,
+	public void member_join_ok(HttpServletRequest request,
 	        HttpServletResponse response)
 	{
-
 	    MemberVO vo = new MemberVO();
 
 	    vo.setId(request.getParameter("id"));
@@ -40,9 +39,58 @@ public class MemberModel {
 
 	    MemberDAO.memberInsert(vo);
 
-	    return "redirect:../member/login.do";
+	    try
+	    {
+	        response.setContentType("text/html;charset=UTF-8");
+	        PrintWriter out=response.getWriter();
+
+	        out.println("<script>");
+	        out.println("alert('회원가입이 완료되었습니다. 로그인해주세요.');");
+	        out.println("location.href='../member/login.do';");
+	        out.println("</script>");
+	    }
+	    catch(Exception ex)
+	    {
+	        ex.printStackTrace();
+	    }
 	}
 
+	// 아이디 중복체크
+	@RequestMapping("member/idcheck.do")
+	public String member_idcheck(HttpServletRequest request,
+	        HttpServletResponse response)
+	{
+	    String id=request.getParameter("id");
+
+	    if(id==null)
+	        id="";
+
+	    int count=MemberDAO.idCount(id);
+
+	    request.setAttribute("id", id);
+	    request.setAttribute("count", count);
+
+	    return "../member/idcheck.jsp";
+	}
+	
+	// 닉네임 중복체크
+	@RequestMapping("member/nickcheck.do")
+	public String member_nickcheck(HttpServletRequest request,
+	        HttpServletResponse response)
+	{
+	    String nickname=request.getParameter("nickname");
+
+	    if(nickname==null)
+	        nickname="";
+
+	    int count=MemberDAO.nickCount(nickname);
+
+	    request.setAttribute("nickname", nickname);
+	    request.setAttribute("count", count);
+
+	    return "../member/nickcheck.jsp";
+	}
+	
 	@RequestMapping("member/login.do")
 	public String login(HttpServletRequest request, HttpServletResponse response) {
 		request.setAttribute("main_jsp", "../member/login.jsp");
@@ -82,10 +130,26 @@ public class MemberModel {
 	}
 
 	@RequestMapping("member/detail.do")
-	public String member_update(HttpServletRequest request, HttpServletResponse response) {
-		request.setAttribute("mypage_content", "../member/detail.jsp");
-		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
-		return "../main/main.jsp";
+	public String member_detail(HttpServletRequest request, HttpServletResponse response) {
+
+	    HttpSession session = request.getSession();
+
+	    String id = (String)session.getAttribute("id");
+
+
+	    MemberVO vo = MemberDAO.memberDetailData(id);
+
+
+	    request.setAttribute("member", vo);
+
+
+	    request.setAttribute("mypage_content",
+	            "../mypage/member_detail.jsp");
+
+	    request.setAttribute("main_jsp",
+	            "../mypage/mypage.jsp");
+
+	    return "../main/main.jsp";
 	}
 
 	// 수정버튼 메서드 만들기
@@ -98,31 +162,73 @@ public class MemberModel {
 
 	// 비밀번호가 맞냐/틀리냐
 	@RequestMapping("member/pwdCheck.do")
-	public String member_pwdCheck(HttpServletRequest request, HttpServletResponse response) {
-		// 사용자가 입력한 비밀번호 가져오기
-		String pwd1 = request.getParameter("pwd");
+	public String member_pwdCheck(HttpServletRequest request,
+	        HttpServletResponse response)
+	{
+	    System.out.println("pwdCheck 들어옴");
 
-		// 세션 열어서 요청한 값 가져오기
-		// getAttribute => object를 반환해서 내가 꺼낸 값의 자료형 추가로 붙여주기
-		HttpSession session = request.getSession();
-		String id = (String) session.getAttribute("id");
+	    String pwd1 = request.getParameter("pwd");
 
-		// dao 호출해서 부탁한 정보 가져온 거 담아
-		String pwd2 = MemberDAO.memberFindPassword(id);
+	    HttpSession session = request.getSession();
+	    String id = (String)session.getAttribute("id");
 
-		// 그다음 둘을 비교 => 문자열 비교는 equals()
-		if(pwd1.equals(pwd2))
-		{
-			// 비번 일치 => 회원정보 수정페이지로 이동
-			return "../mypage/member_update.jsp";
-		}
-		else
-		{
-			request.setAttribute("msg", "비밀번호가 틀렸습니다.");
-			return "../mypage/pwd_check.jsp";
-		}
+	    System.out.println("입력 비번 : " + pwd1);
+	    System.out.println("세션 id : " + id);
 
-		
-	} 
+
+	    String pwd2 = MemberDAO.memberFindPassword(id);
+
+	    System.out.println("DB 비번 : " + pwd2);
+
+
+	    if(pwd1.equals(pwd2))
+	    {
+	        MemberVO member = MemberDAO.memberDetailData(id);
+
+	        System.out.println("회원정보 : " + member);
+
+	        request.setAttribute("member", member);
+
+	        request.setAttribute("mypage_content",
+	                "../mypage/member_update.jsp");
+
+	        request.setAttribute("main_jsp",
+	                "../mypage/mypage.jsp");
+
+	        return "../main/main.jsp";
+	    }
+	    else
+	    {
+	        System.out.println("비밀번호 불일치");
+
+	        request.setAttribute("msg",
+	                "비밀번호가 틀렸습니다.");
+
+	        return "../mypage/pwd_check.jsp";
+	    }
+	}
+	@RequestMapping("member/update_ok.do")
+	public String member_update_ok(
+	        HttpServletRequest request,
+	        HttpServletResponse response)
+	{
+
+	    MemberVO vo = new MemberVO();
+
+	    vo.setId(request.getParameter("id"));
+	    vo.setName(request.getParameter("name"));
+	    vo.setNickname(request.getParameter("nickname"));
+	    vo.setPwd(request.getParameter("pwd"));
+	    vo.setPhone(request.getParameter("phone"));
+	    vo.setZipcode(request.getParameter("zipcode"));
+	    vo.setAddress(request.getParameter("address"));
+	    vo.setAddress_detail(request.getParameter("address_detail"));
+
+
+	    MemberDAO.memberUpdate(vo);
+
+
+	    return "redirect:../mypage/member_detail.do";
+	}
 
 }

@@ -78,9 +78,9 @@
 								</div>
 	
 								<div class="mt-2">
-									<!-- <span class="text-danger fw-bold">xx%</span> --> <span
-										class="fw-bold fs-5">{{vo.gvo.goods_price}}</span> <%-- 할인 후 가격 --%>
-									<!-- <del class="text-body-secondary ms-1">xx,xxx원</del> --> <%-- 할인 전 가격 --%>
+									<span class="text-danger fw-bold">{{vo.gvo.goods_discount}}%</span> <span
+										class="fw-bold fs-5">{{vo.gvo.after_sPrice}}원</span> <%-- 할인 후 가격 --%>
+									<del class="text-body-secondary ms-1">{{vo.gvo.goods_price}}</del> <%-- 할인 전 가격 --%>
 								</div>
 	
 								<div class="mt-3" style="max-width: 300px;">
@@ -182,11 +182,11 @@
 					<div class="border rounded-4 p-4 summary-box">
 
 						<div class="d-flex justify-content-between mb-2">
-							<span class="fw-bold">총 주문 금액</span> <span class="fw-bold">{{totalPrice.toLocaleString()}}원</span>
+							<span class="fw-bold">총 주문 금액</span> <span class="fw-bold">{{totalPrice_goods.toLocaleString()}}원</span>
 						</div>
 						<div
 							class="d-flex justify-content-between text-body-secondary small mb-1">
-							<span>└ 상품 금액</span><span>{{totalPrice.toLocaleString()}}원</span>
+							<span>└ 상품 금액</span><span>{{totalPrice_goods.toLocaleString()}}원</span>
 						</div>
 						<div
 							class="d-flex justify-content-between text-body-secondary small mb-3">
@@ -195,15 +195,15 @@
 
 						<hr>
 						<!-- 할인이 있는 경우... -->
-						<!-- <div class="d-flex justify-content-between mb-2">
+						<div class="d-flex justify-content-between mb-2">
 							<span class="fw-bold">총 할인 금액</span> <span
-								class="fw-bold text-danger">-118,830원</span>
+								class="fw-bold text-danger">-{{discountPrice.toLocaleString()}}원</span>
 						</div>
 						<div
 							class="d-flex justify-content-between text-body-secondary small mb-1">
-							<span>└ 상품 할인</span><span>-83,830원</span>
+							<span>└ 상품 할인</span><span>-{{discountPrice.toLocaleString()}}원</span>
 						</div>
-						<div
+						<!-- <div
 							class="d-flex justify-content-between text-body-secondary small mb-3">
 							<span>└ 장바구니 쿠폰</span><span>-35,000원</span>
 						</div>
@@ -321,7 +321,7 @@
 				
 				let form = document.createElement('form')
 				form.method = 'POST'
-				form.action = '../order/before_order.do'
+				form.action = '../order/orderList.do'
 				
 				let input = document.createElement('input')
 				input.type = 'hidden'
@@ -347,6 +347,20 @@
 		},
 		computed:{
     		totalPrice() {
+    			// 할인을 포함한 총 상품 금액
+    			let sum = 0
+    			for(let i=0; i < this.list.length; i++)
+    			{
+    				if(this.list[i].checked===true)
+    				{
+    					let price = this.list[i].gvo.after_iPrice
+    					sum = sum + (price * this.list[i].quantity)
+    				}
+    			}
+    			return sum
+    		},
+    		totalPrice_goods() {
+    			// 할인하지 않은 총 상품 금액
     			let sum = 0
     			for(let i=0; i < this.list.length; i++)
     			{
@@ -354,6 +368,20 @@
     				{
     					let price = this.list[i].gvo.price
     					sum = sum + (price * this.list[i].quantity)
+    				}
+    			}
+    			return sum
+    		},
+    		discountPrice() {
+    			// 할인되는 금액
+    			let sum = 0
+    			for(let i=0; i < this.list.length; i++)
+    			{
+    				if(this.list[i].checked===true)
+    				{
+    					let discount = this.list[i].gvo.goods_discount
+    					let price = this.list[i].gvo.price
+    					sum = sum + ((price * discount / 100) * this.list[i].quantity)
     				}
     			}
     			return sum
