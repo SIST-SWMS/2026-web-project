@@ -38,10 +38,19 @@ public class ReviewDAO {
     public static ReviewVO reviewDetail(int no)
     {
         SqlSession session = ssf.openSession();
-        ReviewVO vo = session.selectOne("reviewDetail", no);
+        ReviewVO vo = session.selectOne("reviewDetail"	, no);
         session.close();
         return vo;
     }
+    
+    /*
+     * <select id="reviewTotal" parameterType="int" >
+		 SELECT CEIL(COUNT(*)/10.0)
+		 FROM review 
+		</select>
+     * 
+     */
+  
      
     
 	/*
@@ -108,5 +117,36 @@ public class ReviewDAO {
         session.delete("reviewDelete", review_no);
         session.commit();
         session.close();
+    }
+    
+    /*
+     *  <select id="reviewListPaged" resultType="ReviewVO" parameterType="map">
+		    SELECT r.review_no, r.subject, r.content, r.hit, r.image, r.created_at,
+		           g.goods_name AS "goods.goods_name",
+		           g.poster_url AS "goods.poster_url"
+		    FROM review r
+		    JOIN goods g ON r.goods_no = g.goods_no
+		    WHERE r.id = #{id}
+		    ORDER BY r.created_at DESC
+		    OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+		</select>
+     * 
+     * 
+     */
+    public static List<ReviewVO> reviewListPaged(Map map)
+    {
+    	SqlSession session = ssf.openSession();
+    	List<ReviewVO> list=session.selectList("reviewListPaged",map);
+    	session.close();
+    	return list;
+    	
+    }
+    
+    public static int reviewTotal(int start)
+    {
+    	SqlSession session = ssf.openSession();
+    	int total=session.selectOne("reviewTotal",start);
+    	session.close();
+    	return total;
     }
 }

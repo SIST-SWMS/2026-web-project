@@ -72,6 +72,7 @@ public class ChatManager {
 	   users.remove(session);
    }
 
+   @OnMessage
    public void message(String message,Session session)
    throws Exception
    {

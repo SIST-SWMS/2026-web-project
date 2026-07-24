@@ -65,7 +65,7 @@ window.onload=function(){
 }
 function connection()
 {
-	websocket=new WebSocket("ws://211.238.142.45/SWMS/chat") 
+	websocket=new WebSocket("ws:///SWMS/chat") 
 	websocket.onopen=onOpen
 	websocket.onmessage=onMessage
 	websocket.onclose=onClose

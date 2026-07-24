@@ -108,22 +108,8 @@ public class MypageModel {
 	@RequestMapping("mypage/reviewList.do")
 	public String reviewList(HttpServletRequest request, HttpServletResponse response) {
 
-		HttpSession session = request.getSession();
-
-		String id = (String) session.getAttribute("id");
-
-		if (id == null) {
-			return "redirect:../member/login.do";
-		}
-
-		List<ReviewVO> list = ReviewDAO.reviewListData(id);
-
-		request.setAttribute("list", list);
-
 		request.setAttribute("mypage_content", "../mypage/review_list.jsp");
-
 		request.setAttribute("main_jsp", "../mypage/mypage.jsp");
-
 		return "../main/main.jsp";
 	}
 
