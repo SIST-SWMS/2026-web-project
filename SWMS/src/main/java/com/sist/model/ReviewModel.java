@@ -47,7 +47,7 @@ public class ReviewModel {
 		
 
 		
-		Part filePart = request.getPart("image");
+		Part filePart = request.getPart("reviewImage");
 		String image = "";
 		if (filePart != null) {
 			image = FileUploadUtil.upload(uploadPath, filePart);
@@ -78,6 +78,7 @@ public class ReviewModel {
 	    HttpSession session = request.getSession();
 	    String id = (String) session.getAttribute("id");
 	    String no = request.getParameter("no");
+	    String image=request.getParameter("image");
 	    if (id == null) {
 	        return "redirect:../member/login.do";
 	    }
@@ -100,6 +101,8 @@ public class ReviewModel {
 		HttpSession session = request.getSession();
 	    String id = (String) session.getAttribute("id");
 	    String no = request.getParameter("no");
+	    String image=request.getParameter("image");
+	    
 	    if (id == null) {
 	    	return "redirect:../member/login.do";
 	    }
@@ -119,7 +122,7 @@ public class ReviewModel {
 	{
 		String uploadPath = UploadConfig.getUploadPath();
 		
-		Part filePart = request.getPart("image");
+		Part filePart = request.getPart("reviewImage");
 		String image = "";
 		if (filePart != null) {
 			image = FileUploadUtil.upload(uploadPath, filePart);
