@@ -1,19 +1,19 @@
  package com.sist.model;
 
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sist.commons.FileUploadUtil;
-import com.sist.commons.UploadConfig;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
+import com.sist.dao.ReviewDAO;
+import com.sist.vo.ReviewVO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-
-import com.sist.vo.*;
-import com.sist.dao.*;
 
 @Controller
 public class ReviewModel {
@@ -35,7 +35,8 @@ public class ReviewModel {
 	@RequestMapping("mypage/review_ok.do")
 	public String review_ok(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		String uploadPath = UploadConfig.getUploadPath();
+		//String uploadPath = UploadConfig.getUploadPath();
+		String uploadPath = request.getServletContext().getRealPath("") + File.separator + "uploads";
 		
 	   String goods_no=request.getParameter("goods_no"); // 상품 번호
 		String hit = request.getParameter("rating");
@@ -120,7 +121,8 @@ public class ReviewModel {
 	@RequestMapping("mypage/review_edit_ok.do")
 	public String review_edit_ok(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String uploadPath = UploadConfig.getUploadPath();
+		//String uploadPath = UploadConfig.getUploadPath();
+		String uploadPath = request.getServletContext().getRealPath("") + File.separator + "uploads";
 		
 		Part filePart = request.getPart("reviewImage");
 		String image = "";

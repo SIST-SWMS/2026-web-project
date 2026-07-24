@@ -1,5 +1,6 @@
 package com.sist.model;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sist.commons.FileUploadUtil;
-import com.sist.commons.UploadConfig;
 import com.sist.controller.Controller;
 import com.sist.controller.RequestMapping;
 import com.sist.dao.AdminDAO;
@@ -176,7 +176,8 @@ public class AdminModel {
 	@RequestMapping("admin/goods_insert_ok.do")
 	public String goods_insert_ok(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String uploadPath = UploadConfig.getUploadPath();
+		// String uploadPath = UploadConfig.getUploadPath();
+		String uploadPath = request.getServletContext().getRealPath("") + File.separator + "uploads";
 
 		String category_no = request.getParameter("category");
 		String brand_no = request.getParameter("brand");
@@ -247,7 +248,8 @@ public class AdminModel {
 	@RequestMapping("admin/goods_update_ok.do")
 	public String goods_update_ok(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String uploadPath = UploadConfig.getUploadPath();
+		// String uploadPath = UploadConfig.getUploadPath();
+		String uploadPath = request.getServletContext().getRealPath("") + File.separator + "uploads";
 
 		String goods_no = request.getParameter("goods_no");
 
