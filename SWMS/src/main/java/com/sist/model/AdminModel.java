@@ -291,6 +291,14 @@ public class AdminModel {
 		return "redirect:../admin/goods_view.do?no=" + goods_no;
 	}
 
+	// 상품 삭제
+	@RequestMapping("admin/goods_delete.do")
+	public String goods_delete(HttpServletRequest request, HttpServletResponse response) {
+		String no = request.getParameter("no");
+		AdminDAO.adminGoodsDelete(Integer.parseInt(no));
+		return "redirect:../admin/goods_list.do";
+	}
+	
 	// 재고 관리 화면 전환
 	@RequestMapping("admin/stock_list.do")
 	public String stock_list(HttpServletRequest request, HttpServletResponse response) {

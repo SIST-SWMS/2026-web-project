@@ -376,4 +376,12 @@ public class AdminDAO {
 		session.close();
 		return list;
 	}
+
+	public static void adminGoodsDelete(int goods_no) {
+		SqlSession session = ssf.openSession();
+		session.delete("adminGoodsStockDelete", goods_no);
+		session.delete("adminGoodsDelete", goods_no);
+		session.commit();
+		session.close();
+	}
 }

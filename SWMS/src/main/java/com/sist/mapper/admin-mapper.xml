@@ -464,4 +464,15 @@
 		WHERE qna_no = #{parent_no}
 	</delete>
 	
+	<delete id="adminGoodsStockDelete" parameterType="int">
+		DELETE FROM stock
+		WHERE goods_no = #{goods_no}
+	</delete>
+
+	<delete id="adminGoodsDelete" parameterType="int">
+		DELETE FROM goods
+		WHERE goods_no = #{goods_no}
+	</delete>
+	
+	
 </mapper>
