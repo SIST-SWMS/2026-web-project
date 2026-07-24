@@ -103,7 +103,7 @@
 							</tr>
 						</c:forEach>
 
-						<c:if test="${empty vo.sizeList}">
+						<c:if test="${empty list}">
 							<tr>
 								<td colspan="2" class="text-center text-body-secondary py-4">등록된 사이즈가 없습니다.</td>
 							</tr>
