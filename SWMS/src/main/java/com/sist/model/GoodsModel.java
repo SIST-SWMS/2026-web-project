@@ -46,10 +46,6 @@ public class GoodsModel {
 
         List<GoodsVO> list = GoodsDAO.goodsListData(map);   
 		
-		/*
-		 * for(GoodsVO vo:list) { LikeDAO.goodsLikeUpdate(vo.getGoods_no()); }
-		 */
-		 
         int totalpage = GoodsDAO.goodsTotalPage(Integer.parseInt(cno));        
 
         final int BLOCK=10;
