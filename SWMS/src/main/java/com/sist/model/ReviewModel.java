@@ -79,16 +79,10 @@ public class ReviewModel {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		String no = request.getParameter("no");
-		String image = request.getParameter("image");
-		if (id == null) {
-			return "redirect:../member/login.do";
-		}
+		
+		System.out.println("===================================================================");
 
 		ReviewVO vo = ReviewDAO.reviewDetail(Integer.parseInt(no));
-
-		if (vo == null || !id.equals(vo.getId())) {
-			return "redirect:../mypage/reviewList.do";
-		}
 
 		request.setAttribute("vo", vo);
 		request.setAttribute("mypage_content", "../mypage/review_view.jsp");
@@ -150,9 +144,6 @@ public class ReviewModel {
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 		String no = request.getParameter("no");
-		if (id == null) {
-			return "redirect:../member/login.do";
-		}
 
 		ReviewVO vo = ReviewDAO.reviewDetail(Integer.parseInt(no));
 		if (vo == null || !id.equals(vo.getId())) {

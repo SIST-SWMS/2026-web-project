@@ -35,10 +35,10 @@ public class ReviewDAO {
 	 * subject=#{subject},#{content},hit=#{hit},good_no=#{goods_no},id=#{id}
 	 * </select>
 	 */
-    public static ReviewVO reviewDetail(int no)
+    public static ReviewVO reviewDetail(int review_no)
     {
         SqlSession session = ssf.openSession();
-        ReviewVO vo = session.selectOne("reviewDetail"	, no);
+        ReviewVO vo = session.selectOne("reviewDetail"	, review_no);
         session.close();
         return vo;
     }

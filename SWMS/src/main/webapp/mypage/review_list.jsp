@@ -54,16 +54,16 @@
 <body>
 	<h4 class="fw-bold border-bottom border-dark border-2 pb-2 mb-4">상품 리뷰</h4>
 	<div id="app">
-		<div class="d-flex align-items-center gap-3 py-3 border-bottom" v-for="(vo,index) in list" :key="index" @click="goView(vo.review_no)">
+		<div class="d-flex align-items-center gap-3 py-3 border-bottom" v-for="(vo,index) in list" :key="index">
 			<img :src="vo.goods.poster_url" width="70" height="70" style="object-fit: cover; border-radius: 8px;" alt="상품">
 			<div class="flex-grow-1">
 				<div class="fw-bold">
-					<a href="../mypage/review_view.do?no=3">{{vo.goods.goods_name}}</a>
+					{{vo.goods.goods_name}}
 				</div>
 			</div>
 
-			<a v-if="vo.review_no > 0" :href="'../mypage/review_view.do?no='+vo.review_no" class="btn btn-dark">리뷰 보기</a>
-			<a v-else :href="'../mypage/review.do?order_no='+vo.order_no+'&goods_no='+vo.goods_no" class="btn btn-dark write">리뷰 쓰기</a>
+			<button type="button" v-if="vo.review_no > 0" class="btn btn-success" @click="reviewView(vo.review_no)">리뷰 보기</button>
+			<button type="button" v-else class="btn btn-danger write" @click="reviewWrite(vo.order_no,vo.goods_no)">리뷰 쓰기</button>
 		</div>
 
 		<div class="d-flex justify-content-center mt-4">
@@ -109,6 +109,13 @@
 	    				 this.list=response.data.list
 	    			 })
 	    		 },
+	    		 reviewView(review_no){
+	    			 console.log("11")
+	    			 location.href = "../mypage/review_view.do?no="+review_no;
+	    		 },
+	    		 reviewWrite(order_no, goods_no){
+	    			 location.href = "../mypage/review.do?order_no="+order_no+"&goods_no="+goods_no;
+	    		 },
 	    		 range(start, end){
 					let arr = []
 					let length = end-start
@@ -121,9 +128,6 @@
 	    		 pageChange(page){
 	    			 this.curpage = page
 	    			 this.dataRecv()
-	    		 },
-	    		 goView(no){
-	    			 location.href = "../mypage/review_view.do?no="+no;
 	    		 }
 			}
 		}).mount("#app")
