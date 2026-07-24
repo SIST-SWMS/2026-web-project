@@ -96,7 +96,8 @@
 				<tr class="prod-row" v-for="(vo,index) in list" :key="index">
 					<td>{{vo.no}}</td>
 					<td>
-						<span class="badge bg-danger">{{vo.chk}}</span>
+						<span v-if="vo.chk=='입고'" class="badge bg-success">{{vo.chk}}</span>
+						<span v-else class="badge bg-danger">{{vo.chk}}</span>
 					</td>
 					<td class="text-start">{{vo.goods_name}}</td>
 					<td>{{vo.inout_size}}</td>

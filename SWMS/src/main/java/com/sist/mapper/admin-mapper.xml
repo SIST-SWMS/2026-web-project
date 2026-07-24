@@ -114,7 +114,8 @@
 		 FROM brand
 	</select>
 	<select id="adminGoodsData" resultType="GoodsVO" parameterType="int">
-		SELECT goods_no, goods_discount, goods_code, goods_name, goods_price, poster_url, subposter_url, to_char(g.created_at,'yyyy-mm-dd') as dbday, 
+		SELECT goods_no, goods_discount, goods_code, goods_name, decode(substr(goods_price,-1),'원',substr(goods_price,1,length(goods_price)-1),goods_price) as goods_price, 
+			   poster_url, subposter_url, to_char(g.created_at,'yyyy-mm-dd') as dbday, 
 		       g.brand_no, g.category_no, b.brand_name, c.category_name
 		 FROM goods g, brand b, category c
 		WHERE g.brand_no = b.brand_no 
