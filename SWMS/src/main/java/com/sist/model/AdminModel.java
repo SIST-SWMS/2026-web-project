@@ -35,7 +35,7 @@ public class AdminModel {
 		// 판매액 차트
 		List<DashVO> salesList = AdminDAO.salesList();
 		request.setAttribute("salesList", salesList);
-		
+		 
 		// 신발 차트
 		List<DashVO> bestList = AdminDAO.bestList();
 		request.setAttribute("bestList", bestList);
