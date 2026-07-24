@@ -22,16 +22,16 @@
 		from orders o, order_detail d, goods g
 		where o.order_no = d.order_no
 		and d.goods_no = g.goods_no		
-		and rownum &lt;= 5
-	    order by o.order_date desc, o.id
+		order by o.order_date desc, o.id
+        FETCH FIRST 5 ROWS ONLY
 	</select>
 	
 	<select id="dashQnaList" resultType="QnaVO">
 		 SELECT qna_no, parent_no, type, subject, content, status, id, to_char(CREATED_AT, 'yyyy-mm-dd') as dbday, goods_no 
 		 FROM qna
 		 WHERE status = '답변대기'
-		 and rownum &lt;= 5
          order by qna_no desc
+        FETCH FIRST 5 ROWS ONLY
 	</select>
 	
 	<select id="dashCountOrder" resultType="int">
