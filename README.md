@@ -101,8 +101,10 @@
 
 ---
 
-##  트러블슈팅 (Troubleshooting)
+## 🛠️ 트러블슈팅 (Troubleshooting)
 
+<details>
+<summary><b> 💡 트러블슈팅 내역 펼쳐보기 (클릭) </b></summary>
 
 | 작성자 | 아쉬운 점 | 개선한 점 | 향후 개선방향 |
 |---|---|---|---|
@@ -112,6 +114,110 @@
 | **송혜림** | • 쿠키를 활용하여 비회원도 최근 본 상품을 확인할 수 있도록 설계<br>• 화면 적용까지는 완료하지 못하여 로그인 사용자 기능만 구현 | • 업로드한 이미지가 최근 본 상품에서 출력되지 않는 문제 발생<br>• 이미지 경로를 수정하여 정상적으로 출력되도록 개선<br>• 비밀번호 확인 후 회원정보 수정 화면으로 이동하도록 구현<br>• 수정 완료 후 회원정보 조회 화면으로 자연스럽게 연결 | • 개발 전 요구사항을 충분히 분석하여 기능 수정과 재작업을 최소화<br>• 팀원과 기능 흐름을 명확히 공유하여 개발 효율 향상<br>• 구현 전 화면 흐름과 기능을 먼저 설계하는 습관을 기르기 |
 | **이윤호** |---|---|---|
 
+</details>
+
 ---
 
-##  프로젝트 구조 (추가예정)
+## 📁 프로젝트 구조 (Directory Structure)
+
+본 프로젝트는 MVC 패턴을 기반으로 각 기능(도메인)별로 패키지와 디렉토리를 분리하여 유지보수성을 높였습니다.
+
+```text
+📦 SWMS (2026-web-project)
+ ┣ 📂 src/main/java
+ ┃ ┣ 📂 com.sist.commons    # 공통 유틸리티 (DB 커넥션, 파일 업로드 등)
+ ┃ ┣ 📂 com.sist.dao        # 데이터베이스 접근 객체 (DAO)
+ ┃ ┣ 📂 com.sist.manager    # 웹소켓 및 세션 관리자
+ ┃ ┣ 📂 com.sist.mapper     # MyBatis SQL 매퍼 XML
+ ┃ ┣ 📂 com.sist.model      # 비즈니스 로직 및 컨트롤러 역할 (Model)
+ ┃ ┗ 📂 com.sist.vo         # 데이터 전송 객체 (VO)
+ ┗ 📂 src/main/webapp
+   ┣ 📂 admin               # 관리자 전용 페이지
+   ┣ 📂 goods               # 상품 목록 및 상세 페이지
+   ┣ 📂 member              # 회원가입, 로그인 등 회원 관리
+   ┣ 📂 mypage              # 장바구니, 주문 내역 등 마이페이지
+   ┣ 📂 resources           # CSS, JS, 이미지 등 정적 자원
+   ┗ 📜 index.html          # 메인 진입점
+📦 SWMS
+ ┣ 📂 src/main/java
+ ┃ ┣ 📂 com.sist.commons
+ ┃ ┃ ┣ 📜 CreateSqlSessionFactory.java
+ ┃ ┃ ┗ 📜 FileUploadUtil.java
+ ┃ ┣ 📂 com.sist.dao
+ ┃ ┃ ┣ 📜 AdminDAO.java
+ ┃ ┃ ┣ 📜 CartDAO.java
+ ┃ ┃ ┣ 📜 GoodsDAO.java
+ ┃ ┃ ┣ 📜 GoodsLikeDAO.java
+ ┃ ┃ ┣ 📜 LikeDAO.java
+ ┃ ┃ ┣ 📜 MemberDAO.java
+ ┃ ┃ ┣ 📜 MypageDAO.java
+ ┃ ┃ ┣ 📜 OrderDAO.java
+ ┃ ┃ ┣ 📜 QnaDAO.java
+ ┃ ┃ ┗ 📜 ReviewDAO.java
+ ┃ ┣ 📂 com.sist.manager
+ ┃ ┃ ┣ 📜 ChatManager.java
+ ┃ ┃ ┗ 📜 WebSocketSessionConfigurator.java
+ ┃ ┣ 📂 com.sist.mapper
+ ┃ ┃ ┣ 📜 admin-mapper.xml
+ ┃ ┃ ┣ 📜 cart-mapper.xml
+ ┃ ┃ ┣ 📜 goods-mapper.xml
+ ┃ ┃ ┣ 📜 member-mapper.xml
+ ┃ ┃ ┣ 📜 mypage-mapper.xml
+ ┃ ┃ ┣ 📜 order-mapper.xml
+ ┃ ┃ ┗ 📜 ... (기타 도메인 mapper)
+ ┃ ┣ 📂 com.sist.model
+ ┃ ┃ ┣ 📜 AdminModel.java
+ ┃ ┃ ┣ 📜 CartModel.java
+ ┃ ┃ ┣ 📜 GoodsModel.java
+ ┃ ┃ ┣ 📜 MemberModel.java
+ ┃ ┃ ┗ 📜 ... (기타 도메인 Model)
+ ┃ ┗ 📂 com.sist.vo
+ ┃   ┣ 📜 BrandVO.java
+ ┃   ┣ 📜 CartVO.java
+ ┃   ┣ 📜 CategoryVO.java
+ ┃   ┣ 📜 GoodsVO.java
+ ┃   ┣ 📜 MemberVO.java
+ ┃   ┣ 📜 Config.xml
+ ┃   ┗ 📜 db.properties
+ ┗ 📂 src/main/webapp
+   ┣ 📂 admin
+   ┃ ┣ 📜 admin.jsp
+   ┃ ┣ 📜 dashboard.jsp
+   ┃ ┣ 📜 goods_insert.jsp
+   ┃ ┗ 📜 ... (관리자 뷰)
+   ┣ 📂 cart
+   ┃ ┗ 📜 cart.jsp
+   ┣ 📂 chat
+   ┃ ┗ 📜 chat.jsp
+   ┣ 📂 goods
+   ┃ ┣ 📜 detail.jsp
+   ┃ ┣ 📜 find.jsp
+   ┃ ┣ 📜 goods_main.jsp
+   ┃ ┗ 📜 goods.jsp
+   ┣ 📂 main
+   ┃ ┣ 📜 footer.jsp
+   ┃ ┣ 📜 header.jsp
+   ┃ ┣ 📜 home.jsp
+   ┃ ┗ 📜 main.jsp
+   ┣ 📂 member
+   ┃ ┣ 📜 idcheck.jsp
+   ┃ ┣ 📜 join.jsp
+   ┃ ┣ 📜 login.jsp
+   ┃ ┗ 📜 nickcheck.jsp
+   ┣ 📂 mypage
+   ┃ ┣ 📜 claim_list.jsp
+   ┃ ┣ 📜 member_detail.jsp
+   ┃ ┣ 📜 mypage_main.jsp
+   ┃ ┣ 📜 order_list.jsp
+   ┃ ┗ 📜 ... (마이페이지 뷰)
+   ┣ 📂 order
+   ┃ ┣ 📜 checkout.jsp
+   ┃ ┗ 📜 complete_order.jsp
+   ┣ 📂 resources
+   ┃ ┣ 📂 css
+   ┃ ┣ 📂 images
+   ┃ ┣ 📂 js
+   ┃ ┗ 📜 style.css
+   ┣ 📂 temp
+   ┣ 📂 WEB-INF
+   ┗ 📜 index.html
