@@ -101,10 +101,10 @@
 
 ---
 
-## 🛠️ 트러블슈팅 (Troubleshooting)
+##  트러블슈팅 (Troubleshooting)
 
 <details>
-<summary><b> 💡 트러블슈팅 내역 펼쳐보기 (클릭) </b></summary>
+<summary><b>  트러블슈팅 내역 펼쳐보기 (클릭) </b></summary>
 
 | 작성자 | 아쉬운 점 | 개선한 점 | 향후 개선방향 |
 |---|---|---|---|
@@ -118,7 +118,7 @@
 
 ---
 
-## 📁 프로젝트 구조 (Directory Structure)
+##  프로젝트 구조 (Directory Structure)
 
 본 프로젝트는 MVC 패턴을 기반으로 각 기능(도메인)별로 패키지와 디렉토리를 분리하여 유지보수성을 높였습니다.
 
@@ -138,86 +138,3 @@
    ┣ 📂 mypage              # 장바구니, 주문 내역 등 마이페이지
    ┣ 📂 resources           # CSS, JS, 이미지 등 정적 자원
    ┗ 📜 index.html          # 메인 진입점
-📦 SWMS
- ┣ 📂 src/main/java
- ┃ ┣ 📂 com.sist.commons
- ┃ ┃ ┣ 📜 CreateSqlSessionFactory.java
- ┃ ┃ ┗ 📜 FileUploadUtil.java
- ┃ ┣ 📂 com.sist.dao
- ┃ ┃ ┣ 📜 AdminDAO.java
- ┃ ┃ ┣ 📜 CartDAO.java
- ┃ ┃ ┣ 📜 GoodsDAO.java
- ┃ ┃ ┣ 📜 GoodsLikeDAO.java
- ┃ ┃ ┣ 📜 LikeDAO.java
- ┃ ┃ ┣ 📜 MemberDAO.java
- ┃ ┃ ┣ 📜 MypageDAO.java
- ┃ ┃ ┣ 📜 OrderDAO.java
- ┃ ┃ ┣ 📜 QnaDAO.java
- ┃ ┃ ┗ 📜 ReviewDAO.java
- ┃ ┣ 📂 com.sist.manager
- ┃ ┃ ┣ 📜 ChatManager.java
- ┃ ┃ ┗ 📜 WebSocketSessionConfigurator.java
- ┃ ┣ 📂 com.sist.mapper
- ┃ ┃ ┣ 📜 admin-mapper.xml
- ┃ ┃ ┣ 📜 cart-mapper.xml
- ┃ ┃ ┣ 📜 goods-mapper.xml
- ┃ ┃ ┣ 📜 member-mapper.xml
- ┃ ┃ ┣ 📜 mypage-mapper.xml
- ┃ ┃ ┣ 📜 order-mapper.xml
- ┃ ┃ ┗ 📜 ... (기타 도메인 mapper)
- ┃ ┣ 📂 com.sist.model
- ┃ ┃ ┣ 📜 AdminModel.java
- ┃ ┃ ┣ 📜 CartModel.java
- ┃ ┃ ┣ 📜 GoodsModel.java
- ┃ ┃ ┣ 📜 MemberModel.java
- ┃ ┃ ┗ 📜 ... (기타 도메인 Model)
- ┃ ┗ 📂 com.sist.vo
- ┃   ┣ 📜 BrandVO.java
- ┃   ┣ 📜 CartVO.java
- ┃   ┣ 📜 CategoryVO.java
- ┃   ┣ 📜 GoodsVO.java
- ┃   ┣ 📜 MemberVO.java
- ┃   ┣ 📜 Config.xml
- ┃   ┗ 📜 db.properties
- ┗ 📂 src/main/webapp
-   ┣ 📂 admin
-   ┃ ┣ 📜 admin.jsp
-   ┃ ┣ 📜 dashboard.jsp
-   ┃ ┣ 📜 goods_insert.jsp
-   ┃ ┗ 📜 ... (관리자 뷰)
-   ┣ 📂 cart
-   ┃ ┗ 📜 cart.jsp
-   ┣ 📂 chat
-   ┃ ┗ 📜 chat.jsp
-   ┣ 📂 goods
-   ┃ ┣ 📜 detail.jsp
-   ┃ ┣ 📜 find.jsp
-   ┃ ┣ 📜 goods_main.jsp
-   ┃ ┗ 📜 goods.jsp
-   ┣ 📂 main
-   ┃ ┣ 📜 footer.jsp
-   ┃ ┣ 📜 header.jsp
-   ┃ ┣ 📜 home.jsp
-   ┃ ┗ 📜 main.jsp
-   ┣ 📂 member
-   ┃ ┣ 📜 idcheck.jsp
-   ┃ ┣ 📜 join.jsp
-   ┃ ┣ 📜 login.jsp
-   ┃ ┗ 📜 nickcheck.jsp
-   ┣ 📂 mypage
-   ┃ ┣ 📜 claim_list.jsp
-   ┃ ┣ 📜 member_detail.jsp
-   ┃ ┣ 📜 mypage_main.jsp
-   ┃ ┣ 📜 order_list.jsp
-   ┃ ┗ 📜 ... (마이페이지 뷰)
-   ┣ 📂 order
-   ┃ ┣ 📜 checkout.jsp
-   ┃ ┗ 📜 complete_order.jsp
-   ┣ 📂 resources
-   ┃ ┣ 📂 css
-   ┃ ┣ 📂 images
-   ┃ ┣ 📂 js
-   ┃ ┗ 📜 style.css
-   ┣ 📂 temp
-   ┣ 📂 WEB-INF
-   ┗ 📜 index.html
