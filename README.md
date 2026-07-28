@@ -5,6 +5,11 @@
 
 ---
 
+## 🔗 관련 링크
+- 📝 [팀 프로젝트 노션 스페이스](https://modern-glove-1c8.notion.site/38a38a039d3f80848138ec4f7f0ac190?source=copy_link)
+
+---
+
 ## 👥 팀원 및 역할 분담
 
 | 이름 | 역할 | 담당 세부 업무 |
